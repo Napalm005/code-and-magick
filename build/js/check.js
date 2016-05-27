@@ -14,7 +14,7 @@ function getMessage(a, b) {
             length += a[i] * b[i];
         }
         result = "Я прошёл " + length + " метров";
-    } else if (Array.isArray(a)) {
+    } else {
         var sum = 0;
         for (var i = 0; i < a.length; i++) {
             sum += a[i];
