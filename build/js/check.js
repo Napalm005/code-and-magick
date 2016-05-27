@@ -10,8 +10,7 @@ function getMessage(a, b) {
     } else if ( (Array.isArray(a)) && (Array.isArray(b)) ) {
         var length = 0;
         for (var i = 0; i < a.length; i++) {
-            var c = a[i] * b[i];
-            length += c;
+            length += a[i] * b[i];
         }
         return "Я прошёл " + length + " метров";
     } else if (Array.isArray(a)) {
