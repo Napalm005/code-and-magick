@@ -1,5 +1,5 @@
 function getMessage(a, b) {
-  var result;
+    var result;
     if (typeof a === "boolean") {
         if (a) {
             result = "Я попал в " + b;
@@ -8,7 +8,7 @@ function getMessage(a, b) {
         }
     } else if (typeof a === "number") {
         result = "Я прыгнул на " + a * 100 + " сантиметров";
-    } else if ( (Array.isArray(a)) && (Array.isArray(b)) ) {
+    } else if ((Array.isArray(a)) && (Array.isArray(b))) {
         var length = 0;
         for (var i = 0; i < a.length; i++) {
             length += a[i] * b[i];
@@ -23,4 +23,5 @@ function getMessage(a, b) {
     }
     return result;
 };
+
 
