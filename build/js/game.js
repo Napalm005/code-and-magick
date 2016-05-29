@@ -378,20 +378,61 @@
      * Отрисовка экрана паузы.
      */
     _drawPauseScreen: function() {
+      var maxWidth = 290;
       switch (this.state.currentStatus) {
         case Verdict.WIN:
-          console.log('you have won!');
+          this.defineCanvas('Поздравляем! Вы успешно закончили этот уровень.', maxWidth);
           break;
         case Verdict.FAIL:
-          console.log('you have failed!');
+          this.defineCanvas('Вы проиграли. Попробуйте ещё раз!', maxWidth);
           break;
         case Verdict.PAUSE:
-          console.log('game is on pause!');
+          this.defineCanvas('Пауза. Скорее возвращайтсь в игру. Для этого нажмите пробел', maxWidth);
           break;
         case Verdict.INTRO:
-          console.log('welcome to the game! Press Space to start');
+          this.defineCanvas('Добро пожаловать в игру! Нажмите пробел, чтобы начать. Приятного вам времяпрепровождения!', maxWidth);
           break;
       }
+    },
+
+    defineCanvas: function(text, maxWidth) {
+
+      function wrapText(context, marginLeft, marginTop, lineHeight) {
+        var words = text.split(' ');
+        var countWords = words.length;
+        var line = '';
+        for (var n = 0; n < countWords; n++) {
+          var testLine = line + words[n] + ' ';
+          var testWidth = context.measureText(testLine).width;
+          if (testWidth > maxWidth) {
+            context.fillText(line, marginLeft, marginTop);
+            line = words[n] + ' ';
+            marginTop += lineHeight;
+          } else {
+            line = testLine;
+          }
+        }
+        context.fillText(line, marginLeft, marginTop);
+      }
+
+      var x = 300;
+      var y = 50;
+      var context = this.ctx;
+      var marginLeft = 10 + x;
+      var marginTop = 20 + y;
+      var lineHeight = 20;
+
+      this.ctx.fillStyle = 'white';
+      this.ctx.rect(x, y, 300, 150);
+      this.ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
+      this.ctx.shadowOffsetX = 10;
+      this.ctx.shadowOffsetY = 10;
+      this.ctx.fill();
+
+      this.ctx.fillStyle = 'blue';
+      this.ctx.shadowColor = 'transparent';
+      this.ctx.font = '16px PT Mono';
+      wrapText(context, text, marginLeft, marginTop, maxWidth, lineHeight);
     },
 
     /**
