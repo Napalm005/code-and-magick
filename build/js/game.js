@@ -396,6 +396,18 @@
     },
 
     defineCanvas: function(text, maxWidth) {
+      var x = 300;
+      var y = 50;
+
+      this.ctx.fillStyle = 'white';
+      this.ctx.rect(x, y, 300, 150);
+      this.ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
+      this.ctx.shadowOffsetX = 10;
+      this.ctx.shadowOffsetY = 10;
+      this.ctx.fill();
+      this.ctx.fillStyle = 'blue';
+      this.ctx.shadowColor = 'transparent';
+      this.ctx.font = '16px PT Mono';
 
       function wrapText(context, marginLeft, marginTop, lineHeight) {
         var words = text.split(' ');
@@ -413,26 +425,16 @@
           }
         }
         context.fillText(line, marginLeft, marginTop);
+
       }
 
-      var x = 300;
-      var y = 50;
       var context = this.ctx;
       var marginLeft = 10 + x;
       var marginTop = 20 + y;
       var lineHeight = 20;
+      wrapText(context, marginLeft, marginTop, lineHeight);
 
-      this.ctx.fillStyle = 'white';
-      this.ctx.rect(x, y, 300, 150);
-      this.ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
-      this.ctx.shadowOffsetX = 10;
-      this.ctx.shadowOffsetY = 10;
-      this.ctx.fill();
 
-      this.ctx.fillStyle = 'blue';
-      this.ctx.shadowColor = 'transparent';
-      this.ctx.font = '16px PT Mono';
-      wrapText(context, text, marginLeft, marginTop, maxWidth, lineHeight);
     },
 
     /**
