@@ -381,33 +381,28 @@
       var maxWidth = 290;
       switch (this.state.currentStatus) {
         case Verdict.WIN:
-          this.defineCanvas('Поздравляем! Вы успешно закончили этот уровень.', maxWidth);
+          this.drawMessage('Поздравляем! Вы успешно закончили этот уровень.', maxWidth);
           break;
         case Verdict.FAIL:
-          this.defineCanvas('Вы проиграли. Попробуйте ещё раз!', maxWidth);
+          this.drawMessage('Вы проиграли. Попробуйте ещё раз!', maxWidth);
           break;
         case Verdict.PAUSE:
-          this.defineCanvas('Пауза. Скорее возвращайтсь в игру. Для этого нажмите пробел', maxWidth);
+          this.drawMessage('Пауза. Скорее возвращайтсь в игру. Для этого нажмите пробел', maxWidth);
           break;
         case Verdict.INTRO:
-          this.defineCanvas('Добро пожаловать в игру! Нажмите пробел, чтобы начать. Приятного вам времяпрепровождения!', maxWidth);
+          this.drawMessage('Добро пожаловать в игру! Нажмите пробел, чтобы начать. Приятного вам времяпрепровождения!', maxWidth);
           break;
       }
     },
 
-    defineCanvas: function(text, maxWidth) {
+    drawMessage: function(text, maxWidth) {
       var x = 300;
       var y = 50;
+      var messageWidth = 300;
+      var messageHeight = 150;
+      var shadowOffsetX = 10;
+      var shadowOffsetY = 10;
 
-      this.ctx.fillStyle = 'white';
-      this.ctx.rect(x, y, 300, 150);
-      this.ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
-      this.ctx.shadowOffsetX = 10;
-      this.ctx.shadowOffsetY = 10;
-      this.ctx.fill();
-      this.ctx.fillStyle = 'blue';
-      this.ctx.shadowColor = 'transparent';
-      this.ctx.font = '16px PT Mono';
 
       function wrapText(context, marginLeft, marginTop, lineHeight) {
         var words = text.split(' ');
@@ -425,16 +420,24 @@
           }
         }
         context.fillText(line, marginLeft, marginTop);
-
       }
+
+      this.ctx.fillStyle = 'white';
+      this.ctx.rect(x, y, messageWidth, messageHeight);
+      this.ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
+      this.ctx.shadowOffsetX = shadowOffsetX;
+      this.ctx.shadowOffsetY = shadowOffsetY;
+      this.ctx.fill();
+      this.ctx.fillStyle = 'blue';
+      this.ctx.shadowColor = 'transparent';
+      this.ctx.font = '16px PT Mono';
 
       var context = this.ctx;
       var marginLeft = 10 + x;
       var marginTop = 20 + y;
       var lineHeight = 20;
+
       wrapText(context, marginLeft, marginTop, lineHeight);
-
-
     },
 
     /**
