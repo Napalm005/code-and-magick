@@ -395,6 +395,11 @@
       }
     },
 
+    /**
+     * Отрисовка сообщения через canvas.
+     * @param {string} text
+     * @param {number} maxWidth
+     */
     drawMessage: function(text, maxWidth) {
       var x = 300;
       var y = 50;
@@ -402,42 +407,61 @@
       var messageHeight = 150;
       var shadowOffsetX = 10;
       var shadowOffsetY = 10;
+      var ctx = this.ctx;
 
-
-      function wrapText(context, marginLeft, marginTop, lineHeight) {
+      /**
+       * Перенос строк в сообщении.
+       * @param {object} ctx
+       * @param {number} marginLeft
+       * @param {number} marginTop
+       * @param {number} lineHeight
+       */
+      function wrapText(ctx, marginLeft, marginTop, lineHeight) {
         var words = text.split(' ');
         var countWords = words.length;
         var line = '';
         for (var n = 0; n < countWords; n++) {
           var testLine = line + words[n] + ' ';
-          var testWidth = context.measureText(testLine).width;
+          var testWidth = ctx.measureText(testLine).width;
           if (testWidth > maxWidth) {
-            context.fillText(line, marginLeft, marginTop);
+            ctx.fillText(line, marginLeft, marginTop);
             line = words[n] + ' ';
             marginTop += lineHeight;
           } else {
             line = testLine;
           }
         }
-        context.fillText(line, marginLeft, marginTop);
+        ctx.fillText(line, marginLeft, marginTop);
       }
 
-      this.ctx.fillStyle = 'white';
-      this.ctx.rect(x, y, messageWidth, messageHeight);
-      this.ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
-      this.ctx.shadowOffsetX = shadowOffsetX;
-      this.ctx.shadowOffsetY = shadowOffsetY;
-      this.ctx.fill();
-      this.ctx.fillStyle = 'blue';
-      this.ctx.shadowColor = 'transparent';
-      this.ctx.font = '16px PT Mono';
+      /**
+       * Отрисовка фона сообщения.
+       */
+      function drawBlockOfMessage() {
+        ctx.fillStyle = 'white';
+        ctx.rect(x, y, messageWidth, messageHeight);
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
+        ctx.shadowOffsetX = shadowOffsetX;
+        ctx.shadowOffsetY = shadowOffsetY;
+        ctx.fill();
+      }
+      drawBlockOfMessage()
 
-      var context = this.ctx;
-      var marginLeft = 10 + x;
-      var marginTop = 20 + y;
-      var lineHeight = 20;
+      /**
+       * Отрисовка текста сообщения.
+       */
+      function innerTextToBlockOfMessage() {
+        ctx.fillStyle = 'blue';
+        ctx.shadowColor = 'transparent';
+        ctx.font = '16px PT Mono';
+        var marginLeft = 10 + x;
+        var marginTop = 20 + y;
+        var lineHeight = 20;
 
-      wrapText(context, marginLeft, marginTop, lineHeight);
+        wrapText(ctx, marginLeft, marginTop, lineHeight);
+      }
+      innerTextToBlockOfMessage()
+
     },
 
     /**
