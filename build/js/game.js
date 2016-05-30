@@ -381,7 +381,7 @@
       var maxWidth = 290;
       switch (this.state.currentStatus) {
         case Verdict.WIN:
-          this.drawMessage('Поздравляем! Вы успешно закончили этот уровень.', maxWidth);
+          this.drawMessage('Поздравляем! Вы успешно закончили этот уровень. Поздравляем! Вы успешно закончили этот уровень.Поздравляем! Вы успешно закончили этот уровень.', maxWidth);
           break;
         case Verdict.FAIL:
           this.drawMessage('Вы проиграли. Попробуйте ещё раз!', maxWidth);
@@ -411,42 +411,37 @@
       ctx.font = '16px PT Mono';
       var font = ctx.font;
       var lineHeight = getFontHeight();
-      var messageHeight = lineHeight;
+      var messageHeight = getMessageHeight() + 10;
       var messageWidth = 300;
 
-      innerTextToBlockOfMessage();
-      drawBlockOfMessage();
+      drawRect();
+      drawText();
 
       /**
        * Перенос строк в сообщении.
-       * @param {object} ctx
-       * @param {number} marginLeft
-       * @param {number} marginTop
-       * @param {number} lineHeight
        */
-      function wrapText() {
+      function getMessageHeight() {
         var words = text.split(' ');
         var line = '';
+        var messageHeight = lineHeight;
 
         for (var n = 0; n < words.length; n++) {
           var testLine = line + words[n] + ' ';
-          var testWidth = ctx.measureText(testLine).width;
-          if (testWidth > maxWidth) {
-            ctx.fillText(line, marginLeft, marginTop);
+          var testLineWidth = ctx.measureText(testLine).width;
+          if (testLineWidth > maxWidth) {
             line = words[n] + ' ';
-            marginTop += lineHeight;
             messageHeight += lineHeight;
           } else {
             line = testLine;
           }
         }
-        ctx.fillText(line, marginLeft, marginTop);
+        return messageHeight;
       }
 
       /**
        * Отрисовка фона сообщения.
        */
-      function drawBlockOfMessage() {
+      function drawRect() {
         ctx.fillStyle = 'white';
         ctx.rect(x, y, messageWidth, messageHeight);
         ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
@@ -458,16 +453,29 @@
       /**
        * Отрисовка текста сообщения.
        */
-      function innerTextToBlockOfMessage() {
+      function drawText() {
         ctx.fillStyle = 'blue';
         ctx.shadowColor = 'transparent';
 
-        wrapText();
+        var words = text.split(' ');
+        var line = '';
+
+        for (var n = 0; n < words.length; n++) {
+          var testLine = line + words[n] + ' ';
+          var testWidth = ctx.measureText(testLine).width;
+          if (testWidth > maxWidth) {
+            ctx.fillText(line, marginLeft, marginTop);
+            line = words[n] + ' ';
+            marginTop += lineHeight;
+          } else {
+            line = testLine;
+          }
+        }
+        ctx.fillText(line, marginLeft, marginTop);
       }
 
       /**
        * Определение высоты текста.
-       * @param {number} font
        * @return {number}
        */
       function getFontHeight() {
