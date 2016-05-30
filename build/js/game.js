@@ -403,14 +403,19 @@
     drawMessage: function(text, maxWidth) {
       var x = 300;
       var y = 50;
-      var messageWidth = 300;
-      var messageHeight = 150;
       var shadowOffsetX = 10;
       var shadowOffsetY = 10;
+      var marginLeft = 10 + x;
+      var marginTop = 20 + y;
       var ctx = this.ctx;
+      ctx.font = '16px PT Mono';
+      var font = ctx.font;
+      var lineHeight = getFontHeight();
+      var messageHeight = lineHeight;
+      var messageWidth = 300;
 
-      drawBlockOfMessage()
-      innerTextToBlockOfMessage()
+      innerTextToBlockOfMessage();
+      drawBlockOfMessage();
 
       /**
        * Перенос строк в сообщении.
@@ -419,9 +424,10 @@
        * @param {number} marginTop
        * @param {number} lineHeight
        */
-      function wrapText(ctx, marginLeft, marginTop, lineHeight) {
+      function wrapText() {
         var words = text.split(' ');
         var line = '';
+
         for (var n = 0; n < words.length; n++) {
           var testLine = line + words[n] + ' ';
           var testWidth = ctx.measureText(testLine).width;
@@ -429,6 +435,7 @@
             ctx.fillText(line, marginLeft, marginTop);
             line = words[n] + ' ';
             marginTop += lineHeight;
+            messageHeight += lineHeight;
           } else {
             line = testLine;
           }
@@ -454,12 +461,20 @@
       function innerTextToBlockOfMessage() {
         ctx.fillStyle = 'blue';
         ctx.shadowColor = 'transparent';
-        ctx.font = '16px PT Mono';
-        var marginLeft = 10 + x;
-        var marginTop = 20 + y;
-        var lineHeight = 20;
 
-        wrapText(ctx, marginLeft, marginTop, lineHeight);
+        wrapText();
+      }
+
+      /**
+       * Определение высоты текста.
+       * @param {number} font
+       * @return {number}
+       */
+      function getFontHeight() {
+        var lineHeightCoefficient = 1.4;
+        var fontText = font.split(' ');
+        var height = parseInt(fontText[0], 10) * lineHeightCoefficient;
+        return height;
       }
     },
 
