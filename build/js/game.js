@@ -418,9 +418,8 @@
        */
       function wrapText(ctx, marginLeft, marginTop, lineHeight) {
         var words = text.split(' ');
-        var countWords = words.length;
         var line = '';
-        for (var n = 0; n < countWords; n++) {
+        for (var n = 0; n < words.length; n++) {
           var testLine = line + words[n] + ' ';
           var testWidth = ctx.measureText(testLine).width;
           if (testWidth > maxWidth) {
