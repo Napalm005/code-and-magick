@@ -409,6 +409,9 @@
       var shadowOffsetY = 10;
       var ctx = this.ctx;
 
+      drawBlockOfMessage()
+      innerTextToBlockOfMessage()
+
       /**
        * Перенос строк в сообщении.
        * @param {object} ctx
@@ -444,7 +447,6 @@
         ctx.shadowOffsetY = shadowOffsetY;
         ctx.fill();
       }
-      drawBlockOfMessage()
 
       /**
        * Отрисовка текста сообщения.
@@ -459,8 +461,6 @@
 
         wrapText(ctx, marginLeft, marginTop, lineHeight);
       }
-      innerTextToBlockOfMessage()
-
     },
 
     /**
