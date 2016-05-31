@@ -425,7 +425,7 @@
       function createArray() {
         var words = text.split(' ');
         var line = '';
-        var linesArray = [];
+        linesArray = [];
 
         for (var n = 0; n < words.length; n++) {
           var testLine = line + words[n] + ' ';
@@ -770,5 +770,5 @@
     var game = new Game(document.querySelector('.demo'));
     game.initializeLevelAndStart();
     game.setGameStatus(window.Game.Verdict.INTRO);
-  }
+  };
 })();
