@@ -403,17 +403,9 @@
     drawMessage: function(text, maxWidth) {
       var x = 300;
       var y = 50;
-      var shadowOffsetX = 10;
-      var shadowOffsetY = 10;
-      var marginLeft = 10 + x;
-      var marginTop = 20 + y;
       var ctx = this.ctx;
-      ctx.font = '16px PT Mono';
-      var font = ctx.font;
       var lineHeight = getFontHeight();
       var linesArray = createArray();
-      var messageHeight = lineHeight * linesArray.length + 10;
-      var messageWidth = 300;
 
       drawRect();
       drawText();
@@ -426,6 +418,7 @@
         var words = text.split(' ');
         var line = '';
         linesArray = [];
+        var resulte = linesArray;
 
         for (var n = 0; n < words.length; n++) {
           var testLine = line + words[n] + ' ';
@@ -438,13 +431,17 @@
           }
         }
         linesArray.push(line);
-        return linesArray;
+        return resulte;
       }
 
       /**
        * Отрисовка фона сообщения.
        */
       function drawRect() {
+        var messageHeight = lineHeight * linesArray.length + 10;
+        var messageWidth = 300;
+        var shadowOffsetX = 10;
+        var shadowOffsetY = 10;
         ctx.beginPath();
         ctx.fillStyle = 'white';
         ctx.rect(x, y, messageWidth, messageHeight);
@@ -458,6 +455,8 @@
        * Отрисовка текста сообщения.
        */
       function drawText() {
+        var marginLeft = 10 + x;
+        var marginTop = 20 + y;
         ctx.fillStyle = 'blue';
         ctx.shadowColor = 'transparent';
 
@@ -472,10 +471,13 @@
        * @return {number}
        */
       function getFontHeight() {
+        ctx.font = '16px PT Mono';
+        var font = ctx.font;
         var lineHeightCoefficient = 1.4;
         var fontText = font.split(' ');
         var height = parseInt(fontText[0], 10) * lineHeightCoefficient;
-        return height;
+        var resulte = height;
+        return resulte;
       }
     },
 
