@@ -411,37 +411,41 @@
       ctx.font = '16px PT Mono';
       var font = ctx.font;
       var lineHeight = getFontHeight();
-      var messageHeight = getMessageHeight() + 10;
+      var linesArray = createArray();
+      var messageHeight = lineHeight * linesArray.length + 10;
       var messageWidth = 300;
 
       drawRect();
       drawText();
 
       /**
-       * Перенос строк в сообщении.
+       * Создание массива со строками.
+       * @return {array}
        */
-      function getMessageHeight() {
+      function createArray() {
         var words = text.split(' ');
         var line = '';
-        var messageHeight = lineHeight;
+        var linesArray = [];
 
         for (var n = 0; n < words.length; n++) {
           var testLine = line + words[n] + ' ';
           var testLineWidth = ctx.measureText(testLine).width;
           if (testLineWidth > maxWidth) {
+            linesArray.push(line);
             line = words[n] + ' ';
-            messageHeight += lineHeight;
           } else {
             line = testLine;
           }
         }
-        return messageHeight;
+        linesArray.push(line);
+        return linesArray;
       }
 
       /**
        * Отрисовка фона сообщения.
        */
       function drawRect() {
+        ctx.beginPath();
         ctx.fillStyle = 'white';
         ctx.rect(x, y, messageWidth, messageHeight);
         ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
@@ -457,21 +461,10 @@
         ctx.fillStyle = 'blue';
         ctx.shadowColor = 'transparent';
 
-        var words = text.split(' ');
-        var line = '';
-
-        for (var n = 0; n < words.length; n++) {
-          var testLine = line + words[n] + ' ';
-          var testWidth = ctx.measureText(testLine).width;
-          if (testWidth > maxWidth) {
-            ctx.fillText(line, marginLeft, marginTop);
-            line = words[n] + ' ';
-            marginTop += lineHeight;
-          } else {
-            line = testLine;
-          }
+        for (var n = 0; n < linesArray.length; n++) {
+          ctx.fillText(linesArray[n], marginLeft, marginTop);
+          marginTop += lineHeight;
         }
-        ctx.fillText(line, marginLeft, marginTop);
       }
 
       /**
@@ -773,7 +766,9 @@
   window.Game = Game;
   window.Game.Verdict = Verdict;
 
-  var game = new Game(document.querySelector('.demo'));
-  game.initializeLevelAndStart();
-  game.setGameStatus(window.Game.Verdict.INTRO);
+  window.onload = function() {
+    var game = new Game(document.querySelector('.demo'));
+    game.initializeLevelAndStart();
+    game.setGameStatus(window.Game.Verdict.INTRO);
+  }
 })();
