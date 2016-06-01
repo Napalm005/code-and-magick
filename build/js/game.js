@@ -417,21 +417,20 @@
       function createArray() {
         var words = text.split(' ');
         var line = '';
-        linesArray = [];
-        var resulte = linesArray;
+        var result = [];
 
         for (var n = 0; n < words.length; n++) {
           var testLine = line + words[n] + ' ';
           var testLineWidth = ctx.measureText(testLine).width;
           if (testLineWidth > maxWidth) {
-            linesArray.push(line);
+            result.push(line);
             line = words[n] + ' ';
           } else {
             line = testLine;
           }
         }
-        linesArray.push(line);
-        return resulte;
+        result.push(line);
+        return result;
       }
 
       /**
@@ -476,8 +475,7 @@
         var lineHeightCoefficient = 1.4;
         var fontText = font.split(' ');
         var height = parseInt(fontText[0], 10) * lineHeightCoefficient;
-        var resulte = height;
-        return resulte;
+        return height;
       }
     },
 
