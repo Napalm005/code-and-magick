@@ -398,7 +398,7 @@
     /**
      * Отрисовка сообщения через canvas.
      * @param {string} text
-     * @param {number} maxWidth
+     * @param {number} messageWidth
      */
     drawMessage: function(text, messageWidth) {
       var ctx = this.ctx;
