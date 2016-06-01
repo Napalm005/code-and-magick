@@ -440,9 +440,10 @@
       function drawRect() {
         var shadowOffsetX = 10;
         var shadowOffsetY = 10;
+        var marginRight = 10;
         ctx.beginPath();
         ctx.fillStyle = 'white';
-        ctx.rect(x, y, messageWidth, messageHeight);
+        ctx.rect(x, y, messageWidth + marginRight, messageHeight);
         ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
         ctx.shadowOffsetX = shadowOffsetX;
         ctx.shadowOffsetY = shadowOffsetY;
@@ -458,9 +459,10 @@
         ctx.fillStyle = 'blue';
         ctx.shadowColor = 'transparent';
 
-        linesArray.forEach(function(lineN) {
-          ctx.fillText(lineN, marginLeft, marginTop);
-          marginTop += lineHeight;
+        linesArray.forEach(function(line, index) {
+          ctx.fillText(line, marginLeft, marginTop);
+          marginTop = 20 + y;
+          marginTop = marginTop + (lineHeight * (index + 1));
         });
       }
 
