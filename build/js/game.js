@@ -378,19 +378,105 @@
      * Отрисовка экрана паузы.
      */
     _drawPauseScreen: function() {
+      var messageWidth = 300;
       switch (this.state.currentStatus) {
         case Verdict.WIN:
-          console.log('you have won!');
+          this.drawMessage('Поздравляем! Вы успешно закончили этот уровень.', messageWidth);
           break;
         case Verdict.FAIL:
-          console.log('you have failed!');
+          this.drawMessage('Вы проиграли. Попробуйте ещё раз!', messageWidth);
           break;
         case Verdict.PAUSE:
-          console.log('game is on pause!');
+          this.drawMessage('Пауза. Скорее возвращайтсь в игру. Для этого нажмите пробел', messageWidth);
           break;
         case Verdict.INTRO:
-          console.log('welcome to the game! Press Space to start');
+          this.drawMessage('Добро пожаловать в игру! Нажмите пробел, чтобы начать. Приятного вам времяпрепровождения!', messageWidth);
           break;
+      }
+    },
+
+    /**
+     * Отрисовка сообщения через canvas.
+     * @param {string} text
+     * @param {number} messageWidth
+     */
+    drawMessage: function(text, messageWidth) {
+      var ctx = this.ctx;
+      var lineHeight = getFontHeight();
+      var linesArray = createArray();
+      var messageHeight = lineHeight * linesArray.length + 10;
+      var x = (this.canvas.width / 2) - (messageWidth / 2);
+      var y = (this.canvas.height / 2) - (messageHeight / 2);
+
+      drawRect();
+      drawText();
+
+      /**
+       * Создание массива со строками.
+       * @return {array}
+       */
+      function createArray() {
+        var words = text.split(' ');
+        var line = '';
+        var result = [];
+
+        words.forEach(function(word) {
+          var testLine = line + word + ' ';
+          var testLineWidth = ctx.measureText(testLine).width;
+          if (testLineWidth > messageWidth) {
+            result.push(line);
+            line = word + ' ';
+          } else {
+            line = testLine;
+          }
+        });
+        result.push(line);
+        return result;
+      }
+
+      /**
+       * Отрисовка фона сообщения.
+       */
+      function drawRect() {
+        var shadowOffsetX = 10;
+        var shadowOffsetY = 10;
+        var marginRight = 10;
+        ctx.beginPath();
+        ctx.fillStyle = 'white';
+        ctx.rect(x, y, messageWidth + marginRight, messageHeight);
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
+        ctx.shadowOffsetX = shadowOffsetX;
+        ctx.shadowOffsetY = shadowOffsetY;
+        ctx.fill();
+      }
+
+      /**
+       * Отрисовка текста сообщения.
+       */
+      function drawText() {
+        var marginLeft = 10 + x;
+        var marginTop = 20 + y;
+        ctx.fillStyle = 'blue';
+        ctx.shadowColor = 'transparent';
+
+        linesArray.forEach(function(line, index) {
+          ctx.fillText(line, marginLeft, marginTop);
+          marginTop = 20 + y;
+          marginTop = marginTop + (lineHeight * (index + 1));
+        });
+      }
+
+      /**
+       * Определение высоты текста.
+       * @return {number}
+       */
+      function getFontHeight() {
+        ctx.font = '16px PT Mono';
+        var font = ctx.font;
+        var lineHeightCoefficient = 1.4;
+        var fontText = font.split(' ');
+        var height = parseInt(fontText[0], 10) * lineHeightCoefficient;
+        return height;
       }
     },
 
@@ -681,7 +767,9 @@
   window.Game = Game;
   window.Game.Verdict = Verdict;
 
-  var game = new Game(document.querySelector('.demo'));
-  game.initializeLevelAndStart();
-  game.setGameStatus(window.Game.Verdict.INTRO);
+  window.onload = function() {
+    var game = new Game(document.querySelector('.demo'));
+    game.initializeLevelAndStart();
+    game.setGameStatus(window.Game.Verdict.INTRO);
+  };
 })();
