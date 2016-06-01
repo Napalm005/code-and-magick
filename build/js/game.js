@@ -378,19 +378,19 @@
      * Отрисовка экрана паузы.
      */
     _drawPauseScreen: function() {
-      var maxWidth = 290;
+      var messageWidth = 300;
       switch (this.state.currentStatus) {
         case Verdict.WIN:
-          this.drawMessage('Поздравляем! Вы успешно закончили этот уровень.', maxWidth);
+          this.drawMessage('Поздравляем! Вы успешно закончили этот уровень.', messageWidth);
           break;
         case Verdict.FAIL:
-          this.drawMessage('Вы проиграли. Попробуйте ещё раз!', maxWidth);
+          this.drawMessage('Вы проиграли. Попробуйте ещё раз!', messageWidth);
           break;
         case Verdict.PAUSE:
-          this.drawMessage('Пауза. Скорее возвращайтсь в игру. Для этого нажмите пробел', maxWidth);
+          this.drawMessage('Пауза. Скорее возвращайтсь в игру. Для этого нажмите пробел', messageWidth);
           break;
         case Verdict.INTRO:
-          this.drawMessage('Добро пожаловать в игру! Нажмите пробел, чтобы начать. Приятного вам времяпрепровождения!', maxWidth);
+          this.drawMessage('Добро пожаловать в игру! Нажмите пробел, чтобы начать. Приятного вам времяпрепровождения!', messageWidth);
           break;
       }
     },
@@ -400,12 +400,11 @@
      * @param {string} text
      * @param {number} maxWidth
      */
-    drawMessage: function(text, maxWidth) {
+    drawMessage: function(text, messageWidth) {
       var ctx = this.ctx;
       var lineHeight = getFontHeight();
       var linesArray = createArray();
       var messageHeight = lineHeight * linesArray.length + 10;
-      var messageWidth = 300;
       var x = (this.canvas.width / 2) - (messageWidth / 2);
       var y = (this.canvas.height / 2) - (messageHeight / 2);
 
@@ -424,7 +423,7 @@
         words.forEach(function(word) {
           var testLine = line + word + ' ';
           var testLineWidth = ctx.measureText(testLine).width;
-          if (testLineWidth > maxWidth) {
+          if (testLineWidth > messageWidth) {
             result.push(line);
             line = word + ' ';
           } else {
