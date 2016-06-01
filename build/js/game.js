@@ -381,7 +381,7 @@
       var maxWidth = 290;
       switch (this.state.currentStatus) {
         case Verdict.WIN:
-          this.drawMessage('Поздравляем! Вы успешно закончили этот уровень. Поздравляем! Вы успешно закончили этот уровень.Поздравляем! Вы успешно закончили этот уровень.', maxWidth);
+          this.drawMessage('Поздравляем! Вы успешно закончили этот уровень.', maxWidth);
           break;
         case Verdict.FAIL:
           this.drawMessage('Вы проиграли. Попробуйте ещё раз!', maxWidth);
@@ -401,11 +401,13 @@
      * @param {number} maxWidth
      */
     drawMessage: function(text, maxWidth) {
-      var x = 300;
-      var y = 50;
       var ctx = this.ctx;
       var lineHeight = getFontHeight();
       var linesArray = createArray();
+      var messageHeight = lineHeight * linesArray.length + 10;
+      var messageWidth = 300;
+      var x = (this.canvas.width / 2) - (messageWidth / 2);
+      var y = (this.canvas.height / 2) - (messageHeight / 2);
 
       drawRect();
       drawText();
@@ -419,16 +421,16 @@
         var line = '';
         var result = [];
 
-        for (var n = 0; n < words.length; n++) {
-          var testLine = line + words[n] + ' ';
+        words.forEach(function(word) {
+          var testLine = line + word + ' ';
           var testLineWidth = ctx.measureText(testLine).width;
           if (testLineWidth > maxWidth) {
             result.push(line);
-            line = words[n] + ' ';
+            line = word + ' ';
           } else {
             line = testLine;
           }
-        }
+        });
         result.push(line);
         return result;
       }
@@ -437,8 +439,6 @@
        * Отрисовка фона сообщения.
        */
       function drawRect() {
-        var messageHeight = lineHeight * linesArray.length + 10;
-        var messageWidth = 300;
         var shadowOffsetX = 10;
         var shadowOffsetY = 10;
         ctx.beginPath();
@@ -459,10 +459,10 @@
         ctx.fillStyle = 'blue';
         ctx.shadowColor = 'transparent';
 
-        for (var n = 0; n < linesArray.length; n++) {
-          ctx.fillText(linesArray[n], marginLeft, marginTop);
+        linesArray.forEach(function(lineN) {
+          ctx.fillText(lineN, marginLeft, marginTop);
           marginTop += lineHeight;
-        }
+        });
       }
 
       /**
