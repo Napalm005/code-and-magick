@@ -14,55 +14,57 @@
   var formButton = form.querySelector('.review-submit');
 
   formReviewName.required = true;
-  formReviewName.validationMessage = 'Hello';
+  disableButton();
+  // formReviewName.validationMessage = 'Hello';
 
   form.oninput = function() {
     defineReviewTextRequire();
     hideLinksTips();
     disableButton();
-  }
+  };
 
   /**
    * Обязует заполнять поле отзыва при оценке ниже 3.
    */
   function defineReviewTextRequire() {
-    if (formReviewMarks.value < 3) {
+    if (Number(formReviewMarks.value) < 3) {
       formReviewText.required = true;
     } else {
       formReviewText.required = false;
     }
-  }
+  };
 
   /**
    * Прячет подсказки при заполнении полей.
    */
   function hideLinksTips() {
-    if (formReviewName.value !== '') {
+    if (formReviewName.checkValidity()) {
       formNameLink.classList.add('invisible');
     } else {
       formNameLink.classList.remove('invisible');
     }
 
-    if (formReviewText.value !== '') {
+    if (formReviewText.checkValidity()) {
       formTextLink.classList.add('invisible');
     } else {
       formTextLink.classList.remove('invisible');
     }
 
-    if ( (formReviewText.value !== '') && (formReviewName.value !== '') ) {
+    if ( (formReviewText.checkValidity()) && (formReviewName.checkValidity()) ) {
       formReviewControl.classList.add('invisible');
     } else {
       formReviewControl.classList.remove('invisible');
     }
-  }
+  };
 
   /**
    * Делает кнопку неактивной, пока форма невалидна.
    * (Пока не работает)
    */
   function disableButton() {
-    if (form.elements.validity.valid === false) {
       formButton.disabled = true;
+    } else {
+      formButton.disabled = false;;
     }
   }
 
