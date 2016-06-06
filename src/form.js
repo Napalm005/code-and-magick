@@ -62,6 +62,7 @@
    * (Пока не работает)
    */
   function disableButton() {
+    if ( !(form.checkValidity()) ) {
       formButton.disabled = true;
     } else {
       formButton.disabled = false;;
