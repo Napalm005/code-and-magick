@@ -14,6 +14,7 @@
   var formButton = form.querySelector('.review-submit');
 
   formReviewName.required = true;
+  formReviewName.validationMessage = 'Hello';
 
   form.oninput = function() {
     defineReviewTextRequire();
@@ -60,7 +61,7 @@
    * (Пока не работает)
    */
   function disableButton() {
-    while (form.submit = false) {
+    if (form.elements.validity.valid === false) {
       formButton.disabled = true;
     }
   }
