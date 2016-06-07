@@ -32,7 +32,7 @@
    * Обязует заполнять поле отзыва при оценке ниже 3.
    */
   function defineReviewTextRequire(mark) {
-    if (mark.type === 'radio') {
+    if (mark.getAttribute('name') === 'review-mark') {
       if (Number(mark.value) < 3) {
         formReviewText.required = true;
       } else {
