@@ -32,10 +32,12 @@
    * Обязует заполнять поле отзыва при оценке ниже 3.
    */
   function defineReviewTextRequire(mark) {
-    if (Number(mark.value) < 3) {
-      formReviewText.required = true;
-    } else {
-      formReviewText.required = false;
+    if (mark.type === 'radio') {
+      if (Number(mark.value) < 3) {
+        formReviewText.required = true;
+      } else {
+        formReviewText.required = false;
+      }
     }
   }
 
