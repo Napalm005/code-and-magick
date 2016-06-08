@@ -45,19 +45,29 @@
    * Прячет подсказки при заполнении полей.
    */
   function hideLinksTips() {
-    if (formReviewName.checkValidity()) {
-      formNameLink.classList.add('invisible');
-    } else {
-      formNameLink.classList.remove('invisible');
-    }
 
-    if (formReviewText.checkValidity()) {
-      formTextLink.classList.add('invisible');
-    } else {
-      formTextLink.classList.remove('invisible');
-    }
+    var fields = [
+      {
+        attr1: formReviewName,
+        attr2: formNameLink
+      },
+      {
+        attr1: formReviewText,
+        attr2: formTextLink
+      }
+    ];
+    var counter = fields.length;
 
-    if ( (formReviewText.checkValidity()) && (formReviewName.checkValidity()) ) {
+    fields.forEach(function(field) {
+      if (field.attr1.checkValidity()) {
+        field.attr2.classList.add('invisible');
+        counter = counter - 1;
+      } else {
+        field.attr2.classList.remove('invisible');
+      }
+    });
+
+    if (counter === 0) {
       formReviewControl.classList.add('invisible');
     } else {
       formReviewControl.classList.remove('invisible');
