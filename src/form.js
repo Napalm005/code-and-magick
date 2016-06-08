@@ -1,17 +1,14 @@
 'use strict';
 
 (function() {
+  var form = document.querySelector('.review-form');
   var formContainer = document.querySelector('.overlay-container');
   var formOpenButton = document.querySelector('.reviews-controls-new');
   var formCloseButton = document.querySelector('.review-form-close');
-  var form = document.querySelector('.review-form');
   var formReviewName = form.elements['review-name'];
   var formReviewText = form.elements['review-text'];
-  var formNameLink = form.querySelector('.review-form-controls .review-fields-name');
-  var formTextLink = form.querySelector('.review-form-controls .review-fields-text');
-  var formReviewControl = form.querySelector('.review-fields');
-  var formButton = form.querySelector('.review-submit');
   var formReviewGroupMark = form.querySelector('.review-form-group-mark');
+  var invisible = 'invisible';
 
   formReviewName.required = true;
   disableButton();
@@ -45,32 +42,34 @@
    * Прячет подсказки при заполнении полей.
    */
   function hideLinksTips() {
-
+    var formReviewControl = form.querySelector('.review-fields');
+    var formNameLink = form.querySelector('.review-form-controls .review-fields-name');
+    var formTextLink = form.querySelector('.review-form-controls .review-fields-text');
     var fields = [
       {
-        attr1: formReviewName,
-        attr2: formNameLink
+        field: formReviewName,
+        link: formNameLink
       },
       {
-        attr1: formReviewText,
-        attr2: formTextLink
+        field: formReviewText,
+        link: formTextLink
       }
     ];
     var counter = fields.length;
 
-    fields.forEach(function(field) {
-      if (field.attr1.checkValidity()) {
-        field.attr2.classList.add('invisible');
-        counter = counter - 1;
+    fields.forEach(function(item) {
+      if (item.field.checkValidity()) {
+        item.link.classList.add(invisible);
+        counter -= 1;
       } else {
-        field.attr2.classList.remove('invisible');
+        item.link.classList.remove(invisible);
       }
     });
 
     if (counter === 0) {
-      formReviewControl.classList.add('invisible');
+      formReviewControl.classList.add(invisible);
     } else {
-      formReviewControl.classList.remove('invisible');
+      formReviewControl.classList.remove(invisible);
     }
   }
 
@@ -78,6 +77,7 @@
    * Делает кнопку неактивной, пока форма невалидна.
    */
   function disableButton() {
+    var formButton = form.querySelector('.review-submit');
     if ( !(form.checkValidity()) ) {
       formButton.disabled = true;
     } else {
@@ -88,11 +88,11 @@
 
   formOpenButton.onclick = function(evt) {
     evt.preventDefault();
-    formContainer.classList.remove('invisible');
+    formContainer.classList.remove(invisible);
   };
 
   formCloseButton.onclick = function(evt) {
     evt.preventDefault();
-    formContainer.classList.add('invisible');
+    formContainer.classList.add(invisible);
   };
 })();
