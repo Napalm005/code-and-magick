@@ -1,6 +1,8 @@
 'use strict';
 
 (function() {
+
+  var browserCookies = require('browser-cookies');
   var form = document.querySelector('.review-form');
   var formContainer = document.querySelector('.overlay-container');
   var formOpenButton = document.querySelector('.reviews-controls-new');
@@ -10,9 +12,29 @@
   var formReviewGroupMark = form.querySelector('.review-form-group-mark');
   var invisible = 'invisible';
 
+  formReviewName.value = browserCookies.get('Name');
+  formReviewText.value = browserCookies.get('Review');
+
   formReviewName.required = true;
   disableButton();
   hideLinksTips();
+
+  form.onsubmit = function() {
+    var now = new Date;
+    var lastBirthday = new Date(now.setMonth(5, 7));
+    var diff = Date.now() - +lastBirthday;
+
+    if (diff < 0) {
+      lastBirthday.setFullYear(now.getFullYear() - 1);
+      diff = Date.now() - +lastBirthday;
+    }
+
+    var dateToExpire = Date.now() + diff;
+    var formatteddateToExpire = new Date(dateToExpire).toUTCString();
+
+    browserCookies.set('Name', formReviewName.value, {expires: formatteddateToExpire});
+    browserCookies.set('Review', formReviewText.value, {expires: formatteddateToExpire});
+  };
 
   form.oninput = function() {
     hideLinksTips();
