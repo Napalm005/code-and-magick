@@ -43,16 +43,14 @@
    */
   function hideLinksTips() {
     var formReviewControl = form.querySelector('.review-fields');
-    var formNameLink = form.querySelector('.review-form-controls .review-fields-name');
-    var formTextLink = form.querySelector('.review-form-controls .review-fields-text');
     var fields = [
       {
         field: formReviewName,
-        link: formNameLink
+        link: form.querySelector('.review-form-controls .review-fields-name')
       },
       {
         field: formReviewText,
-        link: formTextLink
+        link: form.querySelector('.review-form-controls .review-fields-text')
       }
     ];
     var counter = fields.length;
