@@ -12,12 +12,7 @@
   var formReviewGroupMark = form.querySelector('.review-form-group-mark');
   var invisible = 'invisible';
 
-  formReviewName.required = true;
-  formReviewName.value = browserCookies.get('Name');
-  formReviewText.value = browserCookies.get('Review');
-  formReviewGroupMark.elements['review-mark'].value = browserCookies.get('Mark');
-
-  updateReviewTextRules(formReviewGroupMark.elements['review-mark'].value);
+  init();
 
   form.onsubmit = function() {
     var now = new Date();
@@ -49,6 +44,17 @@
       disableButton();
     }
   };
+
+  /**
+   * Инициализирует состояние элементов формы.
+   */
+  function init() {
+    formReviewName.required = true;
+    formReviewName.value = browserCookies.get('Name');
+    formReviewText.value = browserCookies.get('Review');
+    formReviewGroupMark.elements['review-mark'].value = browserCookies.get('Mark');
+    updateReviewTextRules(formReviewGroupMark.elements['review-mark'].value);
+  }
 
   /**
    * Обязует заполнять поле отзыва при оценке ниже 3.
