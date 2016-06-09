@@ -47,7 +47,9 @@
   };
 
   formReviewGroupMark.onclick = function(evt) {
-    defineReviewTextRequire(evt.target);
+    if (evt.target.getAttribute('name') === 'review-mark') {
+      defineReviewTextRequire(evt.target);
+    }
     hideLinksTips();
     disableButton();
   };
@@ -56,12 +58,10 @@
    * Обязует заполнять поле отзыва при оценке ниже 3.
    */
   function defineReviewTextRequire(mark) {
-    if (mark.getAttribute('name') === 'review-mark') {
-      if (Number(mark.value) < 3) {
-        formReviewText.required = true;
-      } else {
-        formReviewText.required = false;
-      }
+    if (Number(mark.value) < 3) {
+      formReviewText.required = true;
+    } else {
+      formReviewText.required = false;
     }
   }
 
