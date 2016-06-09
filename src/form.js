@@ -17,6 +17,12 @@
   formReviewText.value = browserCookies.get('Review');
   formReviewGroupMark.elements['review-mark'].value = browserCookies.get('Mark');
 
+  if (Number(formReviewGroupMark.elements['review-mark'].value) < 3) {
+    formReviewText.required = true;
+  } else {
+    formReviewText.required = false;
+  }
+
   form.onsubmit = function() {
     var now = new Date();
     var lastBirthday = new Date(now.setMonth(0, 22));
@@ -109,7 +115,6 @@
     evt.preventDefault();
     formContainer.classList.remove(invisible);
     disableButton();
-    hideLinksTips();
     hideLinksTips();
   };
 
