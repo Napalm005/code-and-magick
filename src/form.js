@@ -17,7 +17,7 @@
   formReviewText.value = browserCookies.get('Review');
   formReviewGroupMark.elements['review-mark'].value = browserCookies.get('Mark');
 
-  onReviewMarkClick(formReviewGroupMark.elements['review-mark'].value);
+  updateReviewTextRules(formReviewGroupMark.elements['review-mark'].value);
 
   form.onsubmit = function() {
     var now = new Date();
@@ -44,7 +44,7 @@
 
   formReviewGroupMark.onclick = function(evt) {
     if (evt.target.getAttribute('name') === 'review-mark') {
-      onReviewMarkClick(evt.target.value);
+      updateReviewTextRules(evt.target.value);
       hideLinksTips();
       disableButton();
     }
@@ -53,7 +53,7 @@
   /**
    * Обязует заполнять поле отзыва при оценке ниже 3.
    */
-  function onReviewMarkClick(mark) {
+  function updateReviewTextRules(mark) {
     if (Number(mark) < 3) {
       formReviewText.required = true;
     } else {
