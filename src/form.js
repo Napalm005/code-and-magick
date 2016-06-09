@@ -58,6 +58,7 @@
 
   /**
    * Обязует заполнять поле отзыва при оценке ниже 3.
+   * @param {string} mark.
    */
   function updateReviewTextRules(mark) {
     if (Number(mark) < 3) {
