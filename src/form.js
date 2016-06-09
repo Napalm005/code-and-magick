@@ -42,7 +42,7 @@
     disableButton();
   };
 
-  formReviewGroupMark.onclick = function(evt) {
+  formReviewGroupMark.onclick = function onReviewMarkClick(evt) {
     if (evt.target.getAttribute('name') === 'review-mark') {
       updateReviewTextRules(evt.target.value);
       hideLinksTips();
