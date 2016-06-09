@@ -1,6 +1,8 @@
 'use strict';
 
 (function() {
+
+  var browserCookies = require('browser-cookies');
   var form = document.querySelector('.review-form');
   var formContainer = document.querySelector('.overlay-container');
   var formOpenButton = document.querySelector('.reviews-controls-new');
@@ -10,31 +12,59 @@
   var formReviewGroupMark = form.querySelector('.review-form-group-mark');
   var invisible = 'invisible';
 
-  formReviewName.required = true;
-  disableButton();
-  hideLinksTips();
+  init();
+
+  form.onsubmit = function() {
+    var now = new Date();
+    var lastBirthday = new Date(now.setMonth(0, 22));
+    var diff = Date.now() - lastBirthday.getTime();
+
+    if (diff < 0) {
+      lastBirthday.setFullYear(now.getFullYear() - 1);
+      diff = Date.now() - lastBirthday.getTime();
+    }
+
+    var dateToExpire = Date.now() + diff;
+    var formatteddateToExpire = new Date(dateToExpire).toUTCString();
+
+    browserCookies.set('Mark', formReviewGroupMark.elements['review-mark'].value, {expires: formatteddateToExpire});
+    browserCookies.set('Name', formReviewName.value, {expires: formatteddateToExpire});
+    browserCookies.set('Review', formReviewText.value, {expires: formatteddateToExpire});
+  };
 
   form.oninput = function() {
     hideLinksTips();
     disableButton();
   };
 
-  formReviewGroupMark.onclick = function(evt) {
-    defineReviewTextRequire(evt.target);
-    hideLinksTips();
-    disableButton();
+  formReviewGroupMark.onclick = function onReviewMarkClick(evt) {
+    if (evt.target.getAttribute('name') === 'review-mark') {
+      updateReviewTextRules(evt.target.value);
+      hideLinksTips();
+      disableButton();
+    }
   };
 
   /**
-   * Обязует заполнять поле отзыва при оценке ниже 3.
+   * Инициализирует состояние элементов формы.
    */
-  function defineReviewTextRequire(mark) {
-    if (mark.getAttribute('name') === 'review-mark') {
-      if (Number(mark.value) < 3) {
-        formReviewText.required = true;
-      } else {
-        formReviewText.required = false;
-      }
+  function init() {
+    formReviewName.required = true;
+    formReviewName.value = browserCookies.get('Name');
+    formReviewText.value = browserCookies.get('Review');
+    formReviewGroupMark.elements['review-mark'].value = browserCookies.get('Mark');
+    updateReviewTextRules(formReviewGroupMark.elements['review-mark'].value);
+  }
+
+  /**
+   * Обязует заполнять поле отзыва при оценке ниже 3.
+   * @param {string} mark.
+   */
+  function updateReviewTextRules(mark) {
+    if (Number(mark) < 3) {
+      formReviewText.required = true;
+    } else {
+      formReviewText.required = false;
     }
   }
 
@@ -87,6 +117,8 @@
   formOpenButton.onclick = function(evt) {
     evt.preventDefault();
     formContainer.classList.remove(invisible);
+    disableButton();
+    hideLinksTips();
   };
 
   formCloseButton.onclick = function(evt) {
