@@ -12,25 +12,25 @@
   var formReviewGroupMark = form.querySelector('.review-form-group-mark');
   var invisible = 'invisible';
 
-  formReviewName.value = browserCookies.get('Name');
-  formReviewText.value = browserCookies.get('Review');
-
   formReviewName.required = true;
-  disableButton();
-  hideLinksTips();
+  formReviewName.value = browserCookies.get('Name') || 'Вася';
+  formReviewText.value = browserCookies.get('Review') || 'Пупкин';
+  formReviewGroupMark.elements['review-mark'].value = browserCookies.get('Mark') || 5;
 
   form.onsubmit = function() {
-    var now = new Date;
-    var lastBirthday = new Date(now.setMonth(5, 7));
-    var diff = Date.now() - +lastBirthday;
+    var now = new Date();
+    var lastBirthday = new Date(now.setMonth(0, 22));
+    var diff = Date.now() - lastBirthday.getTime();
 
     if (diff < 0) {
       lastBirthday.setFullYear(now.getFullYear() - 1);
-      diff = Date.now() - +lastBirthday;
+      diff = Date.now() - lastBirthday.getTime();
     }
 
     var dateToExpire = Date.now() + diff;
     var formatteddateToExpire = new Date(dateToExpire).toUTCString();
+
+    checkIt(formatteddateToExpire);
 
     browserCookies.set('Name', formReviewName.value, {expires: formatteddateToExpire});
     browserCookies.set('Review', formReviewText.value, {expires: formatteddateToExpire});
@@ -46,6 +46,18 @@
     hideLinksTips();
     disableButton();
   };
+
+  /**
+   * Фиксирует чекнутый радиобаттон и запоминает его в куку.
+   */
+  function checkIt(formatteddateToExpire) {
+    var theGroup = formReviewGroupMark.elements['review-mark'];
+    for (var i = 0; i < theGroup.length; i++) {
+      if (theGroup[i].checked) {
+        browserCookies.set('Mark', theGroup[i].value, {expires: formatteddateToExpire});
+      }
+    }
+  }
 
   /**
    * Обязует заполнять поле отзыва при оценке ниже 3.
@@ -109,6 +121,9 @@
   formOpenButton.onclick = function(evt) {
     evt.preventDefault();
     formContainer.classList.remove(invisible);
+    disableButton();
+    hideLinksTips();
+    hideLinksTips();
   };
 
   formCloseButton.onclick = function(evt) {
