@@ -30,7 +30,7 @@
     var dateToExpire = Date.now() + diff;
     var formatteddateToExpire = new Date(dateToExpire).toUTCString();
 
-    browserCookies.set('Mark', setRadioCookie(formatteddateToExpire), {expires: formatteddateToExpire});
+    browserCookies.set('Mark', formReviewGroupMark.elements['review-mark'].value, {expires: formatteddateToExpire});
     browserCookies.set('Name', formReviewName.value, {expires: formatteddateToExpire});
     browserCookies.set('Review', formReviewText.value, {expires: formatteddateToExpire});
   };
@@ -45,18 +45,6 @@
     hideLinksTips();
     disableButton();
   };
-
-  /**
-   * Фиксирует чекнутый радиобаттон и запоминает его в куку.
-   */
-  function setRadioCookie(formatteddateToExpire) {
-    var theGroup = formReviewGroupMark.elements['review-mark'];
-    for (var i = 0; i < theGroup.length; i++) {
-      if (theGroup[i].checked) {
-        return theGroup[i].value;
-      }
-    }
-  }
 
   /**
    * Обязует заполнять поле отзыва при оценке ниже 3.
