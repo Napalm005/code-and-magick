@@ -13,9 +13,9 @@
   var invisible = 'invisible';
 
   formReviewName.required = true;
-  formReviewName.value = browserCookies.get('Name') || 'Вася';
-  formReviewText.value = browserCookies.get('Review') || 'Пупкин';
-  formReviewGroupMark.elements['review-mark'].value = browserCookies.get('Mark') || 5;
+  formReviewName.value = browserCookies.get('Name');
+  formReviewText.value = browserCookies.get('Review');
+  formReviewGroupMark.elements['review-mark'].value = browserCookies.get('Mark');
 
   form.onsubmit = function() {
     var now = new Date();
@@ -30,8 +30,7 @@
     var dateToExpire = Date.now() + diff;
     var formatteddateToExpire = new Date(dateToExpire).toUTCString();
 
-    checkIt(formatteddateToExpire);
-
+    browserCookies.set('Mark', setRadioCookie(formatteddateToExpire), {expires: formatteddateToExpire});
     browserCookies.set('Name', formReviewName.value, {expires: formatteddateToExpire});
     browserCookies.set('Review', formReviewText.value, {expires: formatteddateToExpire});
   };
@@ -50,11 +49,11 @@
   /**
    * Фиксирует чекнутый радиобаттон и запоминает его в куку.
    */
-  function checkIt(formatteddateToExpire) {
+  function setRadioCookie(formatteddateToExpire) {
     var theGroup = formReviewGroupMark.elements['review-mark'];
     for (var i = 0; i < theGroup.length; i++) {
       if (theGroup[i].checked) {
-        browserCookies.set('Mark', theGroup[i].value, {expires: formatteddateToExpire});
+        return theGroup[i].value;
       }
     }
   }
