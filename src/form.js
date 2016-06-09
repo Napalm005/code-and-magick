@@ -48,17 +48,17 @@
 
   formReviewGroupMark.onclick = function(evt) {
     if (evt.target.getAttribute('name') === 'review-mark') {
-      defineReviewTextRequire(evt.target);
+      defineReviewTextRequire(evt.target.value);
+      hideLinksTips();
+      disableButton();
     }
-    hideLinksTips();
-    disableButton();
   };
 
   /**
    * Обязует заполнять поле отзыва при оценке ниже 3.
    */
   function defineReviewTextRequire(mark) {
-    if (Number(mark.value) < 3) {
+    if (Number(mark) < 3) {
       formReviewText.required = true;
     } else {
       formReviewText.required = false;
