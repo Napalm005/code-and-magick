@@ -24,7 +24,7 @@
     } else {
       result = templateElement.querySelector('.review');
     }
-    return result
+    return result;
   }
 
   /**
@@ -36,6 +36,7 @@
     var element = elementToClone.cloneNode(true);
     element.querySelector('.review-text').textContent = data.description;
     element.querySelector('.review-rating').textContent = data.rating;
+    setImageParameters(data, element);
     return element;
   };
 
@@ -71,7 +72,6 @@
 
   window.reviews.forEach(function(review) {
     reviewsContainer.appendChild(cloneReviewElements(review));
-    setImageParameters(review, cloneReviewElements(review));
   });
 
   reviewsFilterBlock.classList.remove(INVISIBLE);
