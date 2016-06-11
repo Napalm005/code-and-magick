@@ -2,42 +2,41 @@
 
 (function() {
   var reviewsFilterBlock = document.querySelector('.reviews-filter');
-  var elementToClone;
+  var elementToClone = getTemplate();
   var reviewsContainer = document.querySelector('.reviews-list');
   var INVISIBLE = 'invisible';
 
   reviewsFilterBlock.classList.add(INVISIBLE);
-  supportTemplateTag();
 
   /** @constant {number} */
   var IMAGE_LOAD_TIMEOUT = 5000;
 
   /**
     * Проверяет поддержку элемента template и получает в нём контент.
-    * @param {Object} data
-    * @param {HTMLElement} container
+    * return {object} result
     */
-  function supportTemplateTag() {
+  function getTemplate() {
     var templateElement = document.querySelector('template');
+    var result;
 
     if ('content' in templateElement) {
-      elementToClone = templateElement.content.querySelector('.review');
+      result = templateElement.content.querySelector('.review');
     } else {
-      elementToClone = templateElement.querySelector('.review');
+      result = templateElement.querySelector('.review');
     }
+    return result
   }
+
   /**
-    * Клонирует элемент из шаблона, подставляет данные из объекта на сервере
-    * и рендерит элемент в указанный блок.
+    * Клонирует элемент из шаблона, подставляет данные из объекта на сервере.
     * @param {Object} data
     * @param {HTMLElement} container
     */
-  var cloneAndRenderReviewElements = function(data, container) {
+  var cloneReviewElements = function(data) {
     var element = elementToClone.cloneNode(true);
     element.querySelector('.review-text').textContent = data.description;
     element.querySelector('.review-rating').textContent = data.rating;
-    container.appendChild(element);
-    setImageParameters(data, element);
+    return element;
   };
 
   /**
@@ -71,7 +70,8 @@
   }
 
   window.reviews.forEach(function(review) {
-    cloneAndRenderReviewElements(review, reviewsContainer);
+    reviewsContainer.appendChild(cloneReviewElements(review));
+    setImageParameters(review, cloneReviewElements(review));
   });
 
   reviewsFilterBlock.classList.remove(INVISIBLE);
