@@ -4,9 +4,9 @@
   var reviewsFilterBlock = document.querySelector('.reviews-filter');
   var elementToClone = getTemplate();
   var reviewsContainer = document.querySelector('.reviews-list');
-  var INVISIBLE = 'invisible';
+  var CLASS_INVISIBLE = 'invisible';
 
-  reviewsFilterBlock.classList.add(INVISIBLE);
+  reviewsFilterBlock.classList.add(CLASS_INVISIBLE);
 
   /** @constant {number} */
   var IMAGE_LOAD_TIMEOUT = 5000;
@@ -30,12 +30,29 @@
   /**
     * Клонирует элемент из шаблона, подставляет данные из объекта на сервере.
     * @param {Object} data
-    * @param {HTMLElement} container
     */
-  var cloneReviewElements = function(data) {
+  var cloneReviewElement = function(data) {
     var element = elementToClone.cloneNode(true);
+    var rating = element.querySelector('.review-rating');
     element.querySelector('.review-text').textContent = data.description;
-    element.querySelector('.review-rating').textContent = data.rating;
+
+    switch (data.rating) {
+      case 1:
+        break;
+      case 2:
+        rating.classList.add('review-rating-two');
+        break;
+      case 3:
+        rating.classList.add('review-rating-three');
+        break;
+      case 4:
+        rating.classList.add('review-rating-fore');
+        break;
+      case 5:
+        rating.classList.add('review-rating-five');
+        break;
+    }
+
     setImageParameters(data, element);
     return element;
   };
@@ -71,8 +88,8 @@
   }
 
   window.reviews.forEach(function(review) {
-    reviewsContainer.appendChild(cloneReviewElements(review));
+    reviewsContainer.appendChild(cloneReviewElement(review));
   });
 
-  reviewsFilterBlock.classList.remove(INVISIBLE);
+  reviewsFilterBlock.classList.remove(CLASS_INVISIBLE);
 })();
