@@ -87,9 +87,41 @@
     }, IMAGE_LOAD_TIMEOUT);
   }
 
-  window.reviews.forEach(function(review) {
-    reviewsContainer.appendChild(cloneReviewElement(review));
-  });
+  /**
+    * Определяет адрес, где расположен JSONP-скрипт и получает объект.
+    * @param {string} url
+    * @param {function} callback
+    */
+  function getReviews(url, callback) {
+    var loadedReviews = [];
+    window.__reviewsLoadCallback = function(data) {
+        loadedReviews = data;
+    };
+    createScript(url);
+    callback(loadedReviews);
+  }
 
+  /**
+    * Создаёт тег, подключающий JSONP-скрипт.
+    */
+  function createScript(url) {
+    var mainScript = document.querySelector('.main-js');
+    var script = document.createElement('script');
+    script.src = url;
+    document.body.insertBefore(script, mainScript);
+  }
+
+  var renderReviews = function(reviews) {
+    reviews.forEach(function(review) {
+      reviewsContainer.appendChild(cloneReviewElement(review));
+    });
+  };
+
+  function loadReviewsCallback(loadedReviews) {
+    reviews = loadedReviews;
+    renderReviews(reviews);
+  }
+
+  getReviews('//up.htmlacademy.ru/assets/js_intensive/jsonp/reviews.js', loadReviewsCallback;
   reviewsFilterBlock.classList.remove(CLASS_INVISIBLE);
 })();
