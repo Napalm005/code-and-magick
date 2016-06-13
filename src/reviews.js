@@ -103,6 +103,7 @@
 
   /**
     * Создаёт тег, подключающий JSONP-скрипт.
+    * @param {string} url
     */
   function createScript(url) {
     var mainScript = document.querySelector('.main-js');
@@ -111,17 +112,19 @@
     document.body.insertBefore(script, mainScript);
   }
 
+  /**
+    * Отрисовывает блоки с отзывами на странице.
+    * @param {array} reviews
+    */
   var renderReviews = function(reviews) {
     reviews.forEach(function(review) {
       reviewsContainer.appendChild(cloneReviewElement(review));
     });
   };
 
-  function loadReviewsCallback(loadedReviews) {
+  getReviews('//up.htmlacademy.ru/assets/js_intensive/jsonp/reviews.js', function(loadedReviews) {
     var reviews = loadedReviews;
     renderReviews(reviews);
-  }
-
-  getReviews('//up.htmlacademy.ru/assets/js_intensive/jsonp/reviews.js', loadReviewsCallback);
+  });
   reviewsFilterBlock.classList.remove(CLASS_INVISIBLE);
 })();
