@@ -118,10 +118,10 @@
   };
 
   function loadReviewsCallback(loadedReviews) {
-    reviews = loadedReviews;
+    var reviews = loadedReviews;
     renderReviews(reviews);
   }
 
-  getReviews('//up.htmlacademy.ru/assets/js_intensive/jsonp/reviews.js', loadReviewsCallback;
+  getReviews('//up.htmlacademy.ru/assets/js_intensive/jsonp/reviews.js', loadReviewsCallback)
   reviewsFilterBlock.classList.remove(CLASS_INVISIBLE);
 })();
