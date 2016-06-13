@@ -95,10 +95,10 @@
   function getReviews(url, callback) {
     var loadedReviews = [];
     window.__reviewsLoadCallback = function(data) {
-        loadedReviews = data;
+      loadedReviews = data;
+      callback(loadedReviews);
     };
     createScript(url);
-    callback(loadedReviews);
   }
 
   /**
