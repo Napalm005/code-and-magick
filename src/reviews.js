@@ -17,6 +17,12 @@
   var CLASS_INVISIBLE = 'invisible';
 
   reviewsFilterBlock.classList.add(CLASS_INVISIBLE);
+  reviewsFilterBlock.classList.remove(CLASS_INVISIBLE);
+
+  getReviews('//up.htmlacademy.ru/assets/js_intensive/jsonp/reviews.js', function(loadedReviews) {
+    var reviews = loadedReviews;
+    renderReviews(reviews);
+  });
 
   /**
     * Проверяет поддержку элемента template и получает в нём контент.
@@ -113,10 +119,4 @@
       reviewsContainer.appendChild(cloneReviewElement(review));
     });
   }
-
-  getReviews('//up.htmlacademy.ru/assets/js_intensive/jsonp/reviews.js', function(loadedReviews) {
-    var reviews = loadedReviews;
-    renderReviews(reviews);
-  });
-  reviewsFilterBlock.classList.remove(CLASS_INVISIBLE);
 })();
