@@ -36,22 +36,36 @@
     var rating = element.querySelector('.review-rating');
     element.querySelector('.review-text').textContent = data.description;
 
-    switch (data.rating) {
-      case 1:
-        break;
-      case 2:
-        rating.classList.add('review-rating-two');
-        break;
-      case 3:
-        rating.classList.add('review-rating-three');
-        break;
-      case 4:
-        rating.classList.add('review-rating-fore');
-        break;
-      case 5:
-        rating.classList.add('review-rating-five');
-        break;
+    var ratingClasses = [
+      'review-rating',
+      'review-rating-two',
+      'review-rating-three',
+      'review-rating-four',
+      'review-rating-five'
+    ];
+
+    for (var i = 1; i < ratingClasses.length; i++) {
+      if (data.rating === i) {
+        rating.classList.add(ratingClasses[i]);
+      }
     }
+
+    // switch (data.rating) {
+    //   case 1:
+    //     break;
+    //   case 2:
+    //     rating.classList.add('review-rating-two');
+    //     break;
+    //   case 3:
+    //     rating.classList.add('review-rating-three');
+    //     break;
+    //   case 4:
+    //     rating.classList.add('review-rating-fore');
+    //     break;
+    //   case 5:
+    //     rating.classList.add('review-rating-five');
+    //     break;
+    // }
 
     setImageParameters(data, element);
     return element;
