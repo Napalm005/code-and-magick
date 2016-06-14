@@ -4,12 +4,19 @@
   var reviewsFilterBlock = document.querySelector('.reviews-filter');
   var elementToClone = getTemplate();
   var reviewsContainer = document.querySelector('.reviews-list');
+  var ratingClasses = [
+    'review-rating',
+    'review-rating-two',
+    'review-rating-three',
+    'review-rating-four',
+    'review-rating-five'
+  ];
+  /** @constant {number} */
+  var IMAGE_LOAD_TIMEOUT = 5000;
+  /** @constant {string} */
   var CLASS_INVISIBLE = 'invisible';
 
   reviewsFilterBlock.classList.add(CLASS_INVISIBLE);
-
-  /** @constant {number} */
-  var IMAGE_LOAD_TIMEOUT = 5000;
 
   /**
     * Проверяет поддержку элемента template и получает в нём контент.
@@ -31,55 +38,16 @@
     * Клонирует элемент из шаблона, подставляет данные из объекта на сервере.
     * @param {Object} data
     */
-  var cloneReviewElement = function(data) {
+  function cloneReviewElement(data) {
     var element = elementToClone.cloneNode(true);
     var rating = element.querySelector('.review-rating');
     element.querySelector('.review-text').textContent = data.description;
 
-    // var ratingClasses = [
-    //   'review-rating',
-    //   'review-rating-two',
-    //   'review-rating-three',
-    //   'review-rating-four',
-    //   'review-rating-five'
-    // ];
-
-    // for (var i = 1; i < ratingClasses.length; i++) {
-    //   if (data.rating === i) {
-    //     rating.classList.add(ratingClasses[i]);
-    //   }
-    // }
-
-    var ratingClasses = {
-      '1': 'review-rating',
-      '2': 'review-rating-two',
-      '3': 'review-rating-three',
-      '4': 'review-rating-four',
-      '5': 'review-rating-five'
-    };
-
-    rating.classList.add(ratingClasses[data.rating]);
-
-    // switch (data.rating) {
-    //   case 1:
-    //     break;
-    //   case 2:
-    //     rating.classList.add('review-rating-two');
-    //     break;
-    //   case 3:
-    //     rating.classList.add('review-rating-three');
-    //     break;
-    //   case 4:
-    //     rating.classList.add('review-rating-fore');
-    //     break;
-    //   case 5:
-    //     rating.classList.add('review-rating-five');
-    //     break;
-    // }
+    rating.classList.add(ratingClasses[data.rating - 1]);
 
     setImageParameters(data, element);
     return element;
-  };
+  }
 
   /**
     * Создаёт изображения, которые получают необходимые параметры из
@@ -140,11 +108,11 @@
     * Отрисовывает блоки с отзывами на странице.
     * @param {array} reviews
     */
-  var renderReviews = function(reviews) {
+  function renderReviews(reviews) {
     reviews.forEach(function(review) {
       reviewsContainer.appendChild(cloneReviewElement(review));
     });
-  };
+  }
 
   getReviews('//up.htmlacademy.ru/assets/js_intensive/jsonp/reviews.js', function(loadedReviews) {
     var reviews = loadedReviews;
