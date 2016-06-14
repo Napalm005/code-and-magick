@@ -51,6 +51,11 @@
     // }
 
     var ratingClasses = {
+      '1': 'review-rating',
+      '2': 'review-rating-two',
+      '3': 'review-rating-three',
+      '4': 'review-rating-four',
+      '5': 'review-rating-five'
     };
 
     rating.classList.add(ratingClasses[data.rating]);
