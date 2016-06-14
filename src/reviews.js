@@ -36,19 +36,24 @@
     var rating = element.querySelector('.review-rating');
     element.querySelector('.review-text').textContent = data.description;
 
-    var ratingClasses = [
-      'review-rating',
-      'review-rating-two',
-      'review-rating-three',
-      'review-rating-four',
-      'review-rating-five'
-    ];
+    // var ratingClasses = [
+    //   'review-rating',
+    //   'review-rating-two',
+    //   'review-rating-three',
+    //   'review-rating-four',
+    //   'review-rating-five'
+    // ];
 
-    for (var i = 1; i < ratingClasses.length; i++) {
-      if (data.rating === i) {
-        rating.classList.add(ratingClasses[i]);
-      }
-    }
+    // for (var i = 1; i < ratingClasses.length; i++) {
+    //   if (data.rating === i) {
+    //     rating.classList.add(ratingClasses[i]);
+    //   }
+    // }
+
+    var ratingClasses = {
+    };
+
+    rating.classList.add(ratingClasses[data.rating]);
 
     // switch (data.rating) {
     //   case 1:
