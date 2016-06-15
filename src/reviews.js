@@ -2,24 +2,19 @@
 
 (function() {
   var reviewsFilterBlock = document.querySelector('.reviews-filter');
-  var elementToClone = getTemplate();
-  var reviewsContainer = document.querySelector('.reviews-list');
-  var ratingClasses = [
-    'review-rating',
-    'review-rating-two',
-    'review-rating-three',
-    'review-rating-four',
-    'review-rating-five'
-  ];
   /** @constant {number} */
-  var IMAGE_LOAD_TIMEOUT = 5000;
+  var IMAGE_LOAD_TIMEOUT = 10000;
   /** @constant {string} */
   var CLASS_INVISIBLE = 'invisible';
+  /** @constant {string} */
+  var CLASS_REVIEWS_SECTION_FAILURE = 'reviews-load-failure';
+  /** @constant {string} */
+  var CLASS_REVIEWS_SECTION_LOADING = 'reviews-list-loading';
 
   reviewsFilterBlock.classList.add(CLASS_INVISIBLE);
   reviewsFilterBlock.classList.remove(CLASS_INVISIBLE);
 
-  getReviews('//up.htmlacademy.ru/assets/js_intensive/jsonp/reviews.js', function(loadedReviews) {
+  getReviews('//o0.github.io/assets/json/reviews.json', function(loadedReviews) {
     var reviews = loadedReviews;
     renderReviews(reviews);
   });
@@ -29,7 +24,7 @@
     * return {object} result
     */
   function getTemplate() {
-    var templateElement = document.querySelector('template');
+    var templateElement = document.querySelector('#review-template');
     var result;
 
     if ('content' in templateElement) {
@@ -45,6 +40,14 @@
     * @param {Object} data
     */
   function cloneReviewElement(data) {
+    var ratingClasses = [
+      'review-rating',
+      'review-rating-two',
+      'review-rating-three',
+      'review-rating-four',
+      'review-rating-five'
+    ];
+    var elementToClone = getTemplate();
     var element = elementToClone.cloneNode(true);
     var rating = element.querySelector('.review-rating');
     element.querySelector('.review-text').textContent = data.description;
@@ -91,23 +94,33 @@
     * @param {function} callback
     */
   function getReviews(url, callback) {
-    var loadedReviews = [];
-    window.__reviewsLoadCallback = function(data) {
-      loadedReviews = data;
-      callback(loadedReviews);
-    };
-    createScript(url);
-  }
+    var reviewsSection = document.querySelector('.reviews');
+    var xhr = new XMLHttpRequest();
 
-  /**
-    * Создаёт тег, подключающий JSONP-скрипт.
-    * @param {string} url
-    */
-  function createScript(url) {
-    var mainScript = document.querySelector('.main-js');
-    var script = document.createElement('script');
-    script.src = url;
-    document.body.insertBefore(script, mainScript);
+    /** @param {ProgressEvent} */
+    xhr.onload = function(evt) {
+      reviewsSection.classList.remove(CLASS_REVIEWS_SECTION_LOADING);
+      var loadedData = JSON.parse(evt.target.response);
+      callback(loadedData);
+    };
+
+    xhr.onprogress = function() {
+      reviewsSection.classList.add(CLASS_REVIEWS_SECTION_LOADING);
+    };
+
+    xhr.onerror = function() {
+      reviewsSection.classList.remove(CLASS_REVIEWS_SECTION_LOADING);
+      reviewsSection.classList.add(CLASS_REVIEWS_SECTION_FAILURE);
+    };
+
+    xhr.timeout = IMAGE_LOAD_TIMEOUT;
+    xhr.ontimeout = function() {
+      reviewsSection.classList.remove(CLASS_REVIEWS_SECTION_LOADING);
+      reviewsSection.classList.add(CLASS_REVIEWS_SECTION_FAILURE);
+    };
+
+    xhr.open('GET', url);
+    xhr.send();
   }
 
   /**
@@ -115,6 +128,7 @@
     * @param {array} reviews
     */
   function renderReviews(reviews) {
+    var reviewsContainer = document.querySelector('.reviews-list');
     reviews.forEach(function(review) {
       reviewsContainer.appendChild(cloneReviewElement(review));
     });
