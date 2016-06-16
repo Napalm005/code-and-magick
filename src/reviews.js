@@ -1,7 +1,7 @@
 'use strict';
 
 (function() {
-    /** @type {Array.<Object>} */
+  /** @type {Array.<Object>} */
   var reviews = [];
   /** @enum {number} */
   var Filter = {
@@ -40,6 +40,12 @@
     setFilterEnabled(DEFAULT_FILTER);
   });
 
+  /**
+    * Возвращает отфильтрованный и отсортированный массив.
+    * @param {array} reviewsList
+    * @param {string} filter
+    * return {object} reviewsToFilter
+    */
   function getFilteredReviews(reviewsList, filter) {
     var reviewsToFilter = reviewsList.slice(0);
 
@@ -79,12 +85,18 @@
     return reviewsToFilter;
   }
 
-  /** @param {string} filter */
+  /**
+    * Передаёт отфильтрованный массив в ф-цию renderReviews и вызывает её.
+    * @param {string} filter
+    */
   function setFilterEnabled(filter) {
     var filteredReviews = getFilteredReviews(reviews, filter);
     renderReviews(filteredReviews);
   }
 
+  /**
+    * Навешивает обработчиики кликов на кнопки блока фильтра.
+    */
   function setFiltersEnabled() {
     var filters = reviewsFilterBlock.elements['reviews'];
     for (var i = 0; i < filters.length; i++) {
@@ -193,7 +205,7 @@
 
   /**
     * Отрисовывает блоки с отзывами на странице.
-    * @param {array} reviews
+    * @param {array} reviewsList
     */
   function renderReviews(reviewsList) {
     reviewsContainer.innerHTML = '';
