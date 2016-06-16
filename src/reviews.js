@@ -48,15 +48,10 @@
     */
   function getFilteredReviews(reviewsList, filter) {
     var reviewsToFilter = reviewsList.slice(0);
+    var preFilteredReviews = reviewsToFilter;
 
     switch (filter) {
       case FILTER.ALL:
-        var preFilteredReviews = reviewsToFilter;
-        if (preFilteredReviews.length) {
-          return preFilteredReviews;
-        } else {
-          console.log('Ни одного отзыва не найдено');
-        }
         break;
 
       case FILTER.RECENT:
@@ -65,46 +60,33 @@
         preFilteredReviews = reviewsToFilter.filter(function(review) {
           return Date.now() + Date.parse(review.date) < FOUR_DAYS;
         });
-        if (preFilteredReviews.length) {
-          preFilteredReviews.sort(function(a, b) {
-            return Date.parse(b.date) - Date.parse(a.date);
-          }); } else {
-          console.log('Ни одного отзыва не найдено');
-        }
+        preFilteredReviews.sort(function(a, b) {
+          return Date.parse(b.date) - Date.parse(a.date);
+        });
         break;
 
       case FILTER.GOOD:
         preFilteredReviews = reviewsToFilter.filter(function(review) {
           return review.rating > 2;
         });
-        if (preFilteredReviews.length) {
-          preFilteredReviews.sort(function(a, b) {
-            return b.rating - a.rating;
-          }); } else {
-          console.log('Ни одного отзыва не найдено');
-        }
+        preFilteredReviews.sort(function(a, b) {
+          return b.rating - a.rating;
+        });
         break;
 
       case FILTER.BAD:
         preFilteredReviews = reviewsToFilter.filter(function(review) {
           return review.rating < 3;
         });
-        if (preFilteredReviews.length) {
-          preFilteredReviews.sort(function(a, b) {
-            return a.rating - b.rating;
-          }); } else {
-          console.log('Ни одного отзыва не найдено');
-        }
+        preFilteredReviews.sort(function(a, b) {
+          return a.rating - b.rating;
+        });
         break;
 
       case FILTER.POPULAR:
-        preFilteredReviews = reviewsToFilter;
-        if (preFilteredReviews.length) {
-          preFilteredReviews.sort(function(a, b) {
-            return b.review_usefulness - a.review_usefulness;
-          }); } else {
-          console.log('Ни одного отзыва не найдено');
-        }
+        preFilteredReviews.sort(function(a, b) {
+          return b.review_usefulness - a.review_usefulness;
+        });
         break;
     }
     return preFilteredReviews;
@@ -147,6 +129,22 @@
     return result;
   }
 
+    /**
+    * Проверяет поддержку элемента template и получает в нём контент.
+    * return {object} result
+    */
+  function getTemplateEmpty() {
+    var templateElementEmpty = document.querySelector('#review-empty-template');
+    var result;
+
+    if ('content' in templateElementEmpty) {
+      result = templateElementEmpty.content.querySelector('.review-empty');
+    } else {
+      result = templateElementEmpty.querySelector('.review-empty');
+    }
+    return result;
+  }
+
   /**
     * Клонирует элемент из шаблона, подставляет данные из объекта на сервере.
     * @param {Object} data
@@ -161,6 +159,15 @@
 
     setImageParameters(data, element);
     return element;
+  }
+
+    /**
+    * Клонирует элемент из шаблона, подставляет данные из объекта на сервере.
+    */
+  function cloneReviewElementEmpty() {
+    var elementEmptyToClone = getTemplateEmpty();
+    var elementEmpty = elementEmptyToClone.cloneNode(true);
+    return elementEmpty;
   }
 
   /**
@@ -234,8 +241,11 @@
     */
   function renderReviews(reviewsList) {
     reviewsContainer.innerHTML = '';
-    reviewsList.forEach(function(review) {
-      reviewsContainer.appendChild(cloneReviewElement(review));
-    });
+    if (reviewsList.length) {
+      reviewsList.forEach(function(review) {
+        reviewsContainer.appendChild(cloneReviewElement(review));
+      }); } else {
+      reviewsContainer.appendChild(cloneReviewElementEmpty());
+    }
   }
 })();
