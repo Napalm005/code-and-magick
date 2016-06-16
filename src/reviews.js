@@ -23,7 +23,7 @@
   /** @constant {Filter} */
   var DEFAULT_FILTER = FILTER.ALL;
   /** @constant {number} */
-  var IMAGE_LOAD_TIMEOUT = 10000;
+  var LOAD_TIMEOUT = 5000;
   /** @constant {string} */
   var CLASS_INVISIBLE = 'invisible';
   /** @constant {string} */
@@ -176,10 +176,10 @@
   function setImageParameters(data, element) {
     var image = new Image(124, 124);
     var imageLoadTimeout;
+    var reviewAvatar = element.querySelector('.review-author');
 
     image.onload = function() {
       clearTimeout(imageLoadTimeout);
-      var reviewAvatar = element.querySelector('.review-author');
       reviewAvatar.src = image.src;
       reviewAvatar.width = image.width;
       reviewAvatar.height = image.height;
@@ -192,9 +192,9 @@
     image.src = data.author.picture;
 
     imageLoadTimeout = setTimeout(function() {
-      image.src = '';
+      reviewAvatar.removeAttribute('src');
       element.classList.add('review-load-failure');
-    }, IMAGE_LOAD_TIMEOUT);
+    }, LOAD_TIMEOUT);
   }
 
   /**
@@ -203,33 +203,42 @@
     * @param {function} callback
     */
   function getReviews(url, callback) {
-    var reviewsSection = document.querySelector('.reviews');
     var xhr = new XMLHttpRequest();
 
     /** @param {ProgressEvent} */
     xhr.onload = function(evt) {
-      reviewsSection.classList.remove(CLASS_REVIEWS_SECTION_LOADING);
-      var loadedData = JSON.parse(evt.target.response);
-      callback(loadedData);
+      if ( (this.status === 200) && (this.readyState === 4) ) {
+        reviewsContainer.classList.remove(CLASS_REVIEWS_SECTION_LOADING);
+        var loadedData = JSON.parse(evt.target.response);
+        callback(loadedData);
+      } else {
+        addErrorClass();
+      }
     };
 
     xhr.onloadstart = function() {
-      reviewsSection.classList.add(CLASS_REVIEWS_SECTION_LOADING);
+      reviewsContainer.classList.add(CLASS_REVIEWS_SECTION_LOADING);
     };
 
     xhr.onerror = function() {
-      reviewsSection.classList.remove(CLASS_REVIEWS_SECTION_LOADING);
-      reviewsSection.classList.add(CLASS_REVIEWS_SECTION_FAILURE);
+      addErrorClass();
     };
 
-    xhr.timeout = IMAGE_LOAD_TIMEOUT;
+    xhr.timeout = LOAD_TIMEOUT;
     xhr.ontimeout = function() {
-      reviewsSection.classList.remove(CLASS_REVIEWS_SECTION_LOADING);
-      reviewsSection.classList.add(CLASS_REVIEWS_SECTION_FAILURE);
+      addErrorClass();
     };
 
     xhr.open('GET', url);
     xhr.send();
+  }
+
+  /**
+    * Добавляется класс со стилем ошибки.
+    */
+  function addErrorClass() {
+    reviewsContainer.classList.remove(CLASS_REVIEWS_SECTION_LOADING);
+    reviewsContainer.classList.add(CLASS_REVIEWS_SECTION_FAILURE);
   }
 
   /**
