@@ -3,8 +3,8 @@
 (function() {
   /** @type {Array.<Object>} */
   var reviews = [];
-  /** @enum {number} */
-  var Filter = {
+  /** @enum {string} */
+  var FILTER = {
     'ALL': 'reviews-all',
     'RECENT': 'reviews-recent',
     'GOOD': 'reviews-good',
@@ -21,7 +21,7 @@
   var reviewsContainer = document.querySelector('.reviews-list');
   var reviewsFilterBlock = document.querySelector('.reviews-filter');
   /** @constant {Filter} */
-  var DEFAULT_FILTER = Filter.ALL;
+  var DEFAULT_FILTER = FILTER.ALL;
   /** @constant {number} */
   var IMAGE_LOAD_TIMEOUT = 10000;
   /** @constant {string} */
@@ -36,8 +36,8 @@
 
   getReviews('//o0.github.io/assets/json/reviews.json', function(loadedReviews) {
     reviews = loadedReviews;
-    setFiltersEnabled();
-    setFilterEnabled(DEFAULT_FILTER);
+    setFiltersActive();
+    setFilterActive(DEFAULT_FILTER);
   });
 
   /**
@@ -50,46 +50,71 @@
     var reviewsToFilter = reviewsList.slice(0);
 
     switch (filter) {
-      case Filter.ALL:
+      case FILTER.ALL:
+        var preFilteredReviews = reviewsToFilter;
+        if (preFilteredReviews !== {}) {
+          return preFilteredReviews;
+        } else {
+          console.log('Ни одного отзыва не найдено');
+        }
         break;
-      case Filter.RECENT:
+
+      case FILTER.RECENT:
         /** @constant {number} */
         var FOUR_DAYS = 4 * 24 * 60 * 60 * 1000;
-        reviewsToFilter.filter(function(review) {
+        preFilteredReviews = reviewsToFilter.filter(function(review) {
           return Date.now() - Date.parse(review.date) < FOUR_DAYS;
-        }).reviewsToFilter.sort(function(a, b) {
-          return Date.parse(b.date) - Date.parse(a.date);
         });
+        if (preFilteredReviews !== {}) {
+          preFilteredReviews.sort(function(a, b) {
+            return Date.parse(b.date) - Date.parse(a.date);
+          }); } else {
+          console.log('Ни одного отзыва не найдено');
+        }
         break;
-      case Filter.GOOD:
-        reviewsToFilter.filter(function(review) {
+
+      case FILTER.GOOD:
+        preFilteredReviews = reviewsToFilter.filter(function(review) {
           return review.rating > 2;
-        }).sort(function(a, b) {
-          return b.rating - a.rating;
         });
+        if (preFilteredReviews !== {}) {
+          preFilteredReviews.sort(function(a, b) {
+            return b.rating - a.rating;
+          }); } else {
+          console.log('Ни одного отзыва не найдено');
+        }
         break;
-      case Filter.BAD:
-        reviewsToFilter.filter(function(review) {
+
+      case FILTER.BAD:
+        preFilteredReviews = reviewsToFilter.filter(function(review) {
           return review.rating < 3;
-        }).sort(function(a, b) {
-          return a.rating - b.rating;
         });
+        if (preFilteredReviews !== {}) {
+          preFilteredReviews.sort(function(a, b) {
+            return a.rating - b.rating;
+          }); } else {
+          console.log('Ни одного отзыва не найдено');
+        }
         break;
-      case Filter.POPULAR:
-        reviewsToFilter.sort(function(a, b) {
-          return b.review_usefulness - a.review_usefulness;
-        });
+
+      case FILTER.POPULAR:
+        preFilteredReviews = reviewsToFilter;
+        if (preFilteredReviews !== {}) {
+          preFilteredReviews.sort(function(a, b) {
+            return b.review_usefulness - a.review_usefulness;
+          }); } else {
+          console.log('Ни одного отзыва не найдено');
+        }
         break;
     }
-
-    return reviewsToFilter;
+    return preFilteredReviews;
   }
 
   /**
     * Передаёт отфильтрованный массив в ф-цию renderReviews и вызывает её.
     * @param {string} filter
     */
-  function setFilterEnabled(filter) {
+  function setFilterActive(filter) {
     var filteredReviews = getFilteredReviews(reviews, filter);
     renderReviews(filteredReviews);
   }
@@ -97,11 +122,11 @@
   /**
     * Навешивает обработчиики кликов на кнопки блока фильтра.
     */
-  function setFiltersEnabled() {
+  function setFiltersActive() {
     var filters = reviewsFilterBlock.elements['reviews'];
     for (var i = 0; i < filters.length; i++) {
       filters[i].onclick = function() {
-        setFilterEnabled(this.id);
+        setFilterActive(this.id);
       };
     }
   }
@@ -184,7 +209,7 @@
       callback(loadedData);
     };
 
-    xhr.onprogress = function() {
+    xhr.onloadstart = function() {
       reviewsSection.classList.add(CLASS_REVIEWS_SECTION_LOADING);
     };
 
