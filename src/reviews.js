@@ -1,7 +1,27 @@
 'use strict';
 
 (function() {
+    /** @type {Array.<Object>} */
+  var reviews = [];
+  /** @enum {number} */
+  var Filter = {
+    'ALL': 'reviews-all',
+    'RECENT': 'reviews-recent',
+    'GOOD': 'reviews-good',
+    'BAD': 'reviews-bad',
+    'POPULAR': 'reviews-popular'
+  };
+  var ratingClasses = [
+    'review-rating',
+    'review-rating-two',
+    'review-rating-three',
+    'review-rating-four',
+    'review-rating-five'
+  ];
+  var reviewsContainer = document.querySelector('.reviews-list');
   var reviewsFilterBlock = document.querySelector('.reviews-filter');
+  /** @constant {Filter} */
+  var DEFAULT_FILTER = Filter.ALL;
   /** @constant {number} */
   var IMAGE_LOAD_TIMEOUT = 10000;
   /** @constant {string} */
@@ -15,9 +35,64 @@
   reviewsFilterBlock.classList.remove(CLASS_INVISIBLE);
 
   getReviews('//o0.github.io/assets/json/reviews.json', function(loadedReviews) {
-    var reviews = loadedReviews;
-    renderReviews(reviews);
+    reviews = loadedReviews;
+    setFiltersEnabled();
+    setFilterEnabled(DEFAULT_FILTER);
   });
+
+  function getFilteredReviews(reviewsList, filter) {
+    var reviewsToFilter = reviewsList.slice(0);
+
+    switch (filter) {
+      case Filter.ALL:
+        break;
+      case Filter.RECENT:
+        /** @constant {number} */
+        var FOUR_DAYS = 4 * 24 * 60 * 60 * 1000;
+        reviewsToFilter.filter(function(review) {
+          return Date.now() - Date.parse(review.date) < FOUR_DAYS;
+        }).reviewsToFilter.sort(function(a, b) {
+          return Date.parse(b.date) - Date.parse(a.date);
+        });
+        break;
+      case Filter.GOOD:
+        reviewsToFilter.filter(function(review) {
+          return review.rating > 2;
+        }).sort(function(a, b) {
+          return b.rating - a.rating;
+        });
+        break;
+      case Filter.BAD:
+        reviewsToFilter.filter(function(review) {
+          return review.rating < 3;
+        }).sort(function(a, b) {
+          return a.rating - b.rating;
+        });
+        break;
+      case Filter.POPULAR:
+        reviewsToFilter.sort(function(a, b) {
+          return b.review_usefulness - a.review_usefulness;
+        });
+        break;
+    }
+
+    return reviewsToFilter;
+  }
+
+  /** @param {string} filter */
+  function setFilterEnabled(filter) {
+    var filteredReviews = getFilteredReviews(reviews, filter);
+    renderReviews(filteredReviews);
+  }
+
+  function setFiltersEnabled() {
+    var filters = reviewsFilterBlock.elements['reviews'];
+    for (var i = 0; i < filters.length; i++) {
+      filters[i].onclick = function() {
+        setFilterEnabled(this.id);
+      };
+    }
+  }
 
   /**
     * Проверяет поддержку элемента template и получает в нём контент.
@@ -40,13 +115,6 @@
     * @param {Object} data
     */
   function cloneReviewElement(data) {
-    var ratingClasses = [
-      'review-rating',
-      'review-rating-two',
-      'review-rating-three',
-      'review-rating-four',
-      'review-rating-five'
-    ];
     var elementToClone = getTemplate();
     var element = elementToClone.cloneNode(true);
     var rating = element.querySelector('.review-rating');
@@ -127,9 +195,9 @@
     * Отрисовывает блоки с отзывами на странице.
     * @param {array} reviews
     */
-  function renderReviews(reviews) {
-    var reviewsContainer = document.querySelector('.reviews-list');
-    reviews.forEach(function(review) {
+  function renderReviews(reviewsList) {
+    reviewsContainer.innerHTML = '';
+    reviewsList.forEach(function(review) {
       reviewsContainer.appendChild(cloneReviewElement(review));
     });
   }
