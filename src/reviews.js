@@ -59,8 +59,7 @@
         var FOUR_DAYS = 4 * 24 * 60 * 60 * 1000;
         preFilteredReviews = reviewsToFilter.filter(function(review) {
           return Date.now() + Date.parse(review.date) < FOUR_DAYS;
-        });
-        preFilteredReviews.sort(function(a, b) {
+        }).sort(function(a, b) {
           return Date.parse(b.date) - Date.parse(a.date);
         });
         break;
@@ -68,8 +67,7 @@
       case FILTER.GOOD:
         preFilteredReviews = reviewsToFilter.filter(function(review) {
           return review.rating > 2;
-        });
-        preFilteredReviews.sort(function(a, b) {
+        }).sort(function(a, b) {
           return b.rating - a.rating;
         });
         break;
@@ -77,8 +75,7 @@
       case FILTER.BAD:
         preFilteredReviews = reviewsToFilter.filter(function(review) {
           return review.rating < 3;
-        });
-        preFilteredReviews.sort(function(a, b) {
+        }).sort(function(a, b) {
           return a.rating - b.rating;
         });
         break;
