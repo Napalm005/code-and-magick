@@ -1,6 +1,7 @@
 'use strict';
 
 (function() {
+  var preFilteredReviews;
   /** @type {Array.<Object>} */
   var reviews = [];
   /** @enum {string} */
@@ -46,52 +47,10 @@
     * @param {string} filter
     * @param {object} reviewsFilterLabels
     */
-  function setSupFilter(reviewsList, filter, reviewsFilterLabels) {
-    var reviewsToFilter = reviewsList.slice(0);
-    var preFilteredReviews = reviewsToFilter;
+  function setSupFilter(reviewsList, filter, reviewsFilterLabel) {
     var sup = document.createElement('sup');
-
-    switch (filter) {
-      case FILTER.ALL:
-        setSupElement(reviewsFilterLabels);
-        break;
-
-      case FILTER.RECENT:
-        /** @constant {number} */
-        var FOUR_DAYS = 4 * 24 * 60 * 60 * 1000;
-        preFilteredReviews = reviewsToFilter.filter(function(review) {
-          return Date.now() + Date.parse(review.date) < FOUR_DAYS;
-        }).sort(function(a, b) {
-          return Date.parse(b.date) - Date.parse(a.date);
-        });
-        setSupElement(reviewsFilterLabels);
-        break;
-
-      case FILTER.GOOD:
-        preFilteredReviews = reviewsToFilter.filter(function(review) {
-          return review.rating > 2;
-        }).sort(function(a, b) {
-          return b.rating - a.rating;
-        });
-        setSupElement(reviewsFilterLabels);
-        break;
-
-      case FILTER.BAD:
-        preFilteredReviews = reviewsToFilter.filter(function(review) {
-          return review.rating < 3;
-        }).sort(function(a, b) {
-          return a.rating - b.rating;
-        });
-        setSupElement(reviewsFilterLabels);
-        break;
-
-      case FILTER.POPULAR:
-        preFilteredReviews.sort(function(a, b) {
-          return b.review_usefulness - a.review_usefulness;
-        });
-        setSupElement(reviewsFilterLabels);
-        break;
-    }
+    preFilteredReviews = getFilteredReviews(reviewsList, filter);
+    setSupElement(reviewsFilterLabel);
 
     /**
       * Создаёт тег sup.
@@ -115,7 +74,7 @@
     */
   function getFilteredReviews(reviewsList, filter) {
     var reviewsToFilter = reviewsList.slice(0);
-    var preFilteredReviews = reviewsToFilter;
+    preFilteredReviews = reviewsToFilter;
 
     switch (filter) {
       case FILTER.ALL:
