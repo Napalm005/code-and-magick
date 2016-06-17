@@ -45,7 +45,8 @@
     * Добывляет теги sup, в которых записано количество найденных отзывов.
     * @param {array} reviewsList
     * @param {string} filter
-    * @param {object} reviewsFilterLabels
+    * @param {HTMLElement} reviewsFilterLabel
+    * return {array} preFilteredReviews
     */
   function setSupFilter(reviewsList, filter, reviewsFilterLabel) {
     var sup = document.createElement('sup');
@@ -54,12 +55,12 @@
 
     /**
       * Создаёт тег sup.
-      * @param {object} reviewsFilterLabelsList
+      * @param {HTMLElement} reviewsFilterLabel
       */
-    function setSupElement(reviewsFilterLabelsList) {
+    function setSupElement(reviewsFilterLabelElement) {
       var supText = document.createTextNode('(' + preFilteredReviews.length + ')');
       sup.appendChild(supText);
-      reviewsFilterLabelsList.appendChild(sup);
+      reviewsFilterLabelElement.appendChild(sup);
     }
 
     return preFilteredReviews;
@@ -70,7 +71,7 @@
     * Возвращает отфильтрованный и отсортированный массив.
     * @param {array} reviewsList
     * @param {string} filter
-    * return {object} reviewsToFilter
+    * return {array} preFilteredReviews
     */
   function getFilteredReviews(reviewsList, filter) {
     var reviewsToFilter = reviewsList.slice(0);
@@ -145,7 +146,7 @@
 
   /**
     * Проверяет поддержку элемента template и получает в нём контент.
-    * return {object} result
+    * return {HTMLElement} result
     */
   function getTemplate() {
     var templateElement = document.querySelector('#review-template');
@@ -161,7 +162,7 @@
 
     /**
     * Проверяет поддержку элемента template и получает в нём контент.
-    * return {object} result
+    * return {HTMLElement} result
     */
   function getTemplateEmpty() {
     var templateElementEmpty = document.querySelector('#review-empty-template');
@@ -178,6 +179,7 @@
   /**
     * Клонирует элемент из шаблона, подставляет данные из объекта на сервере.
     * @param {Object} data
+    * return {HTMLElement} element
     */
   function cloneReviewElement(data) {
     var elementToClone = getTemplate();
@@ -193,6 +195,7 @@
 
     /**
     * Клонирует элемент из шаблона, подставляет данные из объекта на сервере.
+    * return {HTMLElement} elementEmpty
     */
   function cloneReviewElementEmpty() {
     var elementEmptyToClone = getTemplateEmpty();
