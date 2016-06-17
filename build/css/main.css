@@ -543,3 +543,26 @@ input[type=radio]:checked + .review-mark-label {
   font-size: 14px;
   color: #ffffff;
 }
+
+.review-empty {
+  height: 80px;
+  text-align: center;
+  position: relative;
+}
+
+.review-empty-text {
+  color: #fff;
+  font-size: 16px;
+  font-family: PT Mono;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
+}
+
+.reviews-filter-item.disabled {
+  cursor: default;
+  opacity: 0.5;
+}
