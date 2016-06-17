@@ -41,6 +41,71 @@
   });
 
   /**
+    * Добывляет теги sup, в которых записано количество найденных отзывов.
+    * @param {array} reviewsList
+    * @param {string} filter
+    * @param {object} reviewsFilterLabels
+    */
+  function setSupFilter(reviewsList, filter, reviewsFilterLabels) {
+    var reviewsToFilter = reviewsList.slice(0);
+    var preFilteredReviews = reviewsToFilter;
+    var sup = document.createElement('sup');
+
+    switch (filter) {
+      case FILTER.ALL:
+        setSupElement(reviewsFilterLabels);
+        break;
+
+      case FILTER.RECENT:
+        /** @constant {number} */
+        var FOUR_DAYS = 4 * 24 * 60 * 60 * 1000;
+        preFilteredReviews = reviewsToFilter.filter(function(review) {
+          return Date.now() + Date.parse(review.date) < FOUR_DAYS;
+        }).sort(function(a, b) {
+          return Date.parse(b.date) - Date.parse(a.date);
+        });
+        setSupElement(reviewsFilterLabels);
+        break;
+
+      case FILTER.GOOD:
+        preFilteredReviews = reviewsToFilter.filter(function(review) {
+          return review.rating > 2;
+        }).sort(function(a, b) {
+          return b.rating - a.rating;
+        });
+        setSupElement(reviewsFilterLabels);
+        break;
+
+      case FILTER.BAD:
+        preFilteredReviews = reviewsToFilter.filter(function(review) {
+          return review.rating < 3;
+        }).sort(function(a, b) {
+          return a.rating - b.rating;
+        });
+        setSupElement(reviewsFilterLabels);
+        break;
+
+      case FILTER.POPULAR:
+        preFilteredReviews.sort(function(a, b) {
+          return b.review_usefulness - a.review_usefulness;
+        });
+        setSupElement(reviewsFilterLabels);
+        break;
+    }
+
+    /**
+      * Создаёт тег sup.
+      * @param {object} reviewsFilterLabelsList
+      */
+    function setSupElement(reviewsFilterLabelsList) {
+      var supText = document.createTextNode('(' + preFilteredReviews.length + ')');
+      sup.appendChild(supText);
+      reviewsFilterLabelsList.appendChild(sup);
+    }
+  }
+
+
+  /**
     * Возвращает отфильтрованный и отсортированный массив.
     * @param {array} reviewsList
     * @param {string} filter
@@ -103,7 +168,9 @@
     */
   function setFiltersActive() {
     var filters = reviewsFilterBlock.elements['reviews'];
+    var reviewsFilterLabels = document.querySelectorAll('.reviews-filter-item');
     for (var i = 0; i < filters.length; i++) {
+      setSupFilter(reviews, filters[i].id, reviewsFilterLabels[i]);
       filters[i].onclick = function() {
         setFilterActive(this.id);
       };
