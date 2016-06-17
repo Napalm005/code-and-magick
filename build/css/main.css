@@ -561,3 +561,8 @@ input[type=radio]:checked + .review-mark-label {
   right: 0;
   margin: auto;
 }
+
+.reviews-filter-item.disabled {
+  cursor: default;
+  opacity: 0.5;
+}

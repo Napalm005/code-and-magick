@@ -102,6 +102,8 @@
       sup.appendChild(supText);
       reviewsFilterLabelsList.appendChild(sup);
     }
+
+    return preFilteredReviews;
   }
 
 
@@ -170,10 +172,15 @@
     var filters = reviewsFilterBlock.elements['reviews'];
     var reviewsFilterLabels = document.querySelectorAll('.reviews-filter-item');
     for (var i = 0; i < filters.length; i++) {
-      setSupFilter(reviews, filters[i].id, reviewsFilterLabels[i]);
-      filters[i].onclick = function() {
-        setFilterActive(this.id);
-      };
+      var reviewsQuantity = setSupFilter(reviews, filters[i].id, reviewsFilterLabels[i]);
+      if (reviewsQuantity.length) {
+        filters[i].onclick = function() {
+          setFilterActive(this.id);
+        };
+      } else {
+        filters[i].setAttribute('disabled', 'disabled');
+        reviewsFilterLabels[i].classList.add('disabled');
+      }
     }
   }
 
