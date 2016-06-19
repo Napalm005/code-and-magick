@@ -1,9 +1,13 @@
 'use strict';
 
 (function() {
-  var preFilteredReviews;
+  var moreReviewsButton = document.querySelector('.reviews-controls-more');
+    /** @type {Array.<Object>} */
+  var filteredReviews = [];
   /** @type {Array.<Object>} */
   var reviews = [];
+  /** @type {number} */
+  var currentOffset = 0;
   /** @enum {string} */
   var FILTER = {
     'ALL': 'reviews-all',
@@ -31,6 +35,8 @@
   var CLASS_REVIEWS_SECTION_FAILURE = 'reviews-load-failure';
   /** @constant {string} */
   var CLASS_REVIEWS_SECTION_LOADING = 'reviews-list-loading';
+  /** @constant {number} */
+  var LIMIT = 3;
 
   reviewsFilterBlock.classList.add(CLASS_INVISIBLE);
   reviewsFilterBlock.classList.remove(CLASS_INVISIBLE);
@@ -39,6 +45,7 @@
     reviews = loadedReviews;
     setFiltersActive();
     setFilterActive(DEFAULT_FILTER);
+    addMoreReviews();
   });
 
   /**
@@ -46,11 +53,11 @@
     * @param {array} reviewsList
     * @param {string} filter
     * @param {HTMLElement} reviewsFilterLabel
-    * return {array} preFilteredReviews
+    * return {array} afterFilteringReviews
     */
   function setSupFilter(reviewsList, filter, reviewsFilterLabel) {
     var sup = document.createElement('sup');
-    preFilteredReviews = getFilteredReviews(reviewsList, filter);
+    var afterFilteringReviews = getFilteredReviews(reviewsList, filter);
     setSupElement(reviewsFilterLabel);
 
     /**
@@ -58,12 +65,12 @@
       * @param {HTMLElement} reviewsFilterLabel
       */
     function setSupElement(reviewsFilterLabelElement) {
-      var supText = document.createTextNode('(' + preFilteredReviews.length + ')');
+      var supText = document.createTextNode('(' + afterFilteringReviews.length + ')');
       sup.appendChild(supText);
       reviewsFilterLabelElement.appendChild(sup);
     }
 
-    return preFilteredReviews;
+    return afterFilteringReviews;
   }
 
 
@@ -75,7 +82,7 @@
     */
   function getFilteredReviews(reviewsList, filter) {
     var reviewsToFilter = reviewsList.slice(0);
-    preFilteredReviews = reviewsToFilter;
+    var preFilteredReviews = reviewsToFilter;
 
     switch (filter) {
       case FILTER.ALL:
@@ -121,8 +128,10 @@
     * @param {string} filter
     */
   function setFilterActive(filter) {
-    var filteredReviews = getFilteredReviews(reviews, filter);
-    renderReviews(filteredReviews);
+    filteredReviews = getFilteredReviews(reviews, filter);
+    moreReviewsButton.classList.remove(CLASS_INVISIBLE);
+    currentOffset = 0;
+    renderReviews(filteredReviews, currentOffset, true);
   }
 
   /**
@@ -131,13 +140,16 @@
   function setFiltersActive() {
     var filters = reviewsFilterBlock.elements['reviews'];
     var reviewsFilterLabels = document.querySelectorAll('.reviews-filter-item');
+
+    reviewsFilterBlock.addEventListener('click', function(evt) {
+      if (evt.target.name === 'reviews') {
+        setFilterActive(evt.target.id);
+      }
+    });
+
     for (var i = 0; i < filters.length; i++) {
       var reviewsQuantity = setSupFilter(reviews, filters[i].id, reviewsFilterLabels[i]);
-      if (reviewsQuantity.length) {
-        filters[i].onclick = function() {
-          setFilterActive(this.id);
-        };
-      } else {
+      if (!reviewsQuantity.length) {
         filters[i].setAttribute('disabled', 'disabled');
         reviewsFilterLabels[i].classList.add('disabled');
       }
@@ -280,14 +292,48 @@
   /**
     * Отрисовывает блоки с отзывами на странице.
     * @param {array} reviewsList
+    * @param {number} offset
+    * @param {boolean} replace
     */
-  function renderReviews(reviewsList) {
-    reviewsContainer.innerHTML = '';
+  function renderReviews(reviewsList, offset, replace) {
+    if (replace) {
+      reviewsContainer.innerHTML = '';
+    }
+
+    var begin = offset * LIMIT;
+    var end = begin + LIMIT;
+
     if (reviewsList.length) {
-      reviewsList.forEach(function(review) {
+      reviewsList.slice(begin, end).forEach(function(review) {
         reviewsContainer.appendChild(cloneReviewElement(review));
       }); } else {
       reviewsContainer.appendChild(cloneReviewElementEmpty());
     }
   }
+
+  /**
+    * Показывает доп. отзывы при нажатии кнопки по LIMIT штук.
+    */
+  function addMoreReviews() {
+    moreReviewsButton.addEventListener('click', function() {
+      if (isNextPageAvailable(filteredReviews, currentOffset, LIMIT)) {
+        currentOffset++;
+        renderReviews(filteredReviews, currentOffset);
+        if ((currentOffset + 1) * LIMIT >= filteredReviews.length) {
+          moreReviewsButton.classList.add(CLASS_INVISIBLE);
+        }
+      }
+    });
+  }
+
+  /**
+    * @param {Array} filteredReviewsList
+    * @param {number} offset
+    * @param {number} limit
+    * @return {boolean}
+    */
+  function isNextPageAvailable(filteredReviewsList, offset, limit ) {
+    return offset < Math.floor(filteredReviewsList.length / limit);
+  }
+
 })();
