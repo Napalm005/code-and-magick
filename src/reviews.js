@@ -4,8 +4,6 @@
   var moreReviewsButton = document.querySelector('.reviews-controls-more');
     /** @type {Array.<Object>} */
   var filteredReviews = [];
-    /** @type {Array.<Object>} */
-  var preFilteredReviews = [];
   /** @type {Array.<Object>} */
   var reviews = [];
   /** @type {number} */
@@ -55,11 +53,11 @@
     * @param {array} reviewsList
     * @param {string} filter
     * @param {HTMLElement} reviewsFilterLabel
-    * return {array} preFilteredReviews
+    * return {array} forsetSupFilteredReviews
     */
   function setSupFilter(reviewsList, filter, reviewsFilterLabel) {
     var sup = document.createElement('sup');
-    preFilteredReviews = getFilteredReviews(reviewsList, filter);
+    var forsetSupFilteredReviews = getFilteredReviews(reviewsList, filter);
     setSupElement(reviewsFilterLabel);
 
     /**
@@ -67,12 +65,12 @@
       * @param {HTMLElement} reviewsFilterLabel
       */
     function setSupElement(reviewsFilterLabelElement) {
-      var supText = document.createTextNode('(' + preFilteredReviews.length + ')');
+      var supText = document.createTextNode('(' + forsetSupFilteredReviews.length + ')');
       sup.appendChild(supText);
       reviewsFilterLabelElement.appendChild(sup);
     }
 
-    return preFilteredReviews;
+    return forsetSupFilteredReviews;
   }
 
 
@@ -84,7 +82,7 @@
     */
   function getFilteredReviews(reviewsList, filter) {
     var reviewsToFilter = reviewsList.slice(0);
-    preFilteredReviews = reviewsToFilter;
+    var preFilteredReviews = reviewsToFilter;
 
     switch (filter) {
       case FILTER.ALL:
