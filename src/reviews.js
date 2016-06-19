@@ -1,9 +1,15 @@
 'use strict';
 
 (function() {
-  var preFilteredReviews;
+  var moreReviewsButton = document.querySelector('.reviews-controls-more');
+    /** @type {Array.<Object>} */
+  var filteredReviews = [];
+    /** @type {Array.<Object>} */
+  var preFilteredReviews = [];
   /** @type {Array.<Object>} */
   var reviews = [];
+  /** @type {number} */
+  var pageNumber = 0;
   /** @enum {string} */
   var FILTER = {
     'ALL': 'reviews-all',
@@ -31,6 +37,8 @@
   var CLASS_REVIEWS_SECTION_FAILURE = 'reviews-load-failure';
   /** @constant {string} */
   var CLASS_REVIEWS_SECTION_LOADING = 'reviews-list-loading';
+  /** @constant {number} */
+  var PAGE_SIZE = 3;
 
   reviewsFilterBlock.classList.add(CLASS_INVISIBLE);
   reviewsFilterBlock.classList.remove(CLASS_INVISIBLE);
@@ -39,6 +47,7 @@
     reviews = loadedReviews;
     setFiltersActive();
     setFilterActive(DEFAULT_FILTER);
+    addMoreReviews();
   });
 
   /**
@@ -121,8 +130,10 @@
     * @param {string} filter
     */
   function setFilterActive(filter) {
-    var filteredReviews = getFilteredReviews(reviews, filter);
-    renderReviews(filteredReviews);
+    filteredReviews = getFilteredReviews(reviews, filter);
+    moreReviewsButton.classList.remove(CLASS_INVISIBLE);
+    pageNumber = 0;
+    renderReviews(filteredReviews, pageNumber, true);
   }
 
   /**
@@ -131,12 +142,15 @@
   function setFiltersActive() {
     var filters = reviewsFilterBlock.elements['reviews'];
     var reviewsFilterLabels = document.querySelectorAll('.reviews-filter-item');
+
     for (var i = 0; i < filters.length; i++) {
       var reviewsQuantity = setSupFilter(reviews, filters[i].id, reviewsFilterLabels[i]);
       if (reviewsQuantity.length) {
-        filters[i].onclick = function() {
-          setFilterActive(this.id);
-        };
+        reviewsFilterBlock.addEventListener('click', function(evt) {
+          if (evt.target.name === 'reviews') {
+            setFilterActive(evt.target.id);
+          }
+        });
       } else {
         filters[i].setAttribute('disabled', 'disabled');
         reviewsFilterLabels[i].classList.add('disabled');
@@ -280,14 +294,48 @@
   /**
     * Отрисовывает блоки с отзывами на странице.
     * @param {array} reviewsList
+    * @param {number} page
+    * @param {boolean} replace
     */
-  function renderReviews(reviewsList) {
-    reviewsContainer.innerHTML = '';
+  function renderReviews(reviewsList, page, replace) {
+    if (replace) {
+      reviewsContainer.innerHTML = '';
+    }
+
+    var from = page * PAGE_SIZE;
+    var to = from + PAGE_SIZE;
+
     if (reviewsList.length) {
-      reviewsList.forEach(function(review) {
+      reviewsList.slice(from, to).forEach(function(review) {
         reviewsContainer.appendChild(cloneReviewElement(review));
       }); } else {
       reviewsContainer.appendChild(cloneReviewElementEmpty());
     }
   }
+
+  /**
+    * Показывает доп. отзывы при нажатии кнопки по PAGE_SIZE штук.
+    */
+  function addMoreReviews() {
+    moreReviewsButton.addEventListener('click', function() {
+      if (isNextPageAvailable(filteredReviews, pageNumber, PAGE_SIZE)) {
+        pageNumber++;
+        renderReviews(filteredReviews, pageNumber);
+        if ((pageNumber + 1) * PAGE_SIZE >= filteredReviews.length) {
+          moreReviewsButton.classList.add(CLASS_INVISIBLE);
+        }
+      }
+    });
+  }
+
+  /**
+    * @param {Array} filteredReviewsList
+    * @param {number} page
+    * @param {number} pageSize
+    * @return {boolean}
+    */
+  function isNextPageAvailable(filteredReviewsList, page, pageSize ) {
+    return page < Math.floor(filteredReviewsList.length / pageSize);
+  }
+
 })();
