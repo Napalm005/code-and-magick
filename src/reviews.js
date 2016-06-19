@@ -53,11 +53,11 @@
     * @param {array} reviewsList
     * @param {string} filter
     * @param {HTMLElement} reviewsFilterLabel
-    * return {array} forsetSupFilteredReviews
+    * return {array} afterFilteringReviews
     */
   function setSupFilter(reviewsList, filter, reviewsFilterLabel) {
     var sup = document.createElement('sup');
-    var forsetSupFilteredReviews = getFilteredReviews(reviewsList, filter);
+    var afterFilteringReviews = getFilteredReviews(reviewsList, filter);
     setSupElement(reviewsFilterLabel);
 
     /**
@@ -65,12 +65,12 @@
       * @param {HTMLElement} reviewsFilterLabel
       */
     function setSupElement(reviewsFilterLabelElement) {
-      var supText = document.createTextNode('(' + forsetSupFilteredReviews.length + ')');
+      var supText = document.createTextNode('(' + afterFilteringReviews.length + ')');
       sup.appendChild(supText);
       reviewsFilterLabelElement.appendChild(sup);
     }
 
-    return forsetSupFilteredReviews;
+    return afterFilteringReviews;
   }
 
 
