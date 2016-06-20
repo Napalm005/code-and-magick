@@ -767,9 +767,40 @@
   window.Game = Game;
   window.Game.Verdict = Verdict;
 
+  var game;
+
   window.onload = function() {
-    var game = new Game(document.querySelector('.demo'));
+    game = new Game(document.querySelector('.demo'));
     game.initializeLevelAndStart();
     game.setGameStatus(window.Game.Verdict.INTRO);
   };
+
+  setScrollEnabled();
+
+  /**
+     * Создаёт параллакс облачков и включает игру на паузу, если она за пределами видимости.
+     */
+  function setScrollEnabled() {
+    var headerClouds = document.querySelector('.header-clouds');
+    var scrollPosition;
+    var gameBlock = document.querySelector('.demo');
+    window.addEventListener('scroll', function() {
+      if (isElementVisible(headerClouds)) {
+        scrollPosition = window.pageYOffset;
+        headerClouds.style.backgroundPosition = scrollPosition + 'px';
+      }
+      if (!isElementVisible(gameBlock)) {
+        game.setGameStatus(window.Game.Verdict.PAUSE);
+      }
+    });
+  }
+
+  /**
+     * Определяет, видим ли элемент.
+     * @param {HTMLElement} element
+     */
+  function isElementVisible(element) {
+    var elementPosition = element.getBoundingClientRect();
+    return elementPosition.bottom >= 0;
+  }
 })();
