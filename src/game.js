@@ -17,7 +17,7 @@
    * @const
    * @type {number}
    */
-  var THROTTLE_DELAY = 500;
+  var THROTTLE_DELAY = 100;
 
   /**
    * ID уровней.
@@ -790,7 +790,7 @@
     var headerClouds = document.querySelector('.header-clouds');
     var scrollPosition;
     var gameBlock = document.querySelector('.demo');
-    var lastCall = Date.now();
+    var lastCall = '';
     var isCloudsVisible;
     var isGemeVisible;
     window.addEventListener('scroll', function() {
