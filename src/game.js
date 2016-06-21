@@ -792,18 +792,18 @@
     var gameBlock = document.querySelector('.demo');
     var lastCall = '';
     var isCloudsVisible;
-    var isGemeVisible;
+    var isGameVisible;
     window.addEventListener('scroll', function() {
       if (Date.now() - lastCall >= THROTTLE_DELAY) {
         isCloudsVisible = isElementVisible(headerClouds);
-        isGemeVisible = isElementVisible(gameBlock);
+        isGameVisible = isElementVisible(gameBlock);
         lastCall = Date.now();
       }
       if (isCloudsVisible) {
         scrollPosition = window.pageYOffset;
         headerClouds.style.backgroundPosition = scrollPosition + 'px';
       }
-      if (!isGemeVisible) {
+      if (!isGameVisible && (game.state.currentStatus !== Verdict.PAUSE)) {
         game.setGameStatus(window.Game.Verdict.PAUSE);
       }
     });
