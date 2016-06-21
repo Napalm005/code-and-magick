@@ -14,6 +14,12 @@
   var WIDTH = 700;
 
   /**
+   * @const
+   * @type {number}
+   */
+  var THROTTLE_DELAY = 500;
+
+  /**
    * ID уровней.
    * @enum {number}
    */
@@ -784,12 +790,20 @@
     var headerClouds = document.querySelector('.header-clouds');
     var scrollPosition;
     var gameBlock = document.querySelector('.demo');
+    var lastCall = Date.now();
+    var isCloudsVisible;
+    var isGemeVisible;
     window.addEventListener('scroll', function() {
-      if (isElementVisible(headerClouds)) {
+      if (Date.now() - lastCall >= THROTTLE_DELAY) {
+        isCloudsVisible = isElementVisible(headerClouds);
+        isGemeVisible = isElementVisible(gameBlock);
+        lastCall = Date.now();
+      }
+      if (isCloudsVisible) {
         scrollPosition = window.pageYOffset;
         headerClouds.style.backgroundPosition = scrollPosition + 'px';
       }
-      if (!isElementVisible(gameBlock)) {
+      if (!isGemeVisible) {
         game.setGameStatus(window.Game.Verdict.PAUSE);
       }
     });
