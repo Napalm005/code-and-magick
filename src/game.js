@@ -803,8 +803,9 @@
         scrollPosition = window.pageYOffset;
         headerClouds.style.backgroundPosition = scrollPosition + 'px';
       }
-      if (!isGameVisible && (game.state.currentStatus !== Verdict.PAUSE)) {
+      if (!isGameVisible) {
         game.setGameStatus(window.Game.Verdict.PAUSE);
+        isGameVisible = true;
       }
     });
   }
