@@ -790,24 +790,41 @@
     var headerClouds = document.querySelector('.header-clouds');
     var scrollPosition;
     var gameBlock = document.querySelector('.demo');
-    var lastCall = '';
-    var isCloudsVisible;
-    var isGameVisible;
-    window.addEventListener('scroll', function() {
-      if (Date.now() - lastCall >= THROTTLE_DELAY) {
-        isCloudsVisible = isElementVisible(headerClouds);
-        isGameVisible = isElementVisible(gameBlock);
-        lastCall = Date.now();
+
+    /**
+       * Throttle оптимизация
+       * @param  {function} callback
+       * @param  {number} timeDelay
+       * @return {function}
+       */
+    function throttle(callback, timeDelay) {
+      var lastCall = 0;
+      return function() {
+        if (Date.now() - lastCall >= timeDelay) {
+          callback();
+          lastCall = Date.now();
+        }
+      };
+    }
+
+    var optimizedGameScroll = throttle(function() {
+      var isGameVisible = isElementVisible(gameBlock);
+      if (!isGameVisible) {
+        console.log('obj Game');
+        game.setGameStatus(window.Game.Verdict.PAUSE);
       }
+    }, THROTTLE_DELAY);
+    window.addEventListener('scroll', optimizedGameScroll);
+
+    var optimizedCloudsScroll = throttle(function() {
+      var isCloudsVisible = isElementVisible(headerClouds);
       if (isCloudsVisible) {
         scrollPosition = window.pageYOffset;
         headerClouds.style.backgroundPosition = scrollPosition + 'px';
+        console.log('obj Clouds');
       }
-      if (!isGameVisible) {
-        game.setGameStatus(window.Game.Verdict.PAUSE);
-        isGameVisible = true;
-      }
-    });
+    }, 0);
+    window.addEventListener('scroll', optimizedCloudsScroll);
   }
 
   /**
@@ -815,6 +832,7 @@
      * @param {HTMLElement} element
      */
   function isElementVisible(element) {
+    console.log('obj Check');
     var elementPosition = element.getBoundingClientRect();
     return elementPosition.bottom >= 0;
   }
