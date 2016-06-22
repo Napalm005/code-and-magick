@@ -14,12 +14,6 @@
   var WIDTH = 700;
 
   /**
-   * @const
-   * @type {number}
-   */
-  var THROTTLE_DELAY = 100;
-
-  /**
    * ID уровней.
    * @enum {number}
    */
@@ -784,18 +778,38 @@
   setScrollEnabled();
 
   /**
-     * Создаёт параллакс облачков и включает игру на паузу, если она за пределами видимости.
-     */
+   * Создаёт параллакс облачков и включает игру на паузу, если она за пределами видимости.
+   */
   function setScrollEnabled() {
     var headerClouds = document.querySelector('.header-clouds');
     var gameBlock = document.querySelector('.demo');
+    var isCloudsVisible;
 
     /**
-       * Throttle оптимизация
-       * @param  {function} callback
-       * @param  {number} timeDelay
-       * @return {function}
-       */
+     * @const
+     * @type {number}
+     */
+    var THROTTLE_DELAY = 100;
+
+    var optimizedGameScroll = throttle(function() {
+      var isGameVisible = isElementVisible(gameBlock);
+      if (!isGameVisible && (game.state.currentStatus !== Verdict.PAUSE)) {
+        game.setGameStatus(window.Game.Verdict.PAUSE);
+      }
+    }, THROTTLE_DELAY);
+
+    var optimizedheckScroll = throttle(function() {
+      isCloudsVisible = isElementVisible(headerClouds);
+    }, THROTTLE_DELAY);
+
+    window.addEventListener('scroll', optimizedScroll);
+
+    /**
+     * Throttle оптимизация
+     * @param  {function} callback
+     * @param  {number} timeDelay
+     * @return {function}
+     */
     function throttle(callback, timeDelay) {
       var lastCall = 0;
       return function() {
@@ -806,43 +820,27 @@
       };
     }
 
-    var optimizedGameScroll = throttle(function() {
-      var isGameVisible = isElementVisible(gameBlock);
-      if (!isGameVisible && (game.state.currentStatus !== Verdict.PAUSE)) {
-        console.log('obj Game');
-        game.setGameStatus(window.Game.Verdict.PAUSE);
-      }
-    }, THROTTLE_DELAY);
-
-    var isCloudsVisible;
-    var optimizedheckScroll = throttle(function() {
-      isCloudsVisible = isElementVisible(headerClouds);
-    }, THROTTLE_DELAY);
-
     function optimizedCloudsScroll() {
       if (isCloudsVisible) {
         var scrollPosition = window.pageYOffset;
         headerClouds.style.backgroundPosition = scrollPosition + 'px';
-        console.log('obj Clouds');
       }
     }
 
-    var optimizedScroll = function() {
+    function optimizedScroll() {
       optimizedheckScroll();
       optimizedCloudsScroll();
       optimizedGameScroll();
-    };
+    }
 
-    window.addEventListener('scroll', optimizedScroll);
-  }
-
-  /**
+    /**
      * Определяет, видим ли элемент.
      * @param {HTMLElement} element
+     * return {boolean}
      */
-  function isElementVisible(element) {
-    console.log('obj Check');
-    var elementPosition = element.getBoundingClientRect();
-    return elementPosition.bottom >= 0;
+    function isElementVisible(element) {
+      var elementPosition = element.getBoundingClientRect();
+      return elementPosition.bottom >= 0;
+    }
   }
 })();
