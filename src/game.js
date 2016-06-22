@@ -788,7 +788,6 @@
      */
   function setScrollEnabled() {
     var headerClouds = document.querySelector('.header-clouds');
-    var scrollPosition;
     var gameBlock = document.querySelector('.demo');
 
     /**
@@ -814,17 +813,27 @@
         game.setGameStatus(window.Game.Verdict.PAUSE);
       }
     }, THROTTLE_DELAY);
-    window.addEventListener('scroll', optimizedGameScroll);
 
-    var optimizedCloudsScroll = throttle(function() {
-      var isCloudsVisible = isElementVisible(headerClouds);
+    var isCloudsVisible;
+    var optimizedheckScroll = throttle(function() {
+      isCloudsVisible = isElementVisible(headerClouds);
+    }, THROTTLE_DELAY);
+
+    function optimizedCloudsScroll() {
       if (isCloudsVisible) {
-        scrollPosition = window.pageYOffset;
+        var scrollPosition = window.pageYOffset;
         headerClouds.style.backgroundPosition = scrollPosition + 'px';
         console.log('obj Clouds');
       }
-    }, 0);
-    window.addEventListener('scroll', optimizedCloudsScroll);
+    }
+
+    var optimizedScroll = function() {
+      optimizedheckScroll();
+      optimizedCloudsScroll();
+      optimizedGameScroll();
+    };
+
+    window.addEventListener('scroll', optimizedScroll);
   }
 
   /**
