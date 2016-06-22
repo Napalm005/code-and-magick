@@ -807,14 +807,14 @@
      */
     var THROTTLE_DELAY = 100;
 
-    var optimizedGameScroll = throttle(function() {
+    var optimizedGameScroll = window.throttle(function() {
       var isGameVisible = isElementVisible(gameBlock);
       if (!isGameVisible && (game.state.currentStatus !== Verdict.PAUSE)) {
         game.setGameStatus(window.Game.Verdict.PAUSE);
       }
     }, THROTTLE_DELAY);
 
-    var optimizedheckScroll = throttle(function() {
+    var optimizedheckScroll = window.throttle(function() {
       isCloudsVisible = isElementVisible(headerClouds);
     }, THROTTLE_DELAY);
 
