@@ -808,7 +808,7 @@
 
     var optimizedGameScroll = throttle(function() {
       var isGameVisible = isElementVisible(gameBlock);
-      if (!isGameVisible) {
+      if (!isGameVisible && (game.state.currentStatus !== Verdict.PAUSE)) {
         console.log('obj Game');
         game.setGameStatus(window.Game.Verdict.PAUSE);
       }
