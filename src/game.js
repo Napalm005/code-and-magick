@@ -775,6 +775,22 @@
     game.setGameStatus(window.Game.Verdict.INTRO);
   };
 
+  /**
+   * Throttle оптимизация
+   * @param  {function} callback
+   * @param  {number} timeDelay
+   * @return {function}
+   */
+  window.throttle = function(callback, timeDelay) {
+    var lastCall = 0;
+    return function() {
+      if (Date.now() - lastCall >= timeDelay) {
+        callback();
+        lastCall = Date.now();
+      }
+    };
+  };
+
   setScrollEnabled();
 
   /**
@@ -804,21 +820,6 @@
 
     window.addEventListener('scroll', optimizedScroll);
 
-    /**
-     * Throttle оптимизация
-     * @param  {function} callback
-     * @param  {number} timeDelay
-     * @return {function}
-     */
-    function throttle(callback, timeDelay) {
-      var lastCall = 0;
-      return function() {
-        if (Date.now() - lastCall >= timeDelay) {
-          callback();
-          lastCall = Date.now();
-        }
-      };
-    }
 
     function optimizedCloudsScroll() {
       if (isCloudsVisible) {
