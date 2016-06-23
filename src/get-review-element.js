@@ -1,35 +1,37 @@
 'use strict';
 
-(function() {
+define(['./variables', './utils'], function(variables, utils) {
 
-  /**
-    * Клонирует элемент из шаблона, подставляет данные из объекта на сервере.
-    * @param {Object} data
-    * return {HTMLElement} element
-    */
-  function cloneReviewElement(data) {
-    var templateElement = document.querySelector('#review-template');
-    var elementToClone = getTemplate(templateElement, '.review');
-    var element = elementToClone.cloneNode(true);
-    var rating = element.querySelector('.review-rating');
-    element.querySelector('.review-text').textContent = data.description;
-
-    rating.classList.add(ratingClasses[data.rating - 1]);
-
-    setImageParameters(data, element);
-    return element;
-  }
-
+  return {
     /**
-    * Клонирует элемент из шаблона, подставляет данные из объекта на сервере.
-    * return {HTMLElement} elementEmpty
-    */
-  function cloneReviewElementEmpty() {
-    var templateElementEmpty = document.querySelector('#review-empty-template');
-    var elementEmptyToClone = getTemplate(templateElementEmpty, '.review-empty');
-    var elementEmpty = elementEmptyToClone.cloneNode(true);
-    return elementEmpty;
-  }
+      * Клонирует элемент из шаблона, подставляет данные из объекта на сервере.
+      * @param {Object} data
+      * return {HTMLElement} element
+      */
+    cloneReviewElement: function(data) {
+      var templateElement = document.querySelector('#review-template');
+      var elementToClone = utils.getTemplate(templateElement, '.review');
+      var element = elementToClone.cloneNode(true);
+      var rating = element.querySelector('.review-rating');
+      element.querySelector('.review-text').textContent = data.description;
+
+      rating.classList.add(variables.ratingClasses[data.rating - 1]);
+
+      setImageParameters(data, element);
+      return element;
+    },
+
+      /**
+      * Клонирует элемент из шаблона, подставляет данные из объекта на сервере.
+      * return {HTMLElement} elementEmpty
+      */
+    cloneReviewElementEmpty: function() {
+      var templateElementEmpty = document.querySelector('#review-empty-template');
+      var elementEmptyToClone = utils.getTemplate(templateElementEmpty, '.review-empty');
+      var elementEmpty = elementEmptyToClone.cloneNode(true);
+      return elementEmpty;
+    }
+  };
 
   /**
     * Создаёт изображения, которые получают необходимые параметры из
@@ -58,6 +60,6 @@
     imageLoadTimeout = setTimeout(function() {
       reviewAvatar.removeAttribute('src');
       element.classList.add('review-load-failure');
-    }, LOAD_TIMEOUT);
+    }, variables.LOAD_TIMEOUT);
   }
 })();

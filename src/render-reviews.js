@@ -13,8 +13,8 @@ define(['./variables', './get-review-element'], function(variables, reviewElemen
         variables.reviewsContainer.innerHTML = '';
       }
 
-      var begin = offset * LIMIT;
-      var end = begin + LIMIT;
+      var begin = offset * variables.LIMIT;
+      var end = begin + variables.LIMIT;
 
       if (reviewsList.length) {
         reviewsList.slice(begin, end).forEach(function(review) {
@@ -23,5 +23,5 @@ define(['./variables', './get-review-element'], function(variables, reviewElemen
         variables.reviewsContainer.appendChild(reviewElement.cloneReviewElementEmpty());
       }
     }
-  }
+  };
 })();

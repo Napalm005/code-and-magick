@@ -1,6 +1,7 @@
 'use strict';
 
 define(function() {
+
   return {
     moreReviewsButton: document.querySelector('.reviews-controls-more'),
       /** @type {Array.<Object>} */
@@ -27,7 +28,7 @@ define(function() {
     reviewsContainer: document.querySelector('.reviews-list'),
     reviewsFilterBlock: document.querySelector('.reviews-filter'),
     /** @constant {Filter} */
-    DEFAULT_FILTER: FILTER.ALL,
+    DEFAULT_FILTER: this.FILTER.ALL,
     /** @constant {number} */
     LOAD_TIMEOUT: 5000,
     /** @constant {string} */
@@ -38,6 +39,6 @@ define(function() {
     CLASS_REVIEWS_SECTION_LOADING: 'reviews-list-loading',
     /** @constant {number} */
     LIMIT: 3
-  }
+  };
 })();
 

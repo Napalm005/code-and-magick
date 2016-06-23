@@ -3,7 +3,6 @@
 define(['./variables', './render-reviews'], function(variables, renderReviews) {
 
   return {
-
     /**
       * Показывает доп. отзывы при нажатии кнопки по LIMIT штук.
       */
@@ -64,7 +63,7 @@ define(['./variables', './render-reviews'], function(variables, renderReviews) {
       * Добавляется класс со стилем ошибки.
       */
     addErrorClass: function(element) {
-      element.classList.remove(CLASS_REVIEWS_SECTION_LOADING);
+      element.classList.remove(variables.CLASS_REVIEWS_SECTION_LOADING);
       element.classList.add(variables.CLASS_REVIEWS_SECTION_FAILURE);
     },
 
@@ -77,5 +76,5 @@ define(['./variables', './render-reviews'], function(variables, renderReviews) {
     isNextPageAvailable: function(filteredReviewsList, offset, limit ) {
       return offset < Math.floor(filteredReviewsList.length / limit);
     }
-  }
+  };
 })();
