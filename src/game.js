@@ -770,7 +770,7 @@ define(function() {
 
   window.onload = function() {
     window.game = new Game(document.querySelector('.demo'));
-    game.initializeLevelAndStart();
-    game.setGameStatus(window.Game.Verdict.INTRO);
+    window.game.initializeLevelAndStart();
+    window.game.setGameStatus(window.Game.Verdict.INTRO);
   };
 });

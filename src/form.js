@@ -1,8 +1,7 @@
 'use strict';
 
-(function() {
+define(['./browser-cookies'], function(cookies) {
 
-  var browserCookies = require('browser-cookies');
   var form = document.querySelector('.review-form');
   var formContainer = document.querySelector('.overlay-container');
   var formOpenButton = document.querySelector('.reviews-controls-new');
@@ -27,9 +26,9 @@
     var dateToExpire = Date.now() + diff;
     var formatteddateToExpire = new Date(dateToExpire).toUTCString();
 
-    browserCookies.set('Mark', formReviewGroupMark.elements['review-mark'].value, {expires: formatteddateToExpire});
-    browserCookies.set('Name', formReviewName.value, {expires: formatteddateToExpire});
-    browserCookies.set('Review', formReviewText.value, {expires: formatteddateToExpire});
+    cookies.set('Mark', formReviewGroupMark.elements['review-mark'].value, {expires: formatteddateToExpire});
+    cookies.set('Name', formReviewName.value, {expires: formatteddateToExpire});
+    cookies.set('Review', formReviewText.value, {expires: formatteddateToExpire});
   };
 
   form.oninput = function() {
@@ -50,9 +49,9 @@
    */
   function init() {
     formReviewName.required = true;
-    formReviewName.value = browserCookies.get('Name');
-    formReviewText.value = browserCookies.get('Review');
-    formReviewGroupMark.elements['review-mark'].value = browserCookies.get('Mark');
+    formReviewName.value = cookies.get('Name');
+    formReviewText.value = cookies.get('Review');
+    formReviewGroupMark.elements['review-mark'].value = cookies.get('Mark');
     updateReviewTextRules(formReviewGroupMark.elements['review-mark'].value);
   }
 

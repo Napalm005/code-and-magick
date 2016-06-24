@@ -1,6 +1,7 @@
 'use strict';
 
 define(['./variables', './get-review-element'], function(variables, reviewElement) {
+
   return {
     /**
       * Отрисовывает блоки с отзывами на странице.
