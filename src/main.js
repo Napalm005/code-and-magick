@@ -1,6 +1,6 @@
 'use strict';
 
-require(['./load', './filter', './utils', './scroll', './variables', './form', './game', './get-review-element', './render-reviews', './scroll'], function(load, filter, utils, scroll, variables) {
+require(['./variables', './utils', './load', './filter', './scroll', './form', './game', './get-review-element', './render-reviews', './scroll'], function(variables, utils, load, filter, scroll) {
   variables.reviewsFilterBlock.classList.add(variables.CLASS_INVISIBLE);
   variables.reviewsFilterBlock.classList.remove(variables.CLASS_INVISIBLE);
 

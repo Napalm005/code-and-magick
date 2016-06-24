@@ -19,8 +19,8 @@ define(['./utils', './game'], function(utils, game) {
 
       var optimizedGameScroll = utils.throttle(function() {
         var isGameVisible = utils.isElementVisible(gameBlock);
-        if (!isGameVisible && (game.game.state.currentStatus !== game.Verdict.PAUSE)) {
-          game.game.setGameStatus(window.Game.Verdict.PAUSE);
+        if (!isGameVisible && (window.game.state.currentStatus !== window.Game.Verdict.PAUSE)) {
+          window.game.setGameStatus(window.Game.Verdict.PAUSE);
         }
       }, THROTTLE_DELAY);
 

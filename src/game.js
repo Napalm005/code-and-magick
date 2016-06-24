@@ -767,10 +767,9 @@ define(function() {
   window.Game = Game;
   window.Game.Verdict = Verdict;
 
-  var game;
 
   window.onload = function() {
-    game = new Game(document.querySelector('.demo'));
+    window.game = new Game(document.querySelector('.demo'));
     game.initializeLevelAndStart();
     game.setGameStatus(window.Game.Verdict.INTRO);
   };

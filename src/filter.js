@@ -25,7 +25,7 @@ define(['./variables', './render-reviews'], function(variables, renderReviews) {
         if (evt.target.name === 'reviews') {
           this.setFilterActive(evt.target.id);
         }
-      });
+      }.bind(this));
 
       for (var i = 0; i < filters.length; i++) {
         var reviewsQuantity = setSupFilter(variables.reviews, filters[i].id, reviewsFilterLabels[i]);

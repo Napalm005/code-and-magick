@@ -1,8 +1,23 @@
 'use strict';
 
-define(['./variables', './utils'], function(variables, utils) {
+define(['./variables'], function(variables) {
 
   return {
+    /**
+      * Проверяет поддержку элемента template и получает в нём контент.
+      * return {HTMLElement} result
+      */
+    getTemplate: function(template, content) {
+      var result;
+
+      if ('content' in template) {
+        result = template.content.querySelector(content);
+      } else {
+        result = template.querySelector(content);
+      }
+      return result;
+    },
+
     /**
       * Клонирует элемент из шаблона, подставляет данные из объекта на сервере.
       * @param {Object} data
@@ -10,7 +25,7 @@ define(['./variables', './utils'], function(variables, utils) {
       */
     cloneReviewElement: function(data) {
       var templateElement = document.querySelector('#review-template');
-      var elementToClone = utils.getTemplate(templateElement, '.review');
+      var elementToClone = this.getTemplate(templateElement, '.review');
       var element = elementToClone.cloneNode(true);
       var rating = element.querySelector('.review-rating');
       element.querySelector('.review-text').textContent = data.description;
@@ -27,11 +42,12 @@ define(['./variables', './utils'], function(variables, utils) {
       */
     cloneReviewElementEmpty: function() {
       var templateElementEmpty = document.querySelector('#review-empty-template');
-      var elementEmptyToClone = utils.getTemplate(templateElementEmpty, '.review-empty');
+      var elementEmptyToClone = this.getTemplate(templateElementEmpty, '.review-empty');
       var elementEmpty = elementEmptyToClone.cloneNode(true);
       return elementEmpty;
     }
   };
+
 
   /**
     * Создаёт изображения, которые получают необходимые параметры из

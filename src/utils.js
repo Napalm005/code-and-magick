@@ -45,21 +45,6 @@ define(['./variables', './render-reviews'], function(variables, renderReviews) {
     },
 
     /**
-      * Проверяет поддержку элемента template и получает в нём контент.
-      * return {HTMLElement} result
-      */
-    getTemplate: function(template, content) {
-      var result;
-
-      if ('content' in template) {
-        result = template.content.querySelector(content);
-      } else {
-        result = template.querySelector(content);
-      }
-      return result;
-    },
-
-    /**
       * Добавляется класс со стилем ошибки.
       */
     addErrorClass: function(element) {
