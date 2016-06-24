@@ -15,7 +15,7 @@ define(['./variables', './render-reviews'], function(variables, renderReviews) {
             variables.moreReviewsButton.classList.add(variables.CLASS_INVISIBLE);
           }
         }
-      });
+      }.bind(this));
     },
 
     /**
