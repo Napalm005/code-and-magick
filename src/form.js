@@ -1,6 +1,6 @@
 'use strict';
 
-define(['./browser-cookies'], function(cookies) {
+define(['browser-cookies'], function(cookies) {
 
   var form = document.querySelector('.review-form');
   var formContainer = document.querySelector('.overlay-container');
