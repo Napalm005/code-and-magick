@@ -774,4 +774,4 @@ define(function() {
     game.initializeLevelAndStart();
     game.setGameStatus(window.Game.Verdict.INTRO);
   };
-})();
+});

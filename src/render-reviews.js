@@ -24,4 +24,4 @@ define(['./variables', './get-review-element'], function(variables, reviewElemen
       }
     }
   };
-})();
+});

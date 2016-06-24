@@ -77,4 +77,4 @@ define(['./variables', './render-reviews'], function(variables, renderReviews) {
       return offset < Math.floor(filteredReviewsList.length / limit);
     }
   };
-})();
+});

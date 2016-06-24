@@ -124,4 +124,4 @@
     evt.preventDefault();
     formContainer.classList.add(invisible);
   };
-})();
+});

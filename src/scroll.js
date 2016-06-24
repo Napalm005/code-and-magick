@@ -24,7 +24,7 @@ define(['./utils', './game'], function(utils, game) {
         }
       }, THROTTLE_DELAY);
 
-      var optimizedheckScroll = window.throttle(function() {
+      var optimizedheckScroll = utils.throttle(function() {
         isCloudsVisible = utils.isElementVisible(headerClouds);
       }, THROTTLE_DELAY);
 
@@ -45,4 +45,4 @@ define(['./utils', './game'], function(utils, game) {
       }
     }
   };
-})();
+});

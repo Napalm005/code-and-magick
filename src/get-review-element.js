@@ -62,4 +62,4 @@ define(['./variables', './utils'], function(variables, utils) {
       element.classList.add('review-load-failure');
     }, variables.LOAD_TIMEOUT);
   }
-})();
+});

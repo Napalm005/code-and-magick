@@ -110,4 +110,4 @@ define(['./variables', './render-reviews'], function(variables, renderReviews) {
     }
     return preFilteredReviews;
   }
-})();
+});
