@@ -1,6 +1,6 @@
 'use strict';
 
-define(['./variables', './get-review-element'], function(variables, reviewElement) {
+define(['./variables', './templates'], function(variables, templates) {
 
   return {
     /**
@@ -19,9 +19,9 @@ define(['./variables', './get-review-element'], function(variables, reviewElemen
 
       if (reviewsList.length) {
         reviewsList.slice(begin, end).forEach(function(review) {
-          variables.reviewsContainer.appendChild(reviewElement.cloneReviewElement(review));
+          variables.reviewsContainer.appendChild(templates.cloneReviewElement(review));
         }); } else {
-        variables.reviewsContainer.appendChild(reviewElement.cloneReviewElementEmpty());
+        variables.reviewsContainer.appendChild(templates.cloneReviewElementEmpty());
       }
     }
   };
