@@ -4,7 +4,6 @@ define(['./variables', './utils', './templates'], function(variables, utils, tem
 
   /** @type {Array.<Object>} */
   var reviewsArray = [];
-  var loadedData;
 
   return {
 
@@ -20,8 +19,9 @@ define(['./variables', './utils', './templates'], function(variables, utils, tem
       xhr.onload = function(evt) {
         if ( (this.status === 200) && (this.readyState === 4) ) {
           variables.reviewsContainer.classList.remove(variables.CLASS_REVIEWS_SECTION_LOADING);
-          loadedData = JSON.parse(evt.target.response);
-          callback(loadedData);
+          var loadedData = JSON.parse(evt.target.response);
+          reviewsArray = loadedData;
+          callback();
         } else {
           utils.addErrorClass(variables.reviewsContainer);
         }
@@ -92,10 +92,9 @@ define(['./variables', './utils', './templates'], function(variables, utils, tem
     },
 
     get: function() {
-      return loadedData;
+      return reviewsArray;
     },
     set: function() {
-      reviewsArray = loadedData;
       return reviewsArray;
     },
     /** @type {Array.<Object>} */

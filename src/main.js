@@ -2,7 +2,7 @@
 
 require(['./reviews', './filter', './variables', './utils', './scroll', './form', './game', './templates', './scroll'], function(reviews, filter, variables) {
 
-  reviews.getReviews('//o0.github.io/assets/json/reviews.json', function(loadedReviews) {
+  reviews.getReviews('//o0.github.io/assets/json/reviews.json', function() {
     filter.setFiltersActive();
     filter.setFilterActive(variables.DEFAULT_FILTER);
     reviews.addMoreReviews();
