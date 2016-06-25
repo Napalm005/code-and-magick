@@ -28,7 +28,7 @@ define(function() {
     reviewsContainer: document.querySelector('.reviews-list'),
     reviewsFilterBlock: document.querySelector('.reviews-filter'),
     /** @constant {Filter} */
-    // DEFAULT_FILTER: this.FILTER.ALL,
+    DEFAULT_FILTER: this.FILTER.ALL,
     /** @constant {number} */
     LOAD_TIMEOUT: 5000,
     /** @constant {string} */
