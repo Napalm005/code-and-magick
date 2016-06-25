@@ -8,7 +8,7 @@ define(['./variables', './render-reviews', './reviews'], function(variables, ren
       * @param {string} filter
       */
     setFilterActive: function(filter) {
-      reviews.filteredReviews = getFilteredReviews(reviews.reviewsArray, filter);
+      reviews.filteredReviews = getFilteredReviews(reviews.get, filter);
       variables.moreReviewsButton.classList.remove(variables.CLASS_INVISIBLE);
       reviews.currentOffset = 0;
       renderReviews.renderReviews(reviews.filteredReviews, reviews.currentOffset, true);
@@ -28,7 +28,7 @@ define(['./variables', './render-reviews', './reviews'], function(variables, ren
       }.bind(this));
 
       for (var i = 0; i < filters.length; i++) {
-        var reviewsQuantity = setSupFilter(reviews.reviewsArray, filters[i].id, reviewsFilterLabels[i]);
+        var reviewsQuantity = setSupFilter(reviews.get, filters[i].id, reviewsFilterLabels[i]);
         if (!reviewsQuantity.length) {
           filters[i].setAttribute('disabled', 'disabled');
           reviewsFilterLabels[i].classList.add('disabled');

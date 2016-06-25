@@ -89,8 +89,10 @@ define(['./variables', './utils', './templates'], function(variables, utils, tem
         }
       }.bind(this));
     },
-    /** @type {Array.<Object>} */
-    'reviewsArray': reviewsArray,
+
+    get: function() {
+      return reviewsArray;
+    },
     /** @type {Array.<Object>} */
     'filteredReviews': [],
     /** @type {number} */
