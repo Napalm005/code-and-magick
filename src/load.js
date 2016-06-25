@@ -1,6 +1,6 @@
 'use strict';
 
-define(['./variables', './utils', './filter', './render-reviews'], function(variables, utils, filter, renderReviews) {
+define(['./variables', './utils', './filter', './render-reviews', './reviews'], function(variables, utils, filter, renderReviews, reviews) {
 
   /**
     * Определяет адрес, где расположен JSONP-скрипт и получает объект.
@@ -39,7 +39,7 @@ define(['./variables', './utils', './filter', './render-reviews'], function(vari
   }
 
   getReviews('//o0.github.io/assets/json/reviews.json', function(loadedReviews) {
-    variables.reviews = loadedReviews;
+    reviews.reviews = loadedReviews;
     filter.setFiltersActive();
     filter.setFilterActive(variables.DEFAULT_FILTER);
     renderReviews.addMoreReviews();

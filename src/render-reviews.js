@@ -1,6 +1,6 @@
 'use strict';
 
-define(['./variables', './templates'], function(variables, templates) {
+define(['./variables', './templates', './reviews'], function(variables, templates, reviews) {
 
   return {
 
@@ -15,8 +15,8 @@ define(['./variables', './templates'], function(variables, templates) {
         variables.reviewsContainer.innerHTML = '';
       }
 
-      var begin = offset * variables.LIMIT;
-      var end = begin + variables.LIMIT;
+      var begin = offset * reviews.LIMIT;
+      var end = begin + reviews.LIMIT;
 
       if (reviewsList.length) {
         reviewsList.slice(begin, end).forEach(function(review) {
@@ -31,10 +31,10 @@ define(['./variables', './templates'], function(variables, templates) {
       */
     addMoreReviews: function() {
       variables.moreReviewsButton.addEventListener('click', function() {
-        if (isNextPageAvailable(variables.filteredReviews, variables.currentOffset, variables.LIMIT)) {
-          variables.currentOffset++;
-          this.renderReviews(variables.filteredReviews, variables.currentOffset);
-          if ((variables.currentOffset + 1) * variables.LIMIT >= variables.filteredReviews.length) {
+        if (isNextPageAvailable(reviews.filteredReviews, reviews.currentOffset, reviews.LIMIT)) {
+          reviews.currentOffset++;
+          this.renderReviews(reviews.filteredReviews, reviews.currentOffset);
+          if ((reviews.currentOffset + 1) * reviews.LIMIT >= reviews.filteredReviews.length) {
             variables.moreReviewsButton.classList.add(variables.CLASS_INVISIBLE);
           }
         }

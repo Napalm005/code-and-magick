@@ -7,12 +7,6 @@ define(function() {
     var self = this;
 
     self.moreReviewsButton = document.querySelector('.reviews-controls-more');
-    /** @type {Array.<Object>} */
-    self.filteredReviews = [];
-    /** @type {Array.<Object>} */
-    self.reviews = [];
-    /** @type {number} */
-    self.currentOffset = 0;
     /** @enum {string} */
     self.FILTER = {
       'ALL': 'reviews-all',
@@ -40,8 +34,6 @@ define(function() {
     self.CLASS_REVIEWS_SECTION_FAILURE = 'reviews-load-failure';
     /** @constant {string} */
     self.CLASS_REVIEWS_SECTION_LOADING = 'reviews-list-loading';
-    /** @constant {number} */
-    self.LIMIT = 3;
   }
 
   return new Variables();

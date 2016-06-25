@@ -1,6 +1,6 @@
 'use strict';
 
-define(['./variables', './render-reviews'], function(variables, renderReviews) {
+define(['./variables', './render-reviews', './reviews'], function(variables, renderReviews, reviews) {
 
   return {
     /**
@@ -8,10 +8,10 @@ define(['./variables', './render-reviews'], function(variables, renderReviews) {
       * @param {string} filter
       */
     setFilterActive: function(filter) {
-      variables.filteredReviews = getFilteredReviews(variables.reviews, filter);
+      reviews.filteredReviews = getFilteredReviews(reviews.reviews, filter);
       variables.moreReviewsButton.classList.remove(variables.CLASS_INVISIBLE);
-      variables.currentOffset = 0;
-      renderReviews.renderReviews(variables.filteredReviews, variables.currentOffset, true);
+      reviews.currentOffset = 0;
+      renderReviews.renderReviews(reviews.filteredReviews, reviews.currentOffset, true);
     },
 
     /**
@@ -28,7 +28,7 @@ define(['./variables', './render-reviews'], function(variables, renderReviews) {
       }.bind(this));
 
       for (var i = 0; i < filters.length; i++) {
-        var reviewsQuantity = setSupFilter(variables.reviews, filters[i].id, reviewsFilterLabels[i]);
+        var reviewsQuantity = setSupFilter(reviews.reviews, filters[i].id, reviewsFilterLabels[i]);
         if (!reviewsQuantity.length) {
           filters[i].setAttribute('disabled', 'disabled');
           reviewsFilterLabels[i].classList.add('disabled');
