@@ -1,22 +1,8 @@
 'use strict';
 
-define(['./variables', './render-reviews'], function(variables, renderReviews) {
+define(['./variables'], function(variables) {
 
   return {
-    /**
-      * Показывает доп. отзывы при нажатии кнопки по LIMIT штук.
-      */
-    addMoreReviews: function() {
-      variables.moreReviewsButton.addEventListener('click', function() {
-        if (this.isNextPageAvailable(variables.filteredReviews, variables.currentOffset, variables.LIMIT)) {
-          variables.currentOffset++;
-          renderReviews.renderReviews(variables.filteredReviews, variables.currentOffset);
-          if ((variables.currentOffset + 1) * variables.LIMIT >= variables.filteredReviews.length) {
-            variables.moreReviewsButton.classList.add(variables.CLASS_INVISIBLE);
-          }
-        }
-      }.bind(this));
-    },
 
     /**
       * Определяет, видим ли элемент.
@@ -50,16 +36,6 @@ define(['./variables', './render-reviews'], function(variables, renderReviews) {
     addErrorClass: function(element) {
       element.classList.remove(variables.CLASS_REVIEWS_SECTION_LOADING);
       element.classList.add(variables.CLASS_REVIEWS_SECTION_FAILURE);
-    },
-
-    /**
-      * @param {Array} filteredReviewsList
-      * @param {number} offset
-      * @param {number} limit
-      * @return {boolean}
-      */
-    isNextPageAvailable: function(filteredReviewsList, offset, limit ) {
-      return offset < Math.floor(filteredReviewsList.length / limit);
     }
   };
 });

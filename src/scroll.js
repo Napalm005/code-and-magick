@@ -44,5 +44,5 @@ define(['./utils'], function(utils) {
     }
   }
 
-  return setScrollEnabled();
+  setScrollEnabled();
 });
