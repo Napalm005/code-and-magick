@@ -1,4 +1,4 @@
 'use strict';
 
-require(['./variables', './utils', './reviews', './load', './filter', './scroll', './form', './game', './templates', './render-reviews', './scroll']);
+require(['./variables', './utils', './reviews', './filter', './scroll', './form', './game', './templates', './render-reviews', './scroll']);
 
