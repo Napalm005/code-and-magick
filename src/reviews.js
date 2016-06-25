@@ -20,8 +20,7 @@ define(['./variables', './utils', './templates'], function(variables, utils, tem
         if ( (this.status === 200) && (this.readyState === 4) ) {
           variables.reviewsContainer.classList.remove(variables.CLASS_REVIEWS_SECTION_LOADING);
           var loadedData = JSON.parse(evt.target.response);
-          reviewsArray = loadedData;
-          callback();
+          callback(loadedData);
         } else {
           utils.addErrorClass(variables.reviewsContainer);
         }
@@ -91,10 +90,12 @@ define(['./variables', './utils', './templates'], function(variables, utils, tem
       }.bind(this));
     },
 
-    get: function() {
+    set: function(array) {
+      reviewsArray = array;
       return reviewsArray;
     },
-    set: function() {
+
+    get: function() {
       return reviewsArray;
     },
     /** @type {Array.<Object>} */
