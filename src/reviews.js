@@ -93,11 +93,9 @@ define(['./variables', './utils', './templates'], function(variables, utils, tem
     /**
       * Записывает в переменную reviewsArray массив с данными из json.
       * @param {Array} array
-      * @return {Array}
       */
     set: function(array) {
       reviewsArray = array;
-      return reviewsArray;
     },
 
     /**
