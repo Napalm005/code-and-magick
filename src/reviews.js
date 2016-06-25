@@ -90,11 +90,20 @@ define(['./variables', './utils', './templates'], function(variables, utils, tem
       }.bind(this));
     },
 
+    /**
+      * Записывает в переменную reviewsArray массив с данными из json.
+      * @param {Array} array
+      * @return {Array}
+      */
     set: function(array) {
       reviewsArray = array;
       return reviewsArray;
     },
 
+    /**
+      * Возвращает значение reviewsArray при вызове.
+      * @return {Array}
+      */
     get: function() {
       return reviewsArray;
     },
