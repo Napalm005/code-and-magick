@@ -1,6 +1,6 @@
 'use strict';
 
-define(['./variables', './render-reviews', './reviews'], function(variables, renderReviews, reviews) {
+define(['./variables', './reviews'], function(variables, reviews) {
 
   return {
     /**
@@ -11,7 +11,7 @@ define(['./variables', './render-reviews', './reviews'], function(variables, ren
       reviews.filteredReviews = getFilteredReviews(reviews.get(), filter);
       variables.moreReviewsButton.classList.remove(variables.CLASS_INVISIBLE);
       reviews.currentOffset = 0;
-      renderReviews.renderReviews(reviews.filteredReviews, reviews.currentOffset, true);
+      reviews.renderReviews(reviews.filteredReviews, reviews.currentOffset, true);
     },
 
     /**
