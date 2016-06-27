@@ -2,105 +2,142 @@
 
 define(['./utils'], function(utils) {
 
-  var galleryContainer = document.querySelector('.overlay-gallery');
-  var closeElement = galleryContainer.querySelector('.overlay-gallery-close');
-  var galleryControlsBlock = galleryContainer.querySelector('.overlay-gallery-controls');
-  var currentNumber = galleryControlsBlock.querySelector('.preview-number-current');
-  var totalNumber = galleryControlsBlock.querySelector('.preview-number-total');
-  var galleryPreview = galleryControlsBlock.querySelector('.overlay-gallery-preview');
-  var galleryControlLeft = galleryControlsBlock.querySelector('.overlay-gallery-control-left');
-  var galleryControlRight = galleryControlsBlock.querySelector('.overlay-gallery-control-right');
-  var pictureElement;
-  /** @type {Array.<string>} */
-  var galleryPictures = [];
-  /** @type {number} */
-  var activePicture = 0;
+  function Gallery(galleryContainer) {
 
-  /**
-    * @param {click} evt
-    */
-  function _onCloseClick(evt) {
-    evt.preventDefault();
-    hideGallery();
-  }
+    var photogalleryContainer = document.querySelector('.photogallery');
+    var closeElement = galleryContainer.querySelector('.overlay-gallery-close');
+    var galleryControlsBlock = galleryContainer.querySelector('.overlay-gallery-controls');
+    var currentIndex = galleryControlsBlock.querySelector('.preview-number-current');
+    var totalIndex = galleryControlsBlock.querySelector('.preview-number-total');
+    var galleryPreview = galleryControlsBlock.querySelector('.overlay-gallery-preview');
+    var galleryControlLeft = galleryControlsBlock.querySelector('.overlay-gallery-control-left');
+    var galleryControlRight = galleryControlsBlock.querySelector('.overlay-gallery-control-right');
+    var pictureElement;
+    /** @type {Array.<string>} */
+    var galleryPictures = [];
+    /** @type {number} */
+    var activePicture = 0;
 
-  /**
-    * @param {click} evt
-    */
-  function _onRightClick(evt) {
-    evt.preventDefault();
-    var nextNumber = activePicture + 1;
-    showPicture(nextNumber);
-  }
+    var self = this;
 
-  /**
-    * @param {click} evt
-    */
-  function _onLeftClick(evt) {
-    evt.preventDefault();
-    var previousNumber = activePicture - 1;
-    showPicture(previousNumber);
-  }
-
-  /**
-    * @param {KeyboardEvent} evt
-    */
-  function _onCloseKeydown(evt) {
-    if (utils.isActivationEvent(evt)) {
+    /**
+      * @param {click} evt
+      */
+    self._onPictureClick = function(evt) {
       evt.preventDefault();
-      hideGallery();
-    }
-  }
-
-  /**
-    * @param {KeyboardEvent} evt
-    */
-  function _onDocumentKeyDown(evt) {
-    if (utils.isDeactivationEvent(evt)) {
-      evt.preventDefault();
-      hideGallery();
-    }
-  }
-
-  /**
-    * Прячет галлерею и удаляет все обработчики
-    */
-  function hideGallery() {
-    galleryContainer.classList.add('invisible');
-
-    document.removeEventListener('keydown', _onDocumentKeyDown);
-    closeElement.removeEventListener('click', _onCloseClick);
-    closeElement.removeEventListener('keydown', _onCloseKeydown);
-    galleryControlRight.removeEventListener('click', _onRightClick);
-    galleryControlLeft.removeEventListener('click', _onLeftClick);
-  }
-
-  /**
-    * показывыет картинку по ее индексу в массиве
-    * @param  {number} pictureNumber.
-    */
-  function showPicture(pictureNumber) {
-    if (pictureNumber >= 0 && pictureNumber < galleryPictures.length) {
-      activePicture = pictureNumber;
-      currentNumber.innerHTML = pictureNumber + 1;
-
-      if (galleryPreview.querySelector('img')) {
-        galleryPreview.removeChild(galleryPreview.querySelector('img'));
+      if (evt.target.src) {
+        for (var i = 0; i < galleryPictures.length; i++) {
+          if (galleryPictures[i] === evt.target.src) {
+            self.showGallery(i);
+            break;
+          }
+        }
       }
+    };
 
-      pictureElement = new Image();
-      galleryPreview.appendChild(pictureElement);
-      pictureElement.src = galleryPictures[pictureNumber];
-    }
-  }
+    /**
+      * @param {click} evt
+      */
+    self._onCloseClick = function(evt) {
+      evt.preventDefault();
+      self._hideGallery();
+    };
 
-  return {
+    /**
+      * @param {click} evt
+      */
+    self._onRightClick = function(evt) {
+      evt.preventDefault();
+      if (activePicture === galleryPictures.length - 1) {
+        var nextIndex = 0;
+      } else {
+        var nextIndex = activePicture + 1;
+      }
+      self._showPicture(nextIndex);
+    };
+
+    /**
+      * @param {click} evt
+      */
+    self._onLeftClick = function(evt) {
+      evt.preventDefault();
+      if (activePicture === 0) {
+        var nextIndex = galleryPictures.length - 1;
+      } else {
+        var nextIndex = activePicture - 1;
+      }
+      self._showPicture(previousIndex);
+    };
+
+    /**
+      * @param {KeyboardEvent} evt
+      */
+    self._onCloseKeydown = function(evt) {
+      if (utils.isActivationEvent(evt)) {
+        evt.preventDefault();
+        self._hideGallery();
+      }
+    };
+
+    /**
+      * @param {KeyboardEvent} evt
+      */
+    self._onDocumentKeyDown = function(evt) {
+      if (utils.isDeactivationEvent(evt)) {
+        evt.preventDefault();
+        self._hideGallery();
+      }
+    };
+
+    /**
+      * Прячет галлерею и удаляет все обработчики
+      */
+    self._hideGallery = function() {
+      galleryContainer.classList.add('invisible');
+
+      document.removeEventListener('keydown', _onDocumentKeyDown);
+      closeElement.removeEventListener('click', _onCloseClick);
+      closeElement.removeEventListener('keydown', _onCloseKeydown);
+      galleryControlRight.removeEventListener('click', _onRightClick);
+      galleryControlLeft.removeEventListener('click', _onLeftClick);
+    };
+
+    /**
+      * показывыет картинку по ее индексу в массиве
+      * @param  {number} pictureIndex.
+      */
+    self._showPicture = function(pictureIndex) {
+      if (pictureIndex >= 0 && pictureIndex < galleryPictures.length) {
+        activePicture = pictureIndex;
+        currentIndex.innerHTML = pictureIndex + 1;
+
+        if (galleryPreview.querySelector('img')) {
+          galleryPreview.removeChild(galleryPreview.querySelector('img'));
+        }
+
+        pictureElement = new Image();
+        galleryPreview.appendChild(pictureElement);
+        pictureElement.src = galleryPictures[pictureIndex];
+      }
+    };
+
+
+    /**
+      * Записывает в переменную galleryPictures массив из url фотографий.
+      * @param {Array} array
+      */
+    self.set = function(array) {
+      for (var i = 0; i < array.length; i++) {
+        galleryPictures.push(array[i].src);
+      }
+    };
+
     /**
       * Показывает галлерею. Навешивает обработчики
       * @param {number} pictureNumber
       */
-    showGallery: function(pictureNumber) {
-      totalNumber.innerHTML = galleryPictures.length;
+    self.showGallery = function(pictureIndex) {
+      totalIndex.innerHTML = galleryPictures.length;
       galleryContainer.classList.remove('invisible');
 
       document.addEventListener('keydown', _onDocumentKeyDown);
@@ -108,27 +145,12 @@ define(['./utils'], function(utils) {
       closeElement.addEventListener('keydown', _onCloseKeydown);
       galleryControlRight.addEventListener('click', _onRightClick);
       galleryControlLeft.addEventListener('click', _onLeftClick);
+      photogalleryContainer.addEventListener('click', _onPictureClick);
 
-      showPicture(pictureNumber);
-    },
-
-    /**
-      * Записывает в переменную galleryPictures массив с url фотографий.
-      * @param {Array} array
-      */
-    set: function(array) {
-      for (var i = 0; i < array.length; i++) {
-        galleryPictures.push(array[i].src);
-      }
-    },
-
-    /**
-      * Возвращает значение galleryPictures при вызове.
-      * @return {Array}
-      */
-    get: function() {
-      return galleryPictures;
-    }
+      self._showPicture(pictureIndex);
+    };
   };
+
+  return new Gallery();
 });
 

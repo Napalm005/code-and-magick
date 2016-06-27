@@ -8,33 +8,9 @@ require(['./reviews', './filter', './variables', './gallery', './utils', './scro
     reviews.addMoreReviews();
   });
 
-  var photogalleryContainer = document.querySelector('.photogallery');
-  var photoList = photogalleryContainer.getElementsByTagName('img');
+  var galleryContainer = document.querySelector('.overlay-gallery');
+  var photoList = document.getElementsByTagName('img');
 
+  var gallery = new Gallery(galleryContainer);
   gallery.set(photoList);
-  var pictures = gallery.get();
-
-  photogalleryContainer.addEventListener('click', function(evt) {
-    if (evt.target.src) {
-      for (var i = 0; i < pictures.length; i++) {
-        if (pictures[i] === evt.target.src) {
-          gallery.showGallery(i);
-          break;
-        }
-      }
-    }
-  });
-
-  photogalleryContainer.addEventListener('keydown', function(evt) {
-    if (utils.isActivationEvent(evt)) {
-      if (evt.target.className === 'photogallery-image') {
-        for (var i = 0; i < pictures.length; i++) {
-          if (pictures[i] === evt.target.src) {
-            gallery.showGallery(i);
-            break;
-          }
-        }
-      }
-    }
-  });
 });
