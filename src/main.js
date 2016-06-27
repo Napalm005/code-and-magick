@@ -12,19 +12,29 @@ require(['./reviews', './filter', './variables', './gallery', './utils', './scro
   var photoList = photogalleryContainer.getElementsByTagName('img');
 
   gallery.set(photoList);
+  var pictures = gallery.get();
 
   photogalleryContainer.addEventListener('click', function(evt) {
-    if (evt.target.tagName === 'IMG') {
-      gallery.showGallery(gallery.get());
+    if (evt.target.src) {
+      for (var i = 0; i < pictures.length; i++) {
+        if (pictures[i] === evt.target.src) {
+          gallery.showGallery(i);
+          break;
+        }
+      }
     }
   });
 
   photogalleryContainer.addEventListener('keydown', function(evt) {
-      if (utils.isActivationEvent(evt)) {
-        if (evt.target.className === 'photogallery-image') {
-          evt.preventDefault();
-          gallery.showGallery(gallery.get());
+    if (utils.isActivationEvent(evt)) {
+      if (evt.target.className === 'photogallery-image') {
+        for (var i = 0; i < pictures.length; i++) {
+          if (pictures[i] === evt.target.src) {
+            gallery.showGallery(i);
+            break;
+          }
         }
       }
-    });
+    }
+  });
 });
