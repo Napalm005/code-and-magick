@@ -1,6 +1,6 @@
 'use strict';
 
-require(['./reviews', './filter', './variables', './gallery', './utils', './scroll', './form', './game', './templates', './scroll'], function(reviews, filter, variables, gallery, utils) {
+require(['./reviews', './filter', './variables', './gallery', './utils', './scroll', './form', './game', './templates', './scroll'], function(reviews, filter, variables, gallery) {
   reviews.getReviews('//o0.github.io/assets/json/reviews.json', function(loadedReviews) {
     reviews.set(loadedReviews);
     filter.setFiltersActive();
@@ -8,9 +8,11 @@ require(['./reviews', './filter', './variables', './gallery', './utils', './scro
     reviews.addMoreReviews();
   });
 
+  var photoList = document.querySelectorAll('.photogallery-image img');
   var galleryContainer = document.querySelector('.overlay-gallery');
-  var photoList = document.getElementsByTagName('img');
 
-  var gallery = new Gallery(galleryContainer);
-  gallery.set(photoList);
+  var galleryElement = new gallery(galleryContainer);
+  galleryElement.set(photoList);
+
+  galleryElement.showGallery();
 });

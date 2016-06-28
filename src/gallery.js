@@ -3,6 +3,7 @@
 define(['./utils'], function(utils) {
 
   function Gallery(galleryContainer) {
+    var self = this;
 
     var photogalleryContainer = document.querySelector('.photogallery');
     var closeElement = galleryContainer.querySelector('.overlay-gallery-close');
@@ -12,18 +13,17 @@ define(['./utils'], function(utils) {
     var galleryPreview = galleryControlsBlock.querySelector('.overlay-gallery-preview');
     var galleryControlLeft = galleryControlsBlock.querySelector('.overlay-gallery-control-left');
     var galleryControlRight = galleryControlsBlock.querySelector('.overlay-gallery-control-right');
-    var pictureElement;
     /** @type {Array.<string>} */
     var galleryPictures = [];
     /** @type {number} */
     var activePicture = 0;
 
-    var self = this;
+
 
     /**
       * @param {click} evt
       */
-    self._onPictureClick = function(evt) {
+    function _onPictureClick(evt) {
       evt.preventDefault();
       if (evt.target.src) {
         for (var i = 0; i < galleryPictures.length; i++) {
@@ -33,66 +33,66 @@ define(['./utils'], function(utils) {
           }
         }
       }
-    };
+    }
 
     /**
       * @param {click} evt
       */
-    self._onCloseClick = function(evt) {
+    function _onCloseClick(evt) {
       evt.preventDefault();
-      self._hideGallery();
-    };
+      _hideGallery();
+    }
 
     /**
       * @param {click} evt
       */
-    self._onRightClick = function(evt) {
+    function _onRightClick(evt) {
       evt.preventDefault();
       if (activePicture === galleryPictures.length - 1) {
         var nextIndex = 0;
       } else {
-        var nextIndex = activePicture + 1;
+        nextIndex = activePicture + 1;
       }
-      self._showPicture(nextIndex);
-    };
+      _showPicture(nextIndex);
+    }
 
     /**
       * @param {click} evt
       */
-    self._onLeftClick = function(evt) {
+    function _onLeftClick(evt) {
       evt.preventDefault();
       if (activePicture === 0) {
-        var nextIndex = galleryPictures.length - 1;
+        var previousIndex = galleryPictures.length - 1;
       } else {
-        var nextIndex = activePicture - 1;
+        previousIndex = activePicture - 1;
       }
-      self._showPicture(previousIndex);
-    };
+      _showPicture(previousIndex);
+    }
 
     /**
       * @param {KeyboardEvent} evt
       */
-    self._onCloseKeydown = function(evt) {
+    function _onCloseKeydown(evt) {
       if (utils.isActivationEvent(evt)) {
         evt.preventDefault();
-        self._hideGallery();
+        _hideGallery();
       }
-    };
+    }
 
     /**
       * @param {KeyboardEvent} evt
       */
-    self._onDocumentKeyDown = function(evt) {
+    function _onDocumentKeyDown(evt) {
       if (utils.isDeactivationEvent(evt)) {
         evt.preventDefault();
-        self._hideGallery();
+        _hideGallery();
       }
-    };
+    }
 
     /**
       * Прячет галлерею и удаляет все обработчики
       */
-    self._hideGallery = function() {
+    function _hideGallery() {
       galleryContainer.classList.add('invisible');
 
       document.removeEventListener('keydown', _onDocumentKeyDown);
@@ -100,13 +100,13 @@ define(['./utils'], function(utils) {
       closeElement.removeEventListener('keydown', _onCloseKeydown);
       galleryControlRight.removeEventListener('click', _onRightClick);
       galleryControlLeft.removeEventListener('click', _onLeftClick);
-    };
+    }
 
     /**
       * показывыет картинку по ее индексу в массиве
       * @param  {number} pictureIndex.
       */
-    self._showPicture = function(pictureIndex) {
+    function _showPicture(pictureIndex) {
       if (pictureIndex >= 0 && pictureIndex < galleryPictures.length) {
         activePicture = pictureIndex;
         currentIndex.innerHTML = pictureIndex + 1;
@@ -115,11 +115,11 @@ define(['./utils'], function(utils) {
           galleryPreview.removeChild(galleryPreview.querySelector('img'));
         }
 
-        pictureElement = new Image();
+        var pictureElement = new Image();
         galleryPreview.appendChild(pictureElement);
         pictureElement.src = galleryPictures[pictureIndex];
       }
-    };
+    }
 
 
     /**
@@ -147,10 +147,10 @@ define(['./utils'], function(utils) {
       galleryControlLeft.addEventListener('click', _onLeftClick);
       photogalleryContainer.addEventListener('click', _onPictureClick);
 
-      self._showPicture(pictureIndex);
+      _showPicture(pictureIndex);
     };
-  };
+  }
 
-  return new Gallery();
+  return Gallery;
 });
 
