@@ -2,6 +2,10 @@
 
 define(['./utils'], function(utils) {
 
+  /**
+    * @param {HTMLElement} galleryContainer
+    * @constructor
+    */
   function Gallery(galleryContainer) {
     var self = this;
     var closeElement = galleryContainer.querySelector('.overlay-gallery-close');
@@ -15,6 +19,7 @@ define(['./utils'], function(utils) {
     var galleryPictures = [];
     /** @type {number} */
     var activePicture = 0;
+    var pictureIndex = 0;
 
 
     /**
@@ -86,12 +91,12 @@ define(['./utils'], function(utils) {
 
     /**
       * показывыет картинку по ее индексу в массиве
-      * @param  {number} pictureIndex.
+      * @param  {number} index.
       */
-    function _showPicture(pictureIndex) {
-      if (pictureIndex >= 0 && pictureIndex < galleryPictures.length) {
-        activePicture = pictureIndex;
-        currentIndex.innerHTML = pictureIndex + 1;
+    function _showPicture(index) {
+      if (index >= 0 && index < galleryPictures.length) {
+        activePicture = index;
+        currentIndex.innerHTML = index + 1;
 
         if (galleryPreview.querySelector('img')) {
           galleryPreview.removeChild(galleryPreview.querySelector('img'));
@@ -99,19 +104,22 @@ define(['./utils'], function(utils) {
 
         var pictureElement = new Image();
         galleryPreview.appendChild(pictureElement);
-        pictureElement.src = galleryPictures[pictureIndex];
+        pictureElement.src = galleryPictures[index];
       }
     }
 
 
-
+    /**
+      * Определяет индекс элемента, по которому кликнули
+      * @param {click} evt.
+      */
     function _getIndex(evt) {
       for (var i = 0; i < galleryPictures.length; i++) {
         if (galleryPictures[i] === evt.target.src) {
-          var pictureIndex = i;
-          return pictureIndex;
+          pictureIndex = i;
         }
       }
+      return pictureIndex;
     }
 
     /**
@@ -126,10 +134,10 @@ define(['./utils'], function(utils) {
 
     /**
       * Показывает галлерею. Навешивает обработчики
-      * @param {number} pictureNumber
+      * @param {click} evt
       */
     self.showGallery = function(evt) {
-      var pictureIndex = _getIndex(evt);
+      pictureIndex = _getIndex(evt);
 
       totalIndex.innerHTML = galleryPictures.length;
       galleryContainer.classList.remove('invisible');
