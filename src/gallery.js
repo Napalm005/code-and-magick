@@ -82,7 +82,6 @@ define(['./utils'], function(utils) {
       closeElement.removeEventListener('keydown', _onCloseKeydown);
       galleryControlRight.removeEventListener('click', _onRightClick);
       galleryControlLeft.removeEventListener('click', _onLeftClick);
-      self._deleteOnPictureClick();
     }
 
     /**
@@ -104,17 +103,13 @@ define(['./utils'], function(utils) {
       }
     }
 
-    /**
-      * @param {click} evt
-      */
-    function _onPictureClick(evt) {
-      evt.preventDefault();
-      if (evt.target.src) {
-        for (var i = 0; i < galleryPictures.length; i++) {
-          if (galleryPictures[i] === evt.target.src) {
-            self.showGallery(i);
-            break;
-          }
+
+
+    function _getIndex(evt) {
+      for (var i = 0; i < galleryPictures.length; i++) {
+        if (galleryPictures[i] === evt.target.src) {
+          var pictureIndex = i;
+          return pictureIndex;
         }
       }
     }
@@ -127,23 +122,14 @@ define(['./utils'], function(utils) {
       for (var i = 0; i < array.length; i++) {
         galleryPictures.push(array[i].src);
       }
-
-      for (i = 0; i < array.length; i++) {
-        array[i].onclick = _onPictureClick;
-      }
-
-      self._deleteOnPictureClick = function() {
-        for (i = 0; i < array.length; i++) {
-          array[i].onclick = null;
-        }
-      }
     };
 
     /**
       * Показывает галлерею. Навешивает обработчики
       * @param {number} pictureNumber
       */
-    self.showGallery = function(pictureIndex) {
+    self.showGallery = function(evt) {
+      var pictureIndex = _getIndex(evt);
 
       totalIndex.innerHTML = galleryPictures.length;
       galleryContainer.classList.remove('invisible');
