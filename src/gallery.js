@@ -82,6 +82,7 @@ define(['./utils'], function(utils) {
       closeElement.removeEventListener('keydown', _onCloseKeydown);
       galleryControlRight.removeEventListener('click', _onRightClick);
       galleryControlLeft.removeEventListener('click', _onLeftClick);
+      self._deleteOnPictureClick();
     }
 
     /**
@@ -129,6 +130,12 @@ define(['./utils'], function(utils) {
 
       for (i = 0; i < array.length; i++) {
         array[i].onclick = _onPictureClick;
+      }
+
+      self._deleteOnPictureClick = function() {
+        for (i = 0; i < array.length; i++) {
+          array[i].onclick = null;
+        }
       }
     };
 
