@@ -4,8 +4,6 @@ define(['./utils'], function(utils) {
 
   function Gallery(galleryContainer) {
     var self = this;
-
-    var photogalleryContainer = document.querySelector('.photogallery');
     var closeElement = galleryContainer.querySelector('.overlay-gallery-close');
     var galleryControlsBlock = galleryContainer.querySelector('.overlay-gallery-controls');
     var currentIndex = galleryControlsBlock.querySelector('.preview-number-current');
@@ -18,22 +16,6 @@ define(['./utils'], function(utils) {
     /** @type {number} */
     var activePicture = 0;
 
-
-
-    /**
-      * @param {click} evt
-      */
-    function _onPictureClick(evt) {
-      evt.preventDefault();
-      if (evt.target.src) {
-        for (var i = 0; i < galleryPictures.length; i++) {
-          if (galleryPictures[i] === evt.target.src) {
-            self.showGallery(i);
-            break;
-          }
-        }
-      }
-    }
 
     /**
       * @param {click} evt
@@ -121,6 +103,20 @@ define(['./utils'], function(utils) {
       }
     }
 
+    /**
+      * @param {click} evt
+      */
+    function _onPictureClick(evt) {
+      evt.preventDefault();
+      if (evt.target.src) {
+        for (var i = 0; i < galleryPictures.length; i++) {
+          if (galleryPictures[i] === evt.target.src) {
+            self.showGallery(i);
+            break;
+          }
+        }
+      }
+    }
 
     /**
       * Записывает в переменную galleryPictures массив из url фотографий.
@@ -130,6 +126,10 @@ define(['./utils'], function(utils) {
       for (var i = 0; i < array.length; i++) {
         galleryPictures.push(array[i].src);
       }
+
+      for (i = 0; i < array.length; i++) {
+        array[i].onclick = _onPictureClick;
+      }
     };
 
     /**
@@ -137,6 +137,7 @@ define(['./utils'], function(utils) {
       * @param {number} pictureNumber
       */
     self.showGallery = function(pictureIndex) {
+
       totalIndex.innerHTML = galleryPictures.length;
       galleryContainer.classList.remove('invisible');
 
@@ -145,7 +146,6 @@ define(['./utils'], function(utils) {
       closeElement.addEventListener('keydown', _onCloseKeydown);
       galleryControlRight.addEventListener('click', _onRightClick);
       galleryControlLeft.addEventListener('click', _onLeftClick);
-      photogalleryContainer.addEventListener('click', _onPictureClick);
 
       _showPicture(pictureIndex);
     };
