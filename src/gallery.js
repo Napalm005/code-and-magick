@@ -114,8 +114,11 @@ define(['./utils'], function(utils) {
       * @param {click} evt.
       */
     function _getIndex(evt) {
-      var imagrIndex = galleryPictures.indexOf(evt.target.src);
-      return imagrIndex;
+      var imageIndex = galleryPictures.indexOf(evt.target.src);
+      if (imageIndex === -1) {
+        imageIndex = 0;
+      }
+      return imageIndex;
     }
 
     /**
