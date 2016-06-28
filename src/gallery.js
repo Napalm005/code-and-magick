@@ -3,6 +3,9 @@
 define(['./utils'], function(utils) {
 
   /**
+    * Конструктор объекта Gallery. Управляет поведением элемента-галлереи, объявленного в параметре galleryContainer.
+    * Принимать на вход массив объектов, описывающих фотографии, и сохранять их.
+    * Добавляет обработчики событий на блок галереи.
     * @param {HTMLElement} galleryContainer
     * @constructor
     */
@@ -19,8 +22,6 @@ define(['./utils'], function(utils) {
     var galleryPictures = [];
     /** @type {number} */
     var activePicture = 0;
-    var pictureIndex = 0;
-
 
     /**
       * @param {click} evt
@@ -108,18 +109,13 @@ define(['./utils'], function(utils) {
       }
     }
 
-
     /**
       * Определяет индекс элемента, по которому кликнули
       * @param {click} evt.
       */
     function _getIndex(evt) {
-      for (var i = 0; i < galleryPictures.length; i++) {
-        if (galleryPictures[i] === evt.target.src) {
-          pictureIndex = i;
-        }
-      }
-      return pictureIndex;
+      var imagrIndex = galleryPictures.indexOf(evt.target.src);
+      return imagrIndex;
     }
 
     /**
@@ -137,6 +133,7 @@ define(['./utils'], function(utils) {
       * @param {click} evt
       */
     self.showGallery = function(evt) {
+      var pictureIndex = 0;
       pictureIndex = _getIndex(evt);
 
       totalIndex.innerHTML = galleryPictures.length;
