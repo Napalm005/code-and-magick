@@ -59,7 +59,8 @@ define(['./variables', './utils', './templates', './review'], function(variables
 
       if (reviewsList.length) {
         reviewsList.slice(begin, end).forEach(function(review) {
-          new Review(review, variables.reviewsContainer);
+          var reviewElement = new Review(review, variables.reviewsContainer);
+          Review();
         }); } else {
         variables.reviewsContainer.appendChild(templates.cloneReviewElementEmpty());
       }
