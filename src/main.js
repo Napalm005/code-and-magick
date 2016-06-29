@@ -1,6 +1,6 @@
 'use strict';
 
-require(['./reviews', './filter', './variables', './gallery', './utils', './scroll', './form', './game', './templates', './scroll'], function(reviews, filter, variables, Gallery) {
+require(['./reviews', './filter', './variables', './gallery', './utils', './scroll', './form', './game', './templates', './scroll', './review'], function(reviews, filter, variables, Gallery) {
   reviews.getReviews('//o0.github.io/assets/json/reviews.json', function(loadedReviews) {
     reviews.set(loadedReviews);
     filter.setFiltersActive();
