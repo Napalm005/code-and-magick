@@ -13,6 +13,7 @@ define(['./templates'], function(templates) {
       */
     function _onYesClick(evt) {
       evt.preventDefault();
+      if (reviewQuizAnswerNo.classList.contains('review-quiz-answer-active')) {
         reviewQuizAnswerNo.classList.remove('review-quiz-answer-active');
       }
       reviewQuizAnswerYes.classList.add('review-quiz-answer-active');
@@ -23,6 +24,7 @@ define(['./templates'], function(templates) {
       */
     function _onNoClick(evt) {
       evt.preventDefault();
+      if (reviewQuizAnswerYes.classList.contains('review-quiz-answer-active')) {
         reviewQuizAnswerYes.classList.remove('review-quiz-answer-active');
       }
       reviewQuizAnswerNo.classList.add('review-quiz-answer-active');
@@ -31,10 +33,13 @@ define(['./templates'], function(templates) {
     this.remove = function() {
       this.element.removeEventListener('click', _onYesClick);
       this.element.removeEventListener('click', _onNoClick);
+      this.element.parentNode.removeChild(this.element);
+    };
 
     this.element.addEventListener('click', _onYesClick);
     this.element.addEventListener('click', _onNoClick);
     container.appendChild(this.element);
+  };
 
   return Review;
 });
