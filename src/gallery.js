@@ -78,7 +78,7 @@ define(['./utils'], function(utils) {
     }
 
     /**
-      * Прячет галлерею и удаляет все обработчики
+      * Прячет галлерею и удаляет все обработчики.
       */
     function _hideGallery() {
       galleryContainer.classList.add('invisible');
@@ -91,7 +91,7 @@ define(['./utils'], function(utils) {
     }
 
     /**
-      * показывыет картинку по ее индексу в массиве
+      * показывыет картинку по ее индексу в массиве.
       * @param  {number} index.
       */
     function _showPicture(index) {
@@ -110,7 +110,7 @@ define(['./utils'], function(utils) {
     }
 
     /**
-      * Определяет индекс элемента, по которому кликнули
+      * Определяет индекс элемента, по которому кликнули.
       * @param {click} evt.
       */
     function _getIndex(evt) {
@@ -132,7 +132,7 @@ define(['./utils'], function(utils) {
     };
 
     /**
-      * Показывает галлерею. Навешивает обработчики
+      * Показывает галлерею. Навешивает обработчики.
       * @param {click} evt
       */
     self.showGallery = function(evt) {
