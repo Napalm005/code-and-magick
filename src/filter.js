@@ -2,14 +2,17 @@
 
 define(['./variables', './reviews'], function(variables, reviews) {
 
+  var currentFilter = localStorage.getItem('reviews-filter-id');
+
   return {
     /**
       * Передаёт отфильтрованный массив в ф-цию renderReviews и вызывает её.
       * @param {string} filter
       */
     setFilterActive: function(filter) {
-      reviews.filteredReviews = getFilteredReviews(reviews.get(), filter);
-      localStorage.setItem('reviews-filter-id', filter);
+      currentFilter = filter;
+      reviews.filteredReviews = getFilteredReviews(reviews.get(), currentFilter);
+      localStorage.setItem('reviews-filter-id', currentFilter);
       variables.moreReviewsButton.classList.remove(variables.CLASS_INVISIBLE);
       reviews.currentOffset = 0;
       reviews.renderReviews(reviews.filteredReviews, reviews.currentOffset, true);
@@ -34,7 +37,7 @@ define(['./variables', './reviews'], function(variables, reviews) {
           filters[i].setAttribute('disabled', 'disabled');
           reviewsFilterLabels[i].classList.add('disabled');
         }
-        if (filters[i].id === variables.DEFAULT_FILTER) {
+        if (filters[i].id === currentFilter) {
           filters[i].setAttribute('checked', 'checked');
         }
       }
