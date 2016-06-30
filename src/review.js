@@ -8,6 +8,10 @@ define(['./templates'], function(templates) {
     var reviewQuizAnswerNo = this.element.querySelector('.review-quiz-answer-no');
     var reviewQuizAnswerYes = this.element.querySelector('.review-quiz-answer-yes');
 
+    reviewQuizAnswerYes.addEventListener('click', _onYesClick);
+    reviewQuizAnswerNo.addEventListener('click', _onNoClick);
+    container.appendChild(this.element);
+
     /**
       * @param {click} evt
       */
@@ -36,9 +40,6 @@ define(['./templates'], function(templates) {
       this.element.parentNode.removeChild(this.element);
     };
 
-    this.element.addEventListener('click', _onYesClick);
-    this.element.addEventListener('click', _onNoClick);
-    container.appendChild(this.element);
   };
 
   return Review;

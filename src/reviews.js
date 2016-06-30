@@ -4,6 +4,7 @@ define(['./variables', './utils', './templates', './review'], function(variables
 
   /** @type {Array.<Object>} */
   var reviewsArray = [];
+  var renderedReviews = [];
 
   return {
 
@@ -51,7 +52,10 @@ define(['./variables', './utils', './templates', './review'], function(variables
       */
     renderReviews: function(reviewsList, offset, replace) {
       if (replace) {
-        variables.reviewsContainer.innerHTML = '';
+        renderedReviews.forEach(function(review) {
+          review.remove();
+        });
+        renderedReviews = [];
       }
 
       var begin = offset * this.LIMIT;
@@ -59,8 +63,7 @@ define(['./variables', './utils', './templates', './review'], function(variables
 
       if (reviewsList.length) {
         reviewsList.slice(begin, end).forEach(function(review) {
-          var reviewElement = new Review(review, variables.reviewsContainer);
-          Review();
+          renderedReviews.push(new Review(review, variables.reviewsContainer));
         }); } else {
         variables.reviewsContainer.appendChild(templates.cloneReviewElementEmpty());
       }
