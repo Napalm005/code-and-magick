@@ -4,7 +4,7 @@ define(['./variables', './reviews'], function(variables, reviews) {
 
 
   return {
-    currentFilter: localStorage.getItem('reviews-filter-id'),
+    currentFilter: localStorage.getItem('reviews-filter-id') || variables.DEFAULT_FILTER,
     /**
       * Передаёт отфильтрованный массив в ф-цию renderReviews и вызывает её.
       * @param {string} filter

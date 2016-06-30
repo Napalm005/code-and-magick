@@ -4,14 +4,11 @@ require(['./reviews', './filter', './variables', './gallery', './utils', './scro
   reviews.getReviews('//o0.github.io/assets/json/reviews.json', function(loadedReviews) {
     reviews.set(loadedReviews);
     filter.setFiltersActive();
-    if (filter.currentFilter) {
-      filter.setFilterActive(filter.currentFilter);
-    } else {
-      filter.currentFilter = variables.DEFAULT_FILTER;
-      filter.setFilterActive(filter.currentFilter);
-    }
+
+    filter.setFilterActive(filter.currentFilter);
     var filterElement = variables.reviewsFilterBlock.querySelector('#' + filter.currentFilter);
     filterElement.setAttribute('checked', 'checked');
+
     reviews.addMoreReviews();
   });
 
