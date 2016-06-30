@@ -4,7 +4,7 @@ require(['./reviews', './filter', './variables', './gallery', './utils', './scro
   reviews.getReviews('//o0.github.io/assets/json/reviews.json', function(loadedReviews) {
     reviews.set(loadedReviews);
     filter.setFiltersActive();
-    filter.setFilterActive(variables.DEFAULT_FILTER);
+    filter.setFilterActive(filter.currentFilter);
     reviews.addMoreReviews();
   });
 
