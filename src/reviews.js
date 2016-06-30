@@ -4,6 +4,7 @@ define(['./variables', './utils', './templates', './review'], function(variables
 
   /** @type {Array.<Object>} */
   var reviewsArray = [];
+  /** @type {Array.<Review>} */
   var renderedReviews = [];
 
   return {

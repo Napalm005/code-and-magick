@@ -2,6 +2,15 @@
 
 define(['./templates'], function(templates) {
 
+  /**
+    * Конструктор объекта Review. Управляет поведением элемента-отзыва, отрисовываемого в дом-ноде container.
+    * Принимает на вход объект, описывающий состояние и свойства отзыва.
+    * Добавляет обработчики событий на кнопках оценки отзыва.
+    * Удаляет обработчики при удалении отзыва из дом-дерева.
+    * @param {Object} data
+    * @param {HTMLElement} container
+    * @constructor
+    */
   var Review = function(data, container) {
     this.data = data;
     this.element = templates.cloneReviewElement(this.data);
