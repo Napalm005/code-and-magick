@@ -10,7 +10,7 @@ define(['./variables', './reviews'], function(variables, reviews) {
       * @param {string} filter
       */
     setFilterActive: function(filter) {
-      setCurrentFilter(filter);
+      this.currentFilter = filter;
       reviews.filteredReviews = getFilteredReviews(reviews.get(), this.currentFilter);
       localStorage.setItem('reviews-filter-id', this.currentFilter);
       variables.moreReviewsButton.classList.remove(variables.CLASS_INVISIBLE);
@@ -40,12 +40,6 @@ define(['./variables', './reviews'], function(variables, reviews) {
       }
     }
   };
-
-  function setCurrentFilter(filter) {
-    this.currentFilter = filter;
-    var filterElement = variables.reviewsFilterBlock.querySelector('#' + this.currentFilter);
-    filterElement.setAttribute('checked', 'checked');
-  }
 
   /**
     * Добывляет теги sup, в которых записано количество найденных отзывов.
