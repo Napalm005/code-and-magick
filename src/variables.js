@@ -25,7 +25,7 @@ define(function() {
     self.reviewsContainer = document.querySelector('.reviews-list');
     self.reviewsFilterBlock = document.querySelector('.reviews-filter');
     /** @constant {Filter} */
-    self.DEFAULT_FILTER = localStorage.getItem('Id') || self.FILTER.ALL;
+    self.DEFAULT_FILTER = localStorage.getItem('reviews-filter-id') || self.FILTER.ALL;
     /** @constant {number} */
     self.LOAD_TIMEOUT = 5000;
     /** @constant {string} */

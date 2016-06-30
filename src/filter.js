@@ -9,7 +9,7 @@ define(['./variables', './reviews'], function(variables, reviews) {
       */
     setFilterActive: function(filter) {
       reviews.filteredReviews = getFilteredReviews(reviews.get(), filter);
-      localStorage.setItem('Id', filter);
+      localStorage.setItem('reviews-filter-id', filter);
       variables.moreReviewsButton.classList.remove(variables.CLASS_INVISIBLE);
       reviews.currentOffset = 0;
       reviews.renderReviews(reviews.filteredReviews, reviews.currentOffset, true);
@@ -34,7 +34,7 @@ define(['./variables', './reviews'], function(variables, reviews) {
           filters[i].setAttribute('disabled', 'disabled');
           reviewsFilterLabels[i].classList.add('disabled');
         }
-        if (filters[i].id === localStorage.getItem('Id')) {
+        if (filters[i].id === variables.DEFAULT_FILTER) {
           filters[i].setAttribute('checked', 'checked');
         }
       }
