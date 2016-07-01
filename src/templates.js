@@ -5,6 +5,8 @@ define(['./variables'], function(variables) {
   return {
     /**
       * Проверяет поддержку элемента template и получает в нём контент.
+      * @param {Element} template
+      * @param {string} content
       * return {HTMLElement} result
       */
     getTemplate: function(template, content) {

@@ -2,13 +2,25 @@
 
 define(['./variables', './reviews'], function(variables, reviews) {
 
+
   return {
+    currentFilter: localStorage.getItem('reviews-filter-id') || variables.DEFAULT_FILTER,
+
+    init: function() {
+      this.setFiltersActive();
+      this.setFilterActive(this.currentFilter);
+      var filterElement = document.getElementById(this.currentFilter);
+      filterElement.setAttribute('checked', 'checked');
+    },
+
     /**
       * Передаёт отфильтрованный массив в ф-цию renderReviews и вызывает её.
       * @param {string} filter
       */
     setFilterActive: function(filter) {
-      reviews.filteredReviews = getFilteredReviews(reviews.get(), filter);
+      this.currentFilter = filter;
+      reviews.filteredReviews = getFilteredReviews(reviews.get(), this.currentFilter);
+      localStorage.setItem('reviews-filter-id', this.currentFilter);
       variables.moreReviewsButton.classList.remove(variables.CLASS_INVISIBLE);
       reviews.currentOffset = 0;
       reviews.renderReviews(reviews.filteredReviews, reviews.currentOffset, true);
@@ -108,6 +120,7 @@ define(['./variables', './reviews'], function(variables, reviews) {
         });
         break;
     }
+
     return preFilteredReviews;
   }
 });
