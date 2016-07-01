@@ -9,7 +9,7 @@ define(['./variables', './reviews'], function(variables, reviews) {
     init: function() {
       this.setFiltersActive();
       this.setFilterActive(this.currentFilter);
-      var filterElement = variables.reviewsFilterBlock.getElementById(this.currentFilter);
+      var filterElement = document.getElementById(this.currentFilter);
       filterElement.setAttribute('checked', 'checked');
     },
 
