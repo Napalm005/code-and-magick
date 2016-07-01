@@ -3,12 +3,7 @@
 require(['./reviews', './filter', './variables', './gallery', './utils', './scroll', './form', './game', './templates', './scroll', './review'], function(reviews, filter, variables, Gallery) {
   reviews.getReviews('//o0.github.io/assets/json/reviews.json', function(loadedReviews) {
     reviews.set(loadedReviews);
-    filter.setFiltersActive();
-
-    filter.setFilterActive(filter.currentFilter);
-    var filterElement = variables.reviewsFilterBlock.querySelector('#' + filter.currentFilter);
-    filterElement.setAttribute('checked', 'checked');
-
+    filter.init();
     reviews.addMoreReviews();
   });
 
