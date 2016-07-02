@@ -15,13 +15,26 @@ require(['./reviews', './filter', './variables', './gallery', './utils', './scro
   galleryElement.set(photoList);
 
   /**
+    * Меняет запись в адрессной строке при клике на картинку галлереи.
     * @param {click} evt
     */
   function _onPictureClick(evt) {
     evt.preventDefault();
     if (evt.target.src) {
-      galleryElement.showGallery(evt);
+      var loc = getLocation(evt.target.src);
+      location.hash = 'photo' + loc.pathname;
     }
   }
   photogalleryContainer.addEventListener('click', _onPictureClick);
+
+  /**
+    * Создаёт элемент-ссылку, чтобы потом взять у неё href без host-часть.
+    * @param {string} href
+    * @return {Element} temporaryElement
+    */
+  function getLocation(href) {
+    var temporaryElement = document.createElement('a');
+    temporaryElement.href = href;
+    return temporaryElement;
+  }
 });

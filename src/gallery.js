@@ -36,12 +36,12 @@ define(['./utils'], function(utils) {
       */
     function _onRightClick(evt) {
       evt.preventDefault();
-      if (activePicture === galleryPictures.length - 1) {
-        var nextIndex = 0;
+      if (activePicture === galleryPictures.length) {
+        var nextIndex = 1;
       } else {
         nextIndex = activePicture + 1;
       }
-      _showPicture(nextIndex);
+      location.hash = 'photo/img/screenshots/' + nextIndex + '.png';
     }
 
     /**
@@ -49,12 +49,12 @@ define(['./utils'], function(utils) {
       */
     function _onLeftClick(evt) {
       evt.preventDefault();
-      if (activePicture === 0) {
-        var previousIndex = galleryPictures.length - 1;
+      if (activePicture === 1) {
+        var previousIndex = galleryPictures.length;
       } else {
         previousIndex = activePicture - 1;
       }
-      _showPicture(previousIndex);
+      location.hash = 'photo/img/screenshots/' + previousIndex + '.png';
     }
 
     /**
@@ -88,16 +88,17 @@ define(['./utils'], function(utils) {
       closeElement.removeEventListener('keydown', _onCloseKeydown);
       galleryControlRight.removeEventListener('click', _onRightClick);
       galleryControlLeft.removeEventListener('click', _onLeftClick);
+      location.hash = '';
     }
 
     /**
       * показывыет картинку по ее индексу в массиве.
       * @param  {number} index.
       */
-    function _showPicture(index) {
-      if (index >= 0 && index < galleryPictures.length) {
+    function _showPicture(index, hash) {
+      if (index >= 1 && index <= galleryPictures.length) {
         activePicture = index;
-        currentIndex.innerHTML = index + 1;
+        currentIndex.innerHTML = index;
 
         if (galleryPreview.querySelector('img')) {
           galleryPreview.removeChild(galleryPreview.querySelector('img'));
@@ -105,20 +106,19 @@ define(['./utils'], function(utils) {
 
         var pictureElement = new Image();
         galleryPreview.appendChild(pictureElement);
-        pictureElement.src = galleryPictures[index];
+        pictureElement.src = location.origin + '/' + hash;
       }
     }
 
     /**
       * Определяет индекс элемента, по которому кликнули.
-      * @param {click} evt.
+      * @param {string} hash.
       */
-    function _getIndex(evt) {
-      var imageIndex = galleryPictures.indexOf(evt.target.src);
-      if (imageIndex === -1) {
-        imageIndex = 0;
-      }
-      return imageIndex;
+    function _getIndex(hash) {
+      var arr = hash.split('/');
+      var str = arr.slice(-1).join('');
+      arr = str.split('');
+      return Number(arr.slice(0, 1).join(''));
     }
 
     /**
@@ -129,15 +129,16 @@ define(['./utils'], function(utils) {
       for (var i = 0; i < array.length; i++) {
         galleryPictures.push(array[i].src);
       }
+      restoreFromHash();
     };
 
     /**
       * Показывает галлерею. Навешивает обработчики.
       * @param {click} evt
       */
-    self.showGallery = function(evt) {
+    self.showGallery = function(hash) {
       var pictureIndex = 0;
-      pictureIndex = _getIndex(evt);
+      pictureIndex = _getIndex(hash);
 
       totalIndex.innerHTML = galleryPictures.length;
       galleryContainer.classList.remove('invisible');
@@ -148,8 +149,21 @@ define(['./utils'], function(utils) {
       galleryControlRight.addEventListener('click', _onRightClick);
       galleryControlLeft.addEventListener('click', _onLeftClick);
 
-      _showPicture(pictureIndex);
+      _showPicture(pictureIndex, hash);
     };
+
+    function _onhashchange() {
+      restoreFromHash();
+    }
+
+    function restoreFromHash() {
+      if (location.hash) {
+        var hash = location.hash.match(/#photo\/(\S+)/);
+        self.showGallery(hash[1]);
+      }
+    }
+
+    window.addEventListener('hashchange', _onhashchange);
   }
 
   return Gallery;
