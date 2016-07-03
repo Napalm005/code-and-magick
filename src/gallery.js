@@ -164,10 +164,10 @@ define(['./utils'], function(utils) {
     function restoreFromHash() {
       if (location.hash) {
         var hash = location.hash.match(/#photo\/(\S+)/);
-        if (hash[1]) {
+        if (hash) {
           self.showGallery(hash[1]);
         } else {
-          self.showGallery(hash[0]);
+          _hideGallery();
         }
       }
     }
