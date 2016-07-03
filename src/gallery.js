@@ -96,7 +96,7 @@ define(['./utils'], function(utils) {
       * @param  {number} index.
       */
     function _showPicture(index, hash) {
-      if (index >= 1 && index <= galleryPictures.length) {
+      if (index >= 1 && index <= galleryPictures.length && galleryPictures.indexOf('/' + hash) !== -1) {
         activePicture = index;
         currentIndex.innerHTML = index;
 
@@ -107,6 +107,8 @@ define(['./utils'], function(utils) {
         var pictureElement = new Image();
         galleryPreview.appendChild(pictureElement);
         pictureElement.src = location.origin + '/' + hash;
+      } else {
+        _hideGallery();
       }
     }
 
