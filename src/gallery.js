@@ -41,7 +41,7 @@ define(['./utils'], function(utils) {
       } else {
         nextIndex = activePicture + 1;
       }
-      location.hash = 'photo/' + galleryPictures[nextIndex - 1];
+      location.hash = 'photo' + galleryPictures[nextIndex - 1];
     }
 
     /**
@@ -54,7 +54,7 @@ define(['./utils'], function(utils) {
       } else {
         previousIndex = activePicture - 1;
       }
-      location.hash = 'photo/' + galleryPictures[previousIndex - 1];
+      location.hash = 'photo' + galleryPictures[previousIndex - 1];
     }
 
     /**
