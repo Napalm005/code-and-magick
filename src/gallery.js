@@ -41,7 +41,7 @@ define(['./utils'], function(utils) {
       } else {
         nextIndex = activePicture + 1;
       }
-      location.hash = 'photo/img/screenshots/' + nextIndex + '.png';
+      location.hash = 'photo/' + galleryPictures[nextIndex - 1];
     }
 
     /**
@@ -54,7 +54,7 @@ define(['./utils'], function(utils) {
       } else {
         previousIndex = activePicture - 1;
       }
-      location.hash = 'photo/img/screenshots/' + previousIndex + '.png';
+      location.hash = 'photo/' + galleryPictures[previousIndex - 1];
     }
 
     /**
@@ -115,10 +115,11 @@ define(['./utils'], function(utils) {
       * @param {string} hash.
       */
     function _getIndex(hash) {
-      var arr = hash.split('/');
-      var str = arr.slice(-1).join('');
-      arr = str.split('');
-      return Number(arr.slice(0, 1).join(''));
+      var imageIndex = galleryPictures.indexOf('/' + hash);
+      if (imageIndex === -1) {
+        imageIndex = 0;
+      }
+      return imageIndex + 1;
     }
 
     /**
@@ -127,7 +128,9 @@ define(['./utils'], function(utils) {
       */
     self.set = function(array) {
       for (var i = 0; i < array.length; i++) {
-        galleryPictures.push(array[i].src);
+        var temporaryElement = document.createElement('a');
+        temporaryElement.href = array[i].src;
+        galleryPictures.push(temporaryElement.pathname);
       }
       restoreFromHash();
     };
@@ -137,7 +140,7 @@ define(['./utils'], function(utils) {
       * @param {click} evt
       */
     self.showGallery = function(hash) {
-      var pictureIndex = 0;
+      var pictureIndex = 1;
       pictureIndex = _getIndex(hash);
 
       totalIndex.innerHTML = galleryPictures.length;
