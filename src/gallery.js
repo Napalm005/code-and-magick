@@ -36,12 +36,12 @@ define(['./utils'], function(utils) {
       */
     function _onRightClick(evt) {
       evt.preventDefault();
-      if (activePicture === galleryPictures.length - 1) {
-        var nextIndex = 0;
+      if (activePicture === galleryPictures.length) {
+        var nextIndex = 1;
       } else {
         nextIndex = activePicture + 1;
       }
-      _showPicture(nextIndex);
+      location.hash = 'photo' + galleryPictures[nextIndex - 1];
     }
 
     /**
@@ -49,12 +49,12 @@ define(['./utils'], function(utils) {
       */
     function _onLeftClick(evt) {
       evt.preventDefault();
-      if (activePicture === 0) {
-        var previousIndex = galleryPictures.length - 1;
+      if (activePicture === 1) {
+        var previousIndex = galleryPictures.length;
       } else {
         previousIndex = activePicture - 1;
       }
-      _showPicture(previousIndex);
+      location.hash = 'photo' + galleryPictures[previousIndex - 1];
     }
 
     /**
@@ -78,7 +78,7 @@ define(['./utils'], function(utils) {
     }
 
     /**
-      * Прячет галлерею и удаляет все обработчики.
+      * Прячет галлерею, удаляет все обработчики и очищает hash.
       */
     function _hideGallery() {
       galleryContainer.classList.add('invisible');
@@ -88,16 +88,17 @@ define(['./utils'], function(utils) {
       closeElement.removeEventListener('keydown', _onCloseKeydown);
       galleryControlRight.removeEventListener('click', _onRightClick);
       galleryControlLeft.removeEventListener('click', _onLeftClick);
+      location.hash = '';
     }
 
     /**
-      * показывыет картинку по ее индексу в массиве.
+      * Показывыет картинку по ее индексу в массиве.
       * @param  {number} index.
       */
     function _showPicture(index) {
-      if (index >= 0 && index < galleryPictures.length) {
+      if (index >= 1 && index <= galleryPictures.length && galleryPictures.indexOf(galleryPictures[index - 1]) !== -1) {
         activePicture = index;
-        currentIndex.innerHTML = index + 1;
+        currentIndex.innerHTML = index;
 
         if (galleryPreview.querySelector('img')) {
           galleryPreview.removeChild(galleryPreview.querySelector('img'));
@@ -105,39 +106,44 @@ define(['./utils'], function(utils) {
 
         var pictureElement = new Image();
         galleryPreview.appendChild(pictureElement);
-        pictureElement.src = galleryPictures[index];
+        pictureElement.src = location.origin + galleryPictures[index - 1];
+      } else {
+        _hideGallery();
       }
     }
 
     /**
-      * Определяет индекс элемента, по которому кликнули.
-      * @param {click} evt.
+      * Определяет индекс элемента по hash.
+      * @param {string} hash.
       */
-    function _getIndex(evt) {
-      var imageIndex = galleryPictures.indexOf(evt.target.src);
+    function _getIndex(hash) {
+      var imageIndex = galleryPictures.indexOf('/' + hash);
       if (imageIndex === -1) {
         imageIndex = 0;
       }
-      return imageIndex;
+      return imageIndex + 1;
     }
 
     /**
-      * Записывает в переменную galleryPictures массив из url фотографий.
-      * @param {Array} array
+      * Записывает в переменную galleryPictures массив из src фотографий.
+      * @param {Array<Element>} array
       */
     self.set = function(array) {
       for (var i = 0; i < array.length; i++) {
-        galleryPictures.push(array[i].src);
+        var temporaryElement = document.createElement('a');
+        temporaryElement.href = array[i].src;
+        galleryPictures.push(temporaryElement.pathname);
       }
+      restoreFromHash();
     };
 
     /**
       * Показывает галлерею. Навешивает обработчики.
       * @param {click} evt
       */
-    self.showGallery = function(evt) {
-      var pictureIndex = 0;
-      pictureIndex = _getIndex(evt);
+    self.showGallery = function(hash) {
+      var pictureIndex = 1;
+      pictureIndex = _getIndex(hash);
 
       totalIndex.innerHTML = galleryPictures.length;
       galleryContainer.classList.remove('invisible');
@@ -150,6 +156,28 @@ define(['./utils'], function(utils) {
 
       _showPicture(pictureIndex);
     };
+
+    function _onhashchange() {
+      restoreFromHash();
+    }
+
+    /**
+      * Если в адресной строке прописан hash, то этот hash проверяется
+      * на соответствие регулярному выражению, и дальше вызывается showGallery.
+      * Если hash не соответствует рег. выражению -- галлерея закрывается.
+      */
+    function restoreFromHash() {
+      if (location.hash) {
+        var hash = location.hash.match(/#photo\/(\S+)/);
+        if (hash !== null) {
+          self.showGallery(hash[1]);
+        } else {
+          _hideGallery();
+        }
+      }
+    }
+
+    window.addEventListener('hashchange', _onhashchange);
   }
 
   return Gallery;
