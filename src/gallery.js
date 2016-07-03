@@ -78,7 +78,7 @@ define(['./utils'], function(utils) {
     }
 
     /**
-      * Прячет галлерею и удаляет все обработчики.
+      * Прячет галлерею, удаляет все обработчики и очищает hash.
       */
     function _hideGallery() {
       galleryContainer.classList.add('invisible');
@@ -92,7 +92,7 @@ define(['./utils'], function(utils) {
     }
 
     /**
-      * показывыет картинку по ее индексу в массиве.
+      * Показывыет картинку по ее индексу в массиве.
       * @param  {number} index.
       */
     function _showPicture(index) {
@@ -113,7 +113,7 @@ define(['./utils'], function(utils) {
     }
 
     /**
-      * Определяет индекс элемента, по которому кликнули.
+      * Определяет индекс элемента по hash.
       * @param {string} hash.
       */
     function _getIndex(hash) {
@@ -125,8 +125,8 @@ define(['./utils'], function(utils) {
     }
 
     /**
-      * Записывает в переменную galleryPictures массив из url фотографий.
-      * @param {Array} array
+      * Записывает в переменную galleryPictures массив из src фотографий.
+      * @param {Array<Element>} array
       */
     self.set = function(array) {
       for (var i = 0; i < array.length; i++) {
@@ -161,10 +161,15 @@ define(['./utils'], function(utils) {
       restoreFromHash();
     }
 
+    /**
+      * Если в адресной строке прописан hash, то этот hash проверяется
+      * на соответствие регулярному выражению, и дальше вызывается showGallery.
+      * Если hash не соответствует рег. выражению -- галлерея закрывается.
+      */
     function restoreFromHash() {
       if (location.hash) {
         var hash = location.hash.match(/#photo\/(\S+)/);
-        if (hash) {
+        if (hash !== null) {
           self.showGallery(hash[1]);
         } else {
           _hideGallery();
