@@ -95,8 +95,8 @@ define(['./utils'], function(utils) {
       * показывыет картинку по ее индексу в массиве.
       * @param  {number} index.
       */
-    function _showPicture(index, hash) {
-      if (index >= 1 && index <= galleryPictures.length && galleryPictures.indexOf('/' + hash) !== -1) {
+    function _showPicture(index) {
+      if (index >= 1 && index <= galleryPictures.length && galleryPictures.indexOf(galleryPictures[index - 1]) !== -1) {
         activePicture = index;
         currentIndex.innerHTML = index;
 
@@ -106,7 +106,7 @@ define(['./utils'], function(utils) {
 
         var pictureElement = new Image();
         galleryPreview.appendChild(pictureElement);
-        pictureElement.src = location.origin + '/' + hash;
+        pictureElement.src = location.origin + galleryPictures[index - 1];
       } else {
         _hideGallery();
       }
@@ -154,7 +154,7 @@ define(['./utils'], function(utils) {
       galleryControlRight.addEventListener('click', _onRightClick);
       galleryControlLeft.addEventListener('click', _onLeftClick);
 
-      _showPicture(pictureIndex, hash);
+      _showPicture(pictureIndex);
     };
 
     function _onhashchange() {
@@ -164,7 +164,11 @@ define(['./utils'], function(utils) {
     function restoreFromHash() {
       if (location.hash) {
         var hash = location.hash.match(/#photo\/(\S+)/);
-        self.showGallery(hash[1]);
+        if (hash[1]) {
+          self.showGallery(hash[1]);
+        } else {
+          self.showGallery(hash[0]);
+        }
       }
     }
 
