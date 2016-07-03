@@ -9,6 +9,8 @@ define(['browser-cookies'], function(cookies) {
   var formReviewName = form.elements['review-name'];
   var formReviewText = form.elements['review-text'];
   var formReviewGroupMark = form.querySelector('.review-form-group-mark');
+  var formButton = form.querySelector('.review-submit');
+
   var invisible = 'invisible';
 
   init();
@@ -33,14 +35,14 @@ define(['browser-cookies'], function(cookies) {
 
   form.oninput = function() {
     hideLinksTips();
-    disableButton();
+    // disableButton();
   };
 
   formReviewGroupMark.onclick = function onReviewMarkClick(evt) {
     if (evt.target.getAttribute('name') === 'review-mark') {
       updateReviewTextRules(evt.target.value);
       hideLinksTips();
-      disableButton();
+      // disableButton();
     }
   };
 
@@ -103,24 +105,39 @@ define(['browser-cookies'], function(cookies) {
   /**
    * Делает кнопку неактивной, пока форма невалидна.
    */
-  function disableButton() {
-    var formButton = form.querySelector('.review-submit');
-    if ( !(form.checkValidity()) ) {
-      formButton.disabled = true;
-    } else {
-      formButton.disabled = false;
-    }
-  }
+  // function disableButton() {
+  //   if ( !(form.checkValidity()) ) {
+  //     formButton.disabled = true;
+  //   } else {
+  //     formButton.disabled = false;
+  //   }
+  // }
 
   formOpenButton.onclick = function(evt) {
     evt.preventDefault();
     formContainer.classList.remove(invisible);
-    disableButton();
+    // disableButton();
     hideLinksTips();
   };
 
   formCloseButton.onclick = function(evt) {
     evt.preventDefault();
     formContainer.classList.add(invisible);
+  };
+
+  function errorMassege(container) {
+    if (!container.validity.valid && container.parentNode.lastChild.tagName !== 'SPAN') {
+      var span = document.createElement('span');
+      var spanText = document.createTextNode(container.validationMessage);
+      span.appendChild(spanText);
+      container.parentNode.appendChild(span);
+    } else if (container.validity.valid && container.parentNode.lastChild.tagName === 'SPAN') {
+      container.parentNode.removeChild(container.parentNode.lastChild);
+    }
+  }
+
+  formButton.onclick = function() {
+    errorMassege(formReviewName);
+    errorMassege(formReviewText);
   };
 });
