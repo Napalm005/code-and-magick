@@ -14,41 +14,41 @@ define(['./templates'], function(templates) {
   var Review = function(data, container) {
     this.data = data;
     this.element = templates.cloneReviewElement(this.data);
-    var reviewQuizAnswerNo = this.element.querySelector('.review-quiz-answer-no');
-    var reviewQuizAnswerYes = this.element.querySelector('.review-quiz-answer-yes');
+    this.reviewQuizAnswerNo = this.element.querySelector('.review-quiz-answer-no');
+    this.reviewQuizAnswerYes = this.element.querySelector('.review-quiz-answer-yes');
 
-    reviewQuizAnswerYes.addEventListener('click', _onYesClick);
-    reviewQuizAnswerNo.addEventListener('click', _onNoClick);
+    this._onYesClick = this._onYesClick.bind(this);
+    this._onNoClick = this._onNoClick.bind(this);
+
+    this.reviewQuizAnswerYes.addEventListener('click', this._onYesClick);
+    this.reviewQuizAnswerNo.addEventListener('click', this._onNoClick);
     container.appendChild(this.element);
+  };
 
-    /**
-      * @param {click} evt
-      */
-    function _onYesClick(evt) {
-      evt.preventDefault();
-      if (reviewQuizAnswerNo.classList.contains('review-quiz-answer-active')) {
-        reviewQuizAnswerNo.classList.remove('review-quiz-answer-active');
-      }
-      reviewQuizAnswerYes.classList.add('review-quiz-answer-active');
+  /**
+    * @param {click} evt
+    */
+  Review.prototype._onYesClick = function(evt) {
+    evt.preventDefault();
+    if (this.reviewQuizAnswerNo.classList.contains('review-quiz-answer-active')) {
+      this.reviewQuizAnswerNo.classList.remove('review-quiz-answer-active');
     }
+    this.reviewQuizAnswerYes.classList.add('review-quiz-answer-active');
 
-    /**
-      * @param {click} evt
-      */
-    function _onNoClick(evt) {
-      evt.preventDefault();
-      if (reviewQuizAnswerYes.classList.contains('review-quiz-answer-active')) {
-        reviewQuizAnswerYes.classList.remove('review-quiz-answer-active');
-      }
-      reviewQuizAnswerNo.classList.add('review-quiz-answer-active');
+  /**
+    * @param {click} evt
+    */
+  Review.prototype._onNoClick = function(evt) {
+    evt.preventDefault();
+    if (this.reviewQuizAnswerYes.classList.contains('review-quiz-answer-active')) {
+      this.reviewQuizAnswerYes.classList.remove('review-quiz-answer-active');
     }
+    this.reviewQuizAnswerNo.classList.add('review-quiz-answer-active');
 
-    this.remove = function() {
-      this.element.removeEventListener('click', _onYesClick);
-      this.element.removeEventListener('click', _onNoClick);
-      this.element.parentNode.removeChild(this.element);
-    };
-
+  Review.prototype.remove = function() {
+    this.element.removeEventListener('click', this._onYesClick);
+    this.element.removeEventListener('click', this._onNoClick);
+    this.element.parentNode.removeChild(this.element);
   };
 
   return Review;
