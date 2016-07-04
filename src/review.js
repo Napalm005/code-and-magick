@@ -34,6 +34,7 @@ define(['./templates'], function(templates) {
       this.reviewQuizAnswerNo.classList.remove('review-quiz-answer-active');
     }
     this.reviewQuizAnswerYes.classList.add('review-quiz-answer-active');
+  };
 
   /**
     * @param {click} evt
@@ -44,6 +45,7 @@ define(['./templates'], function(templates) {
       this.reviewQuizAnswerYes.classList.remove('review-quiz-answer-active');
     }
     this.reviewQuizAnswerNo.classList.add('review-quiz-answer-active');
+  };
 
   Review.prototype.remove = function() {
     this.element.removeEventListener('click', this._onYesClick);
