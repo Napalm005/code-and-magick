@@ -11,6 +11,10 @@ define(['./variables'], function(variables) {
 
   return {
 
+    inherit: function(ChildComponent, BaseComponent) {
+      ChildComponent.prototipe = new BaseComponent();
+    },
+
     /**
       * Определяет, видим ли элемент.
       * @param {HTMLElement} element
