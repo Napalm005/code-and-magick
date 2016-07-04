@@ -108,7 +108,7 @@ define(['./utils'], function(utils) {
     } else {
       this._hideGallery();
     }
-  }
+  };
 
   /**
     * Определяет индекс элемента по hash.
@@ -120,11 +120,11 @@ define(['./utils'], function(utils) {
       imageIndex = 0;
     }
     return imageIndex + 1;
-  }
+  };
 
   Gallery.prototype._onhashchange = function() {
     this._restoreFromHash();
-  }
+  };
 
   /**
     * Если в адресной строке прописан hash, то этот hash проверяется
@@ -140,7 +140,7 @@ define(['./utils'], function(utils) {
         this._hideGallery();
       }
     }
-  }
+  };
 
   /**
     * @param {click} evt
