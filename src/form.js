@@ -135,9 +135,12 @@ define(['browser-cookies'], function(cookies) {
       var span = document.createElement('span');
       var spanText = document.createTextNode(container.validationMessage);
       span.appendChild(spanText);
+      span.style.display = 'block';
+      container.style.border = '3px solid red';
       container.parentNode.appendChild(span);
     } else if (container.validity.valid && container.parentNode.lastChild.tagName === 'SPAN') {
       container.parentNode.removeChild(container.parentNode.lastChild);
+      container.style.border = 'none';
     }
   }
 });
