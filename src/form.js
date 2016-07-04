@@ -9,6 +9,8 @@ define(['browser-cookies'], function(cookies) {
   var formReviewName = form.elements['review-name'];
   var formReviewText = form.elements['review-text'];
   var formReviewGroupMark = form.querySelector('.review-form-group-mark');
+  var formButton = form.querySelector('.review-submit');
+
   var invisible = 'invisible';
 
   init();
@@ -34,13 +36,17 @@ define(['browser-cookies'], function(cookies) {
   form.oninput = function() {
     hideLinksTips();
     disableButton();
+    errorMassege(formReviewName);
+    errorMassege(formReviewText);
   };
 
   formReviewGroupMark.onclick = function onReviewMarkClick(evt) {
-    if (evt.target.getAttribute('name') === 'review-mark') {
+    if (evt .target.getAttribute('name') === 'review-mark') {
       updateReviewTextRules(evt.target.value);
       hideLinksTips();
       disableButton();
+      errorMassege(formReviewName);
+      errorMassege(formReviewText);
     }
   };
 
@@ -88,6 +94,7 @@ define(['browser-cookies'], function(cookies) {
       if (item.field.checkValidity()) {
         item.link.classList.add(invisible);
         counter -= 1;
+
       } else {
         item.link.classList.remove(invisible);
       }
@@ -104,7 +111,6 @@ define(['browser-cookies'], function(cookies) {
    * Делает кнопку неактивной, пока форма невалидна.
    */
   function disableButton() {
-    var formButton = form.querySelector('.review-submit');
     if ( !(form.checkValidity()) ) {
       formButton.disabled = true;
     } else {
@@ -123,4 +129,23 @@ define(['browser-cookies'], function(cookies) {
     evt.preventDefault();
     formContainer.classList.add(invisible);
   };
+
+  /**
+   * Добавляет span с сообщеним об ошибке, если в поле
+   * невалидное значение.
+   * @param {Element} container.
+   */
+  function errorMassege(container) {
+    if (!container.validity.valid && container.parentNode.lastChild.tagName !== 'SPAN') {
+      var span = document.createElement('span');
+      var spanText = document.createTextNode(container.validationMessage);
+      span.appendChild(spanText);
+      span.style.display = 'block';
+      container.style.border = '3px solid red';
+      container.parentNode.appendChild(span);
+    } else if (container.validity.valid && container.parentNode.lastChild.tagName === 'SPAN') {
+      container.parentNode.removeChild(container.parentNode.lastChild);
+      container.style.border = 'none';
+    }
+  }
 });
