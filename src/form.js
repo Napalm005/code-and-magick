@@ -130,6 +130,11 @@ define(['browser-cookies'], function(cookies) {
     formContainer.classList.add(invisible);
   };
 
+  /**
+   * Добавляет span с сообщеним об ошибке, если в поле
+   * невалидное значение.
+   * @param {Element} container.
+   */
   function errorMassege(container) {
     if (!container.validity.valid && container.parentNode.lastChild.tagName !== 'SPAN') {
       var span = document.createElement('span');
