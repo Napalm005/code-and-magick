@@ -35,14 +35,18 @@ define(['browser-cookies'], function(cookies) {
 
   form.oninput = function() {
     hideLinksTips();
-    // disableButton();
+    disableButton();
+    errorMassege(formReviewName);
+    errorMassege(formReviewText);
   };
 
   formReviewGroupMark.onclick = function onReviewMarkClick(evt) {
-    if (evt.target.getAttribute('name') === 'review-mark') {
+    if (evt .target.getAttribute('name') === 'review-mark') {
       updateReviewTextRules(evt.target.value);
       hideLinksTips();
-      // disableButton();
+      disableButton();
+      errorMassege(formReviewName);
+      errorMassege(formReviewText);
     }
   };
 
@@ -90,6 +94,7 @@ define(['browser-cookies'], function(cookies) {
       if (item.field.checkValidity()) {
         item.link.classList.add(invisible);
         counter -= 1;
+
       } else {
         item.link.classList.remove(invisible);
       }
@@ -105,18 +110,18 @@ define(['browser-cookies'], function(cookies) {
   /**
    * Делает кнопку неактивной, пока форма невалидна.
    */
-  // function disableButton() {
-  //   if ( !(form.checkValidity()) ) {
-  //     formButton.disabled = true;
-  //   } else {
-  //     formButton.disabled = false;
-  //   }
-  // }
+  function disableButton() {
+    if ( !(form.checkValidity()) ) {
+      formButton.disabled = true;
+    } else {
+      formButton.disabled = false;
+    }
+  }
 
   formOpenButton.onclick = function(evt) {
     evt.preventDefault();
     formContainer.classList.remove(invisible);
-    // disableButton();
+    disableButton();
     hideLinksTips();
   };
 
@@ -135,9 +140,4 @@ define(['browser-cookies'], function(cookies) {
       container.parentNode.removeChild(container.parentNode.lastChild);
     }
   }
-
-  formButton.onclick = function() {
-    errorMassege(formReviewName);
-    errorMassege(formReviewText);
-  };
 });
