@@ -12,7 +12,9 @@ define(['./variables'], function(variables) {
   return {
 
     inherit: function(ChildComponent, BaseComponent) {
-      ChildComponent.prototipe = new BaseComponent();
+      function EmptyConstructor() {};
+      EmptyConstructor.prototype = BaseComponent.prototype;
+      ChildComponent.prototype = new EmptyConstructor();
     },
 
     /**
