@@ -1,6 +1,6 @@
 'use strict';
 
-define(['./templates'], function(templates) {
+define(['./templates', './base-component', './utils'], function(templates, BaseComponent, utils) {
 
   /**
     * Конструктор объекта Review. Управляет поведением элемента-отзыва, отрисовываемого в дом-ноде container.
@@ -20,10 +20,14 @@ define(['./templates'], function(templates) {
     this._onYesClick = this._onYesClick.bind(this);
     this._onNoClick = this._onNoClick.bind(this);
 
-    this.reviewQuizAnswerYes.addEventListener('click', this._onYesClick);
-    this.reviewQuizAnswerNo.addEventListener('click', this._onNoClick);
-    container.appendChild(this.element);
+    BaseComponent.call(this, this.element, container);
+    this.create();
+
+    this._setEventListener('click', this.reviewQuizAnswerYes, this._onYesClick);
+    this._setEventListener('click', this.reviewQuizAnswerNo, this._onNoClick);
   };
+
+  utils.inherit(Review, BaseComponent);
 
   /**
     * @param {click} evt
@@ -48,9 +52,9 @@ define(['./templates'], function(templates) {
   };
 
   Review.prototype.remove = function() {
-    this.element.removeEventListener('click', this._onYesClick);
-    this.element.removeEventListener('click', this._onNoClick);
-    this.element.parentNode.removeChild(this.element);
+    this._removeEventListener('click', this.reviewQuizAnswerYes, this._onYesClick);
+    this._removeEventListener('click', this.reviewQuizAnswerNo, this._onNoClick);
+    BaseComponent.prototype.remove.call(this);
   };
 
   return Review;
