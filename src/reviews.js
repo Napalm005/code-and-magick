@@ -1,8 +1,8 @@
 'use strict';
 
-define(['./variables', './utils', './templates', './review'], function(variables, utils, templates, Review) {
+define(['./variables', './utils', './templates', './review', './review-model'], function(variables, utils, templates, Review, ReviewModel) {
 
-  /** @type {Array.<Object>} */
+  /** @type {Array.<ReviewModel>} */
   var reviewsArray = [];
   /** @type {Array.<Review>} */
   var renderedReviews = [];
@@ -22,6 +22,9 @@ define(['./variables', './utils', './templates', './review'], function(variables
         if ( (this.status === 200) && (this.readyState === 4) ) {
           variables.reviewsContainer.classList.remove(variables.CLASS_REVIEWS_SECTION_LOADING);
           var loadedData = JSON.parse(evt.target.response);
+          loadedData = loadedData.map(function(review) {
+            return new ReviewModel(review);
+          });
           callback(loadedData);
         } else {
           utils.addErrorClass(variables.reviewsContainer);
@@ -47,12 +50,12 @@ define(['./variables', './utils', './templates', './review'], function(variables
 
     /**
       * Отрисовывает блоки с отзывами на странице.
-      * @param {array} reviewsList
+      * @param {Array.<ReviewModel>} reviewsList
       * @param {number} offset
       * @param {boolean} replace
       */
-    renderReviews: function(reviewsList, offset, replace) {
-      if (replace) {
+    renderReviews: function(reviewsList, offset, hesReplaced) {
+      if (hesReplaced) {
         renderedReviews.forEach(function(review) {
           review.remove();
         });
@@ -84,7 +87,7 @@ define(['./variables', './utils', './templates', './review'], function(variables
         }
 
         /**
-          * @param {Array} filteredReviewsList
+          * @param {Array.<ReviewModel>} filteredReviewsList
           * @param {number} offset
           * @param {number} limit
           * @return {boolean}
@@ -97,7 +100,7 @@ define(['./variables', './utils', './templates', './review'], function(variables
 
     /**
       * Записывает в переменную reviewsArray массив с данными из json.
-      * @param {Array} array
+      * @param {Array.<ReviewModel>} array
       */
     set: function(array) {
       reviewsArray = array;
@@ -105,12 +108,12 @@ define(['./variables', './utils', './templates', './review'], function(variables
 
     /**
       * Возвращает значение reviewsArray при вызове.
-      * @return {Array}
+      * @return {Array.<ReviewModel>}
       */
     get: function() {
       return reviewsArray;
     },
-    /** @type {Array.<Object>} */
+    /** @type {Array.<ReviewModel>} */
     'filteredReviews': [],
     /** @type {number} */
     'currentOffset': 0,

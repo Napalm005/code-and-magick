@@ -1,6 +1,6 @@
 'use strict';
 
-define(['./templates'], function(templates) {
+define(['./templates', './base-component', './utils'], function(templates, BaseComponent, utils) {
 
   /**
     * Конструктор объекта Review. Управляет поведением элемента-отзыва, отрисовываемого в дом-ноде container.
@@ -14,41 +14,65 @@ define(['./templates'], function(templates) {
   var Review = function(data, container) {
     this.data = data;
     this.element = templates.cloneReviewElement(this.data);
-    var reviewQuizAnswerNo = this.element.querySelector('.review-quiz-answer-no');
-    var reviewQuizAnswerYes = this.element.querySelector('.review-quiz-answer-yes');
+    this.reviewQuizAnswerNo = this.element.querySelector('.review-quiz-answer-no');
+    this.reviewQuizAnswerYes = this.element.querySelector('.review-quiz-answer-yes');
 
-    reviewQuizAnswerYes.addEventListener('click', _onYesClick);
-    reviewQuizAnswerNo.addEventListener('click', _onNoClick);
-    container.appendChild(this.element);
+    this._onYesClick = this._onYesClick.bind(this);
+    this._onNoClick = this._onNoClick.bind(this);
+    this._onReviewQuizClick = this._onReviewQuizClick.bind(this);
 
-    /**
-      * @param {click} evt
-      */
-    function _onYesClick(evt) {
-      evt.preventDefault();
-      if (reviewQuizAnswerNo.classList.contains('review-quiz-answer-active')) {
-        reviewQuizAnswerNo.classList.remove('review-quiz-answer-active');
-      }
-      reviewQuizAnswerYes.classList.add('review-quiz-answer-active');
+    BaseComponent.call(this, this.element, container);
+    this.create();
+
+    this._setEventListener('click', this.element, this._onReviewQuizClick);
+  };
+
+  utils.inherit(Review, BaseComponent);
+
+
+
+
+  /**
+    * @param {click} evt
+    */
+  Review.prototype._onReviewQuizClick = function(evt) {
+    var isUsefull;
+    if (evt.target.classList.contains('review-quiz-answer-yes') && !(evt.target.classList.contains('review-quiz-answer-active'))) {
+      isUsefull = true;
+      this.data.setReviewUsefulness(isUsefull, this._onYesClick);
+    } else if (evt.target.classList.contains('review-quiz-answer-no')) {
+      isUsefull = false;
+      this.data.setReviewUsefulness(isUsefull, this._onNoClick);
     }
+  };
 
-    /**
-      * @param {click} evt
-      */
-    function _onNoClick(evt) {
-      evt.preventDefault();
-      if (reviewQuizAnswerYes.classList.contains('review-quiz-answer-active')) {
-        reviewQuizAnswerYes.classList.remove('review-quiz-answer-active');
-      }
-      reviewQuizAnswerNo.classList.add('review-quiz-answer-active');
+  /**
+    * @param {click} evt
+    */
+  Review.prototype._onYesClick = function() {
+    if (this.reviewQuizAnswerNo.classList.contains('review-quiz-answer-active')) {
+      this.reviewQuizAnswerNo.classList.remove('review-quiz-answer-active');
     }
+    this.reviewQuizAnswerYes.classList.add('review-quiz-answer-active');
+  };
 
-    this.remove = function() {
-      this.element.removeEventListener('click', _onYesClick);
-      this.element.removeEventListener('click', _onNoClick);
-      this.element.parentNode.removeChild(this.element);
-    };
+  /**
+    * @param {click} evt
+    */
+  Review.prototype._onNoClick = function() {
+    if (this.reviewQuizAnswerYes.classList.contains('review-quiz-answer-active')) {
+      this.reviewQuizAnswerYes.classList.remove('review-quiz-answer-active');
+    }
+    this.reviewQuizAnswerNo.classList.add('review-quiz-answer-active');
+  };
 
+  /**
+    * Удаляет обработчики. Удаляяет элемент из дома.
+    */
+  Review.prototype.remove = function() {
+    this._removeEventListener('click', this.reviewQuizAnswerYes, this._onYesClick);
+    this._removeEventListener('click', this.reviewQuizAnswerNo, this._onNoClick);
+    BaseComponent.prototype.remove.call(this);
   };
 
   return Review;

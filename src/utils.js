@@ -12,6 +12,18 @@ define(['./variables'], function(variables) {
   return {
 
     /**
+      * Наследование прототипа.
+      * @param {constructor} ChildComponent
+      * @param {constructor} BaseComponent
+      */
+    inherit: function(ChildComponent, BaseComponent) {
+      function EmptyConstructor() {}
+      EmptyConstructor.prototype = BaseComponent.prototype;
+      ChildComponent.prototype = new EmptyConstructor();
+      ChildComponent.prototype.constructor = ChildComponent;
+    },
+
+    /**
       * Определяет, видим ли элемент.
       * @param {HTMLElement} element
       * return {boolean}
