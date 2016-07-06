@@ -85,15 +85,15 @@ define(['./utils', './base-component'], function(utils, BaseComponent) {
     this._setEventListener('click', this.galleryControlRight, this._onRightClick);
     this._setEventListener('click', this.galleryControlLeft, this._onLeftClick);
 
-    this._showPicture(pictureIndex, hash);
+    this._showPicture(pictureIndex);
   };
 
   /**
     * Показывыет картинку по ее индексу в массиве.
     * @param  {number} index.
     */
-  Gallery.prototype._showPicture = function(index, hash) {
-    if (index >= 1 && index <= this.galleryPictures.length && this.galleryPictures.indexOf('/' + hash) !== -1) {
+  Gallery.prototype._showPicture = function(index) {
+    if (index >= 1 && index <= this.galleryPictures.length) {
       this.activePicture = index;
       this.currentIndex.innerHTML = index;
 
@@ -116,7 +116,7 @@ define(['./utils', './base-component'], function(utils, BaseComponent) {
   Gallery.prototype._getIndex = function(hash) {
     var imageIndex = this.galleryPictures.indexOf('/' + hash);
     if (imageIndex === -1) {
-      imageIndex = 0;
+      imageIndex = NaN;
     }
     return imageIndex + 1;
   };
