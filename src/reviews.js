@@ -24,7 +24,7 @@ define(['./variables', './utils', './templates', './review', './data-constructor
           var loadedData = JSON.parse(evt.target.response);
           loadedData = loadedData.map(function(review) {
             return new DataConstructor(review);
-          })
+          });
           callback(loadedData);
         } else {
           utils.addErrorClass(variables.reviewsContainer);
