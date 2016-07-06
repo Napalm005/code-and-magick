@@ -36,7 +36,9 @@ define(['./templates', './base-component', './utils'], function(templates, BaseC
       this.data.setReviewUsefulness(active, this._onYesClick);
     } else if (evt.target.classList.contains('review-quiz-answer-no')) {
       active = false;
+      this.data.setReviewUsefulness(active, this._onNoClick);
     }
+  };
 
   /**
     * @param {click} evt
