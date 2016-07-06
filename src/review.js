@@ -32,7 +32,9 @@ define(['./templates', './base-component', './utils'], function(templates, BaseC
 
 
 
-
+  /**
+    * @param {click} evt
+    */
   Review.prototype._onReviewQuizClick = function(evt) {
     var isUsefull;
     if (evt.target.classList.contains('review-quiz-answer-yes') && !(evt.target.classList.contains('review-quiz-answer-active'))) {
@@ -64,6 +66,9 @@ define(['./templates', './base-component', './utils'], function(templates, BaseC
     this.reviewQuizAnswerNo.classList.add('review-quiz-answer-active');
   };
 
+  /**
+    * Удаляет обработчики. Удаляяет элемент из дома.
+    */
   Review.prototype.remove = function() {
     this._removeEventListener('click', this.reviewQuizAnswerYes, this._onYesClick);
     this._removeEventListener('click', this.reviewQuizAnswerNo, this._onNoClick);

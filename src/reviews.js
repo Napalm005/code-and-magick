@@ -50,12 +50,12 @@ define(['./variables', './utils', './templates', './review', './review-model'], 
 
     /**
       * Отрисовывает блоки с отзывами на странице.
-      * @param {Array.<Object>} reviewsList
+      * @param {Array.<ReviewModel>} reviewsList
       * @param {number} offset
       * @param {boolean} replace
       */
-    renderReviews: function(reviewsList, offset, replace) {
-      if (replace) {
+    renderReviews: function(reviewsList, offset, hesReplaced) {
+      if (hesReplaced) {
         renderedReviews.forEach(function(review) {
           review.remove();
         });
@@ -87,7 +87,7 @@ define(['./variables', './utils', './templates', './review', './review-model'], 
         }
 
         /**
-          * @param {Array.<Object>} filteredReviewsList
+          * @param {Array.<ReviewModel>} filteredReviewsList
           * @param {number} offset
           * @param {number} limit
           * @return {boolean}
@@ -113,7 +113,7 @@ define(['./variables', './utils', './templates', './review', './review-model'], 
     get: function() {
       return reviewsArray;
     },
-    /** @type {Array.<Object>} */
+    /** @type {Array.<ReviewModel>} */
     'filteredReviews': [],
     /** @type {number} */
     'currentOffset': 0,

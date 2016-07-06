@@ -51,8 +51,8 @@ define(['browser-cookies'], function(cookies) {
   };
 
   /**
-   * Инициализирует состояние элементов формы.
-   */
+    * Инициализирует состояние элементов формы.
+    */
   function init() {
     formReviewName.required = true;
     formReviewName.value = cookies.get('Name');
@@ -62,9 +62,9 @@ define(['browser-cookies'], function(cookies) {
   }
 
   /**
-   * Обязует заполнять поле отзыва при оценке ниже 3.
-   * @param {string} mark.
-   */
+    * Обязует заполнять поле отзыва при оценке ниже 3.
+    * @param {string} mark.
+    */
   function updateReviewTextRules(mark) {
     if (Number(mark) < 3) {
       formReviewText.required = true;
@@ -74,8 +74,8 @@ define(['browser-cookies'], function(cookies) {
   }
 
   /**
-   * Прячет подсказки при заполнении полей.
-   */
+    * Прячет подсказки при заполнении полей.
+    */
   function hideLinksTips() {
     var formReviewControl = form.querySelector('.review-fields');
     var fields = [
@@ -108,8 +108,8 @@ define(['browser-cookies'], function(cookies) {
   }
 
   /**
-   * Делает кнопку неактивной, пока форма невалидна.
-   */
+    * Делает кнопку неактивной, пока форма невалидна.
+    */
   function disableButton() {
     if ( !(form.checkValidity()) ) {
       formButton.disabled = true;
@@ -118,6 +118,9 @@ define(['browser-cookies'], function(cookies) {
     }
   }
 
+  /**
+    * @param {click} evt
+    */
   formOpenButton.onclick = function(evt) {
     evt.preventDefault();
     formContainer.classList.remove(invisible);
@@ -125,16 +128,19 @@ define(['browser-cookies'], function(cookies) {
     hideLinksTips();
   };
 
+  /**
+    * @param {click} evt
+    */
   formCloseButton.onclick = function(evt) {
     evt.preventDefault();
     formContainer.classList.add(invisible);
   };
 
   /**
-   * Добавляет span с сообщеним об ошибке, если в поле
-   * невалидное значение.
-   * @param {Element} container.
-   */
+    * Добавляет span с сообщеним об ошибке, если в поле
+    * невалидное значение.
+    * @param {Element} container.
+    */
   function errorMassege(container) {
     if (!container.validity.valid && container.parentNode.lastChild.tagName !== 'SPAN') {
       var span = document.createElement('span');

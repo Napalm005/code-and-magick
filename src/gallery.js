@@ -195,6 +195,9 @@ define(['./utils', './base-component'], function(utils, BaseComponent) {
     }
   };
 
+  /**
+    * Удаляет обработчик изменения адрессной строки
+    */
   Gallery.prototype.remove = function() {
     this._removeEventListener('hashchange', window, this._onhashchange);
   };

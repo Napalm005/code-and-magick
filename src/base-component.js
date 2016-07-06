@@ -21,14 +21,23 @@ define(function() {
     this.container.appendChild(this.element);
   };
 
+  /**
+    * Навешивает обработчик
+    */
   BaseComponent.prototype._setEventListener = function(eventName, listener, fn) {
     listener.addEventListener(eventName, fn);
   };
 
+  /**
+    * Удаляет обработчик
+    */
   BaseComponent.prototype._removeEventListener = function(eventName, listener, fn) {
     listener.removeEventListener(eventName, fn);
   };
 
+  /**
+    * Удаляет элемент из контейнера
+    */
   BaseComponent.prototype.remove = function() {
     this.element.parentNode.removeChild(this.element);
   };

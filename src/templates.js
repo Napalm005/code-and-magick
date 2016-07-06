@@ -38,7 +38,7 @@ define(['./variables'], function(variables) {
       return element;
     },
 
-      /**
+    /**
       * Клонирует элемент из шаблона, подставляет данные из объекта на сервере.
       * return {HTMLElement} elementEmpty
       */
