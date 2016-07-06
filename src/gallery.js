@@ -1,6 +1,6 @@
 'use strict';
 
-define(['./utils'], function(utils) {
+define(['./utils', './base-component'], function(utils, BaseComponent) {
 
   /**
     * Конструктор объекта Gallery. Управляет поведением элемента-галлереи, объявленного в параметре galleryContainer.
@@ -10,13 +10,13 @@ define(['./utils'], function(utils) {
     * @constructor
     */
   function Gallery(galleryContainer) {
-    this.closeElement = galleryContainer.querySelector('.overlay-gallery-close');
-    var galleryControlsBlock = galleryContainer.querySelector('.overlay-gallery-controls');
-    var totalIndex = galleryControlsBlock.querySelector('.preview-number-total');
-    this.currentIndex = galleryControlsBlock.querySelector('.preview-number-current');
-    this.galleryPreview = galleryControlsBlock.querySelector('.overlay-gallery-preview');
-    this.galleryControlLeft = galleryControlsBlock.querySelector('.overlay-gallery-control-left');
-    this.galleryControlRight = galleryControlsBlock.querySelector('.overlay-gallery-control-right');
+    this.galleryContainer = galleryContainer;
+    this.closeElement = this.galleryContainer.querySelector('.overlay-gallery-close');
+    this.galleryControlsBlock = this.galleryContainer.querySelector('.overlay-gallery-controls');
+    this.currentIndex = this.galleryControlsBlock.querySelector('.preview-number-current');
+    this.galleryPreview = this.galleryControlsBlock.querySelector('.overlay-gallery-preview');
+    this.galleryControlLeft = this.galleryControlsBlock.querySelector('.overlay-gallery-control-left');
+    this.galleryControlRight = this.galleryControlsBlock.querySelector('.overlay-gallery-control-right');
     /** @type {Array.<string>} */
     this.galleryPictures = [];
     /** @type {number} */
@@ -32,62 +32,61 @@ define(['./utils'], function(utils) {
     this._getIndex = this._getIndex.bind(this);
     this._showPicture = this._showPicture.bind(this);
 
-    /**
-      * Прячет галлерею, удаляет все обработчики и очищает hash.
-      */
-    this._hideGallery = function() {
-      galleryContainer.classList.add('invisible');
-
-      document.removeEventListener('keydown', this._onDocumentKeyDown);
-      this.closeElement.removeEventListener('click', this._onCloseClick);
-      this.closeElement.removeEventListener('keydown', this._onCloseKeydown);
-      this.galleryControlRight.removeEventListener('click', this._onRightClick);
-      this.galleryControlLeft.removeEventListener('click', this._onLeftClick);
-      location.hash = '';
-    };
-
-    /**
-      * Записывает в переменную galleryPictures массив из src фотографий.
-      * @param {Array<Element>} array
-      */
-    this.set = function(array) {
-      for (var i = 0; i < array.length; i++) {
-        var temporaryElement = document.createElement('a');
-        temporaryElement.href = array[i].src;
-        this.galleryPictures.push(temporaryElement.pathname);
-      }
-      this._restoreFromHash();
-    };
-
-    /**
-      * Показывает галлерею. Навешивает обработчики.
-      * @param {click} evt
-      */
-    this.showGallery = function(hash) {
-      var pictureIndex = 1;
-      pictureIndex = this._getIndex(hash);
-
-      totalIndex.innerHTML = this.galleryPictures.length;
-      galleryContainer.classList.remove('invisible');
-
-      document.addEventListener('keydown', this._onDocumentKeyDown);
-      this.closeElement.addEventListener('click', this._onCloseClick);
-      this.closeElement.addEventListener('keydown', this._onCloseKeydown);
-      this.galleryControlRight.addEventListener('click', this._onRightClick);
-      this.galleryControlLeft.addEventListener('click', this._onLeftClick);
-
-      this._showPicture(pictureIndex);
-    };
-
-    window.addEventListener('hashchange', this._onhashchange);
+    this._setEventListener('hashchange', window, this._onhashchange);
   }
 
+  utils.inherit(Gallery, BaseComponent);
 
 
 
 
+  /**
+    * Прячет галлерею, удаляет все обработчики и очищает hash.
+    */
+  Gallery.prototype._hideGallery = function() {
+    this.galleryContainer.classList.add('invisible');
 
+    this._removeEventListener('keydown', document, this._onDocumentKeyDown);
+    this._removeEventListener('click', this.closeElement, this._onCloseClick);
+    this._removeEventListener('keydown', this.closeElement, this._onCloseKeydown);
+    this._removeEventListener('click', this.galleryControlRight, this._onRightClick);
+    this._removeEventListener('click', this.galleryControlLeft, this._onLeftClick);
+    location.hash = '';
+  };
 
+  /**
+    * Записывает в переменную galleryPictures массив из src фотографий.
+    * @param {Array<Element>} array
+    */
+  Gallery.prototype.set = function(array) {
+    for (var i = 0; i < array.length; i++) {
+      var temporaryElement = document.createElement('a');
+      temporaryElement.href = array[i].src;
+      this.galleryPictures.push(temporaryElement.pathname);
+    }
+    this._restoreFromHash();
+  };
+
+  /**
+    * Показывает галлерею. Навешивает обработчики.
+    * @param {click} evt
+    */
+  Gallery.prototype.showGallery = function(hash) {
+    var totalIndex = this.galleryControlsBlock.querySelector('.preview-number-total');
+    var pictureIndex = 1;
+    pictureIndex = this._getIndex(hash);
+
+    totalIndex.innerHTML = this.galleryPictures.length;
+    this.galleryContainer.classList.remove('invisible');
+
+    this._setEventListener('keydown', document, this._onDocumentKeyDown);
+    this._setEventListener('click', this.closeElement, this._onCloseClick);
+    this._setEventListener('keydown', this.closeElement, this._onCloseKeydown);
+    this._setEventListener('click', this.galleryControlRight, this._onRightClick);
+    this._setEventListener('click', this.galleryControlLeft, this._onLeftClick);
+
+    this._showPicture(pictureIndex);
+  };
 
   /**
     * Показывыет картинку по ее индексу в массиве.
@@ -194,6 +193,10 @@ define(['./utils'], function(utils) {
       evt.preventDefault();
       this._hideGallery();
     }
+  };
+
+  Gallery.prototype.remove = function() {
+    this._removeEventListener('hashchange', window, this._onhashchange);
   };
 
   return Gallery;
