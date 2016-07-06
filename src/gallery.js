@@ -85,15 +85,15 @@ define(['./utils', './base-component'], function(utils, BaseComponent) {
     this._setEventListener('click', this.galleryControlRight, this._onRightClick);
     this._setEventListener('click', this.galleryControlLeft, this._onLeftClick);
 
-    this._showPicture(pictureIndex);
+    this._showPicture(pictureIndex, hash);
   };
 
   /**
     * Показывыет картинку по ее индексу в массиве.
     * @param  {number} index.
     */
-  Gallery.prototype._showPicture = function(index) {
-    if (index >= 1 && index <= this.galleryPictures.length && this.galleryPictures.indexOf(this.galleryPictures[index - 1]) !== -1) {
+  Gallery.prototype._showPicture = function(index, hash) {
+    if (index >= 1 && index <= this.galleryPictures.length && this.galleryPictures.indexOf('/' + hash) !== -1) {
       this.activePicture = index;
       this.currentIndex.innerHTML = index;
 

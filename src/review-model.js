@@ -10,8 +10,6 @@ define(function() {
   var ReviewModel = function(data) {
     this.data = data;
     this.author = this.data.author;
-    this.author.name = this.author.name;
-    this.author.picture = this.author.picture;
     this.date = this.data.date;
     this.description = this.data.description;
     this.rating = this.data.rating;
