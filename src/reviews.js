@@ -1,10 +1,10 @@
 'use strict';
 
-define(['./variables', './utils', './templates', './review', './data-constructor'], function(variables, utils, templates, Review, DataConstructor) {
+define(['./variables', './utils', './templates', './review', './review-model'], function(variables, utils, templates, Review, ReviewModel) {
 
-  /** @type {Array.<Object>} */
+  /** @type {Array.<ReviewModel>} */
   var reviewsArray = [];
-  /** @type {Array.<Review>} */
+  /** @type {Array.<ReviewModel>} */
   var renderedReviews = [];
 
   return {
@@ -23,7 +23,7 @@ define(['./variables', './utils', './templates', './review', './data-constructor
           variables.reviewsContainer.classList.remove(variables.CLASS_REVIEWS_SECTION_LOADING);
           var loadedData = JSON.parse(evt.target.response);
           loadedData = loadedData.map(function(review) {
-            return new DataConstructor(review);
+            return new ReviewModel(review);
           });
           callback(loadedData);
         } else {
@@ -50,7 +50,7 @@ define(['./variables', './utils', './templates', './review', './data-constructor
 
     /**
       * Отрисовывает блоки с отзывами на странице.
-      * @param {array} reviewsList
+      * @param {Array.<Object>} reviewsList
       * @param {number} offset
       * @param {boolean} replace
       */
@@ -87,7 +87,7 @@ define(['./variables', './utils', './templates', './review', './data-constructor
         }
 
         /**
-          * @param {Array} filteredReviewsList
+          * @param {Array.<Object>} filteredReviewsList
           * @param {number} offset
           * @param {number} limit
           * @return {boolean}
@@ -100,7 +100,7 @@ define(['./variables', './utils', './templates', './review', './data-constructor
 
     /**
       * Записывает в переменную reviewsArray массив с данными из json.
-      * @param {Array} array
+      * @param {Array.<ReviewModel>} array
       */
     set: function(array) {
       reviewsArray = array;
@@ -108,7 +108,7 @@ define(['./variables', './utils', './templates', './review', './data-constructor
 
     /**
       * Возвращает значение reviewsArray при вызове.
-      * @return {Array}
+      * @return {Array.<ReviewModel>}
       */
     get: function() {
       return reviewsArray;

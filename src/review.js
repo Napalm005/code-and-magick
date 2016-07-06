@@ -29,14 +29,18 @@ define(['./templates', './base-component', './utils'], function(templates, BaseC
 
   utils.inherit(Review, BaseComponent);
 
+
+
+
+
   Review.prototype._onReviewQuizClick = function(evt) {
-    var active;
+    var isUsefull;
     if (evt.target.classList.contains('review-quiz-answer-yes') && !(evt.target.classList.contains('review-quiz-answer-active'))) {
-      active = true;
-      this.data.setReviewUsefulness(active, this._onYesClick);
+      isUsefull = true;
+      this.data.setReviewUsefulness(isUsefull, this._onYesClick);
     } else if (evt.target.classList.contains('review-quiz-answer-no')) {
-      active = false;
-      this.data.setReviewUsefulness(active, this._onNoClick);
+      isUsefull = false;
+      this.data.setReviewUsefulness(isUsefull, this._onNoClick);
     }
   };
 

@@ -51,10 +51,10 @@ define(['./variables', './reviews'], function(variables, reviews) {
 
   /**
     * Добывляет теги sup, в которых записано количество найденных отзывов.
-    * @param {array} reviewsList
+    * @param {Array.<ReviewModel>} reviewsList
     * @param {string} filter
     * @param {HTMLElement} reviewsFilterLabel
-    * return {array} afterFilteringReviews
+    * return {Array.<ReviewModel>} afterFilteringReviews
     */
   function setSupFilter(reviewsList, filter, reviewsFilterLabel) {
     var sup = document.createElement('sup');
@@ -76,9 +76,9 @@ define(['./variables', './reviews'], function(variables, reviews) {
 
   /**
     * Возвращает отфильтрованный и отсортированный массив.
-    * @param {array} reviewsList
+    * @param {Array.<ReviewModel>} reviewsList
     * @param {string} filter
-    * return {array} preFilteredReviews
+    * return {Array.<ReviewModel>} preFilteredReviews
     */
   function getFilteredReviews(reviewsList, filter) {
     var reviewsToFilter = reviewsList.slice(0);

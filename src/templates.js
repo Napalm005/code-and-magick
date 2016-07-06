@@ -22,19 +22,19 @@ define(['./variables'], function(variables) {
 
     /**
       * Клонирует элемент из шаблона, подставляет данные из объекта на сервере.
-      * @param {Object} data
+      * @param {ReviewModel} review
       * return {HTMLElement} element
       */
-    cloneReviewElement: function(data) {
+    cloneReviewElement: function(review) {
       var templateElement = document.querySelector('#review-template');
       var elementToClone = this.getTemplate(templateElement, '.review');
       var element = elementToClone.cloneNode(true);
       var rating = element.querySelector('.review-rating');
-      element.querySelector('.review-text').textContent = data.getDescription();
+      element.querySelector('.review-text').textContent = review.getDescription();
 
-      rating.classList.add(variables.ratingClasses[data.getRating() - 1]);
+      rating.classList.add(variables.ratingClasses[review.getRating() - 1]);
 
-      setImageParameters(data, element);
+      setImageParameters(review, element);
       return element;
     },
 
@@ -54,10 +54,10 @@ define(['./variables'], function(variables) {
   /**
     * Создаёт изображения, которые получают необходимые параметры из
     * свойств объекта на сервере и добавляет им обработчики загрузки и ошибки.
-    * @param {Object} data
+    * @param {ReviewModel} review
     * @param {HTMLElement} element
     */
-  function setImageParameters(data, element) {
+  function setImageParameters(review, element) {
     var image = new Image(124, 124);
     var imageLoadTimeout;
     var reviewAvatar = element.querySelector('.review-author');
@@ -73,7 +73,7 @@ define(['./variables'], function(variables) {
       element.classList.add('review-load-failure');
     };
 
-    image.src = data.getAuthorPicture();
+    image.src = review.getAuthorPicture();
 
     imageLoadTimeout = setTimeout(function() {
       reviewAvatar.removeAttribute('src');
