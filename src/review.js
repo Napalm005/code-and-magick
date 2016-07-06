@@ -19,21 +19,29 @@ define(['./templates', './base-component', './utils'], function(templates, BaseC
 
     this._onYesClick = this._onYesClick.bind(this);
     this._onNoClick = this._onNoClick.bind(this);
+    this._onReviewQuizClick = this._onReviewQuizClick.bind(this);
 
     BaseComponent.call(this, this.element, container);
     this.create();
 
-    this._setEventListener('click', this.reviewQuizAnswerYes, this._onYesClick);
-    this._setEventListener('click', this.reviewQuizAnswerNo, this._onNoClick);
+    this._setEventListener('click', this.element, this._onReviewQuizClick);
   };
 
   utils.inherit(Review, BaseComponent);
 
+  Review.prototype._onReviewQuizClick = function(evt) {
+    var active;
+    if (evt.target.classList.contains('review-quiz-answer-yes') && !(evt.target.classList.contains('review-quiz-answer-active'))) {
+      active = true;
+      this.data.setReviewUsefulness(active, this._onYesClick);
+    } else if (evt.target.classList.contains('review-quiz-answer-no')) {
+      active = false;
+    }
+
   /**
     * @param {click} evt
     */
-  Review.prototype._onYesClick = function(evt) {
-    evt.preventDefault();
+  Review.prototype._onYesClick = function() {
     if (this.reviewQuizAnswerNo.classList.contains('review-quiz-answer-active')) {
       this.reviewQuizAnswerNo.classList.remove('review-quiz-answer-active');
     }
@@ -43,8 +51,7 @@ define(['./templates', './base-component', './utils'], function(templates, BaseC
   /**
     * @param {click} evt
     */
-  Review.prototype._onNoClick = function(evt) {
-    evt.preventDefault();
+  Review.prototype._onNoClick = function() {
     if (this.reviewQuizAnswerYes.classList.contains('review-quiz-answer-active')) {
       this.reviewQuizAnswerYes.classList.remove('review-quiz-answer-active');
     }
