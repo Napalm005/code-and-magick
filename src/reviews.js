@@ -1,6 +1,6 @@
 'use strict';
 
-define(['./variables', './utils', './templates', './review'], function(variables, utils, templates, Review) {
+define(['./variables', './utils', './templates', './review', './data-constructor'], function(variables, utils, templates, Review, DataConstructor) {
 
   /** @type {Array.<Object>} */
   var reviewsArray = [];
@@ -22,6 +22,9 @@ define(['./variables', './utils', './templates', './review'], function(variables
         if ( (this.status === 200) && (this.readyState === 4) ) {
           variables.reviewsContainer.classList.remove(variables.CLASS_REVIEWS_SECTION_LOADING);
           var loadedData = JSON.parse(evt.target.response);
+          loadedData = loadedData.map(function(review) {
+            return new DataConstructor(review);
+          })
           callback(loadedData);
         } else {
           utils.addErrorClass(variables.reviewsContainer);

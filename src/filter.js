@@ -92,31 +92,31 @@ define(['./variables', './reviews'], function(variables, reviews) {
         /** @constant {number} */
         var FOUR_DAYS = 4 * 24 * 60 * 60 * 1000;
         preFilteredReviews = reviewsToFilter.filter(function(review) {
-          return Date.now() + Date.parse(review.date) < FOUR_DAYS;
+          return Date.now() + Date.parse(review.getDate()) < FOUR_DAYS;
         }).sort(function(a, b) {
-          return Date.parse(b.date) - Date.parse(a.date);
+          return Date.parse(b.getDate()) - Date.parse(a.getDate());
         });
         break;
 
       case variables.FILTER.GOOD:
         preFilteredReviews = reviewsToFilter.filter(function(review) {
-          return review.rating > 2;
+          return review.getRating() > 2;
         }).sort(function(a, b) {
-          return b.rating - a.rating;
+          return b.getRating() - a.getRating();
         });
         break;
 
       case variables.FILTER.BAD:
         preFilteredReviews = reviewsToFilter.filter(function(review) {
-          return review.rating < 3;
+          return review.getRating() < 3;
         }).sort(function(a, b) {
-          return a.rating - b.rating;
+          return a.getRating() - b.getRating();
         });
         break;
 
       case variables.FILTER.POPULAR:
         preFilteredReviews.sort(function(a, b) {
-          return b.review_usefulness - a.review_usefulness;
+          return b.getReviewUsefulness() - a.getReviewUsefulness();
         });
         break;
     }

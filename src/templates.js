@@ -30,9 +30,9 @@ define(['./variables'], function(variables) {
       var elementToClone = this.getTemplate(templateElement, '.review');
       var element = elementToClone.cloneNode(true);
       var rating = element.querySelector('.review-rating');
-      element.querySelector('.review-text').textContent = data.description;
+      element.querySelector('.review-text').textContent = data.getDescription();
 
-      rating.classList.add(variables.ratingClasses[data.rating - 1]);
+      rating.classList.add(variables.ratingClasses[data.getRating() - 1]);
 
       setImageParameters(data, element);
       return element;
@@ -73,7 +73,7 @@ define(['./variables'], function(variables) {
       element.classList.add('review-load-failure');
     };
 
-    image.src = data.author.picture;
+    image.src = data.getAuthorPicture();
 
     imageLoadTimeout = setTimeout(function() {
       reviewAvatar.removeAttribute('src');
